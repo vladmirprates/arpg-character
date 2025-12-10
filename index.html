@@ -408,6 +408,49 @@
               </div>
             </div>
           </div>
+          <div
+          class="inventory-slot slot-pet companion unique"
+          id="tooltip-pet"
+          style="position: absolute; bottom: 120px; right: 80px"
+        >
+          <img
+            src="https://game-icons.net/icons/ffffff/000000/1x1/lorc/duck.svg"
+            class="item-icon"
+          />
+        </div>
+
+        <div
+          class="inventory-slot slot-charm1 charm magic tooltip-charm"
+          style="
+            position: absolute;
+            top: 100px;
+            left: 60px;
+            height: 40px;
+            width: 25px;
+          "
+        >
+          <img
+            src="https://game-icons.net/icons/ffffff/000000/1x1/lorc/rune-stone.svg"
+            class="item-icon"
+          />
+        </div>
+
+        <div
+          class="inventory-slot slot-aura1 aura rare tooltip-aura"
+          style="
+            position: absolute;
+            top: 40px;
+            right: 100px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+          "
+        >
+          <img
+            src="https://game-icons.net/icons/ffffff/000000/1x1/lorc/shaking-hands.svg"
+            class="item-icon"
+          />
+        </div>
         </div>
       </div>
 
@@ -416,7 +459,7 @@
         <div
           style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px"
         >
-          <div class="inventory-slot small">
+          <div class="inventory-slot small" id="backpack-scroll">
             <img
               src="https://game-icons.net/icons/ffffff/000000/1x1/delapouite/scroll-quill.svg"
               class="item-icon"
@@ -427,7 +470,7 @@
           <div class="inventory-slot small" style="opacity: 0.3"></div>
           <div class="inventory-slot small" style="opacity: 0.3"></div>
           <div class="inventory-slot small" style="opacity: 0.3"></div>
-          <div class="inventory-slot small">
+          <div class="inventory-slot small" id="backpack-potion">
             <img
               src="https://game-icons.net/icons/ffffff/000000/1x1/lorc/potion-ball.svg"
               class="item-icon"
@@ -1018,7 +1061,7 @@
 
       // --- GRAPH TRAVERSAL LOGIC (BFS) ---
 
-      // Converts the list of links into an adjacency list 
+      // Converts the list of links into an adjacency list
       function getAdjacencyList() {
         const adj = new Map();
         treeData.forEach((node) => adj.set(node.id, new Set()));
@@ -1236,6 +1279,110 @@
         </div>
       `,
         });
+      });
+
+      // --- NEW ITEMS ---
+
+      // 1. Rubber Duck
+      tippy(".tooltip-pet", {
+        ...commonConfig,
+        content: `
+    <div class="poe-tooltip">
+      <div class="item-header">
+        <span class="item-name">Junior Rubber Duck</span>
+        <span class="item-base">Legendary Companion</span>
+      </div>
+      <div class="item-content">
+        <div class="stat-blue">Nível do Item: 100</div>
+        <div class="separator"></div>
+        <div>Absorve <span class="stat-blue">50%</span> do Estresse Mental.</div>
+        <div>Escuta seus problemas de lógica sem julgar.</div>
+        <div><span class="stat-white">"Quack."</span></div>
+        <div class="flavor-text">O melhor amigo de um QA solitário.</div>
+      </div>
+    </div>
+  `,
+      });
+
+      // 2. Certification Charm
+      tippy(".tooltip-charm", {
+        ...commonConfig,
+        content: `
+    <div class="poe-tooltip">
+      <div class="item-header">
+        <span class="item-name">Stone of ISTQB</span>
+        <span class="item-base">Small Charm</span>
+      </div>
+      <div class="item-content">
+        <div class="stat-blue">Requer Nível: Junior</div>
+        <div class="separator"></div>
+        <div><span class="stat-blue">+10</span> de Conhecimento Teórico.</div>
+        <div><span class="stat-blue">+5%</span> de chance de citar "Melhores Práticas".</div>
+        <div class="flavor-text">Carregado no inventário para dar credibilidade.</div>
+      </div>
+    </div>
+  `,
+      });
+
+      // 3. Aura (Teamwork)
+      tippy(".tooltip-aura", {
+        ...commonConfig,
+        content: `
+    <div class="poe-tooltip">
+      <div class="item-header">
+        <span class="item-name">Collaboration Aura</span>
+        <span class="item-base">Passive Skill</span>
+      </div>
+      <div class="item-content">
+        <div class="separator"></div>
+        <div>Concede <span class="stat-blue">Empatia</span> aos aliados próximos.</div>
+        <div>Reduz a hostilidade dos Desenvolvedores em <span class="stat-blue">20%</span>.</div>
+        <div><span class="stat-white">Sempre Ativo</span>.</div>
+      </div>
+    </div>
+  `,
+      });
+
+      // --- TOOLTIPS DA MOCHILA (BACKPACK) ---
+
+      // 1. Scroll of Wisdom (Certificados/Docs)
+      tippy("#backpack-scroll", {
+        ...commonConfig, // Usa a mesma config rápida que criamos antes
+        content: `
+    <div class="poe-tooltip" style="display: block !important; position: static !important; visibility: visible !important; opacity: 1 !important;">
+      <div class="item-header">
+        <span class="item-name">Scroll of Documentation</span>
+        <span class="item-base">Currency</span>
+      </div>
+      <div class="item-content">
+        <div class="stat-blue">Stack Size: 1/40</div>
+        <div class="separator"></div>
+        <div>Identifies <span class="stat-white">Unwritten Rules</span> of the project.</div>
+        <div>Right click to learn <span class="stat-blue">"How this feature actually works"</span>.</div>
+        <div class="flavor-text">"RTFM (Read The Fine Manual)."</div>
+      </div>
+    </div>
+  `,
+      });
+
+      // 2. Health Potion (Café Extra)
+      tippy("#backpack-potion", {
+        ...commonConfig,
+        content: `
+    <div class="poe-tooltip" style="display: block !important; position: static !important; visibility: visible !important; opacity: 1 !important;">
+      <div class="item-header">
+        <span class="item-name">Emergency Coffee</span>
+        <span class="item-base">Utility Flask</span>
+      </div>
+      <div class="item-content">
+        <div class="stat-blue">Restores 100% Sanity</div>
+        <div class="separator"></div>
+        <div>Consumes 1 Charge on <span class="stat-red">Critical Bug</span> discovery.</div>
+        <div>Grants <span class="stat-blue">Immunity to Sleep</span> for 4 hours.</div>
+        <div class="flavor-text">"Do not shake before use. Or do. I'm not a cop."</div>
+      </div>
+    </div>
+  `,
       });
     </script>
   </body>

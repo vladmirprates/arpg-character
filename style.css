@@ -22,6 +22,54 @@ body {
   align-items: center;
 }
 
+body {
+  margin: 0;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Prevents scrollbars */
+  color: white;
+
+  background-color: #050505;
+  background-image: radial-gradient(
+      circle at 50% 50%,
+      rgba(30, 35, 45, 1) 0%,
+      rgba(5, 5, 5, 1) 100%
+    ),
+    url("https://www.transparenttextures.com/patterns/stardust.png"); /* Optional subtle noise */
+  background-size: 240% 240%;
+  animation: abyss-breathe 18s ease infinite;
+
+  /* Adds a subtle vignette (darker edges) */
+  box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.9);
+}
+
+@keyframes abyss-breathe {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Creates a tiny dot pattern */
+  background-image: radial-gradient(#333 1px, transparent 1px);
+  background-size: 30px 30px;
+  opacity: 0.15; /* Very subtle */
+  pointer-events: none;
+  z-index: -1;
+}
+
 /* --- UI LAYOUT (3 Columns) --- */
 .ui-container {
   display: grid;
@@ -32,14 +80,67 @@ body {
   gap: 20px;
 }
 
+/* === PANEL POE ARCANA === */
 .panel {
-  background: var(--panel-bg);
-  border: 2px solid var(--border-color);
-  padding: 20px;
   position: relative;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-  display: flex;
-  flex-direction: column;
+  background: #0a0807;
+  padding: 22px;
+  border-radius: 4px;
+
+  border: 3px solid rgba(90, 55, 25, 0.7);
+
+  box-shadow: 0 0 35px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(0, 0, 0, 0.85),
+    inset 0 0 12px rgba(175, 96, 37, 0.12);
+}
+
+.panel::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 2px solid rgba(175, 96, 37, 0.28);
+  border-radius: 4px;
+  pointer-events: none;
+  animation: poeGlow 6s infinite ease-in-out;
+}
+
+.panel::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  pointer-events: none;
+  border-radius: 4px;
+  border: 3px solid rgba(175, 96, 37, 0.4);
+  animation: poePulse 7s infinite ease-in-out;
+}
+
+@keyframes poeGlow {
+  0% {
+    box-shadow: 0 0 6px rgba(175, 96, 37, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 12px rgba(255, 150, 70, 0.65);
+  }
+  100% {
+    box-shadow: 0 0 6px rgba(175, 96, 37, 0.4);
+  }
+}
+
+@keyframes poePulse {
+  0% {
+    box-shadow: 0 0 16px rgba(175, 96, 37, 0.15),
+      inset 0 0 12px rgba(175, 96, 37, 0.07);
+    border-color: rgba(175, 96, 37, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(255, 140, 40, 0.35),
+      inset 0 0 20px rgba(255, 140, 40, 0.2);
+    border-color: rgba(255, 160, 60, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 16px rgba(175, 96, 37, 0.15),
+      inset 0 0 12px rgba(175, 96, 37, 0.07);
+    border-color: rgba(175, 96, 37, 0.35);
+  }
 }
 
 .panel-title {
@@ -157,6 +258,24 @@ body {
 .slot-belt {
   grid-area: belt;
   width: 140px !important;
+  justify-self: center;
+  align-self: center;
+}
+
+.slot-pet {
+  grid-area: pet;
+  justify-self: center;
+  align-self: center;
+}
+
+.slot-charm1 {
+  grid-area: charm1;
+  justify-self: center;
+  align-self: center;
+}
+
+.slot-aura1 {
+  grid-area: aura1;
   justify-self: center;
   align-self: center;
 }
