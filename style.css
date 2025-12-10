@@ -7,7 +7,7 @@
   --magic-blue: #8888ff;
   --text-grey: #7f7f7f;
   --text-white: #e0e0e0;
-  --corrupted-red: #f88;
+  --corrupted-red: rgb(202, 2, 2);
 }
 
 body {
@@ -421,6 +421,12 @@ body::before {
   color: var(--magic-blue);
   border-color: var(--magic-blue);
 }
+.corrupted .item-name,
+.corrupted .item-base,
+.corrupted .poe-tooltip {
+  color: var(--corrupted-red);
+  border-color: var(--corrupted-red);
+}
 
 .item-content {
   padding: 10px;
@@ -440,7 +446,7 @@ body::before {
   color: #fff;
 }
 .stat-red {
-  color: #ff5555;
+  color: #ff0000;
 }
 .flavor-text {
   color: var(--unique-orange);
