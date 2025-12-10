@@ -7,6 +7,7 @@
   --magic-blue: #8888ff;
   --text-grey: #7f7f7f;
   --text-white: #e0e0e0;
+  --corrupted-red: #f88;
 }
 
 body {
@@ -200,19 +201,21 @@ body::before {
 /* --- CENTER PANEL: PAPER DOLL --- */
 .paper-doll {
   display: grid;
-  grid-template-columns: 80px 60px 80px 60px 80px;
+  grid-template-columns: 40px 80px 60px 80px 60px 80px 40px;
   grid-template-rows: 40px 40px 80px 40px 50px 80px;
   gap: 6px;
   justify-content: center;
   align-content: center;
   background: url("https://www.transparenttextures.com/patterns/dark-matter.png");
+  
+  /* Visual map */
   grid-template-areas:
-    "w1     .    head   .       w2"
-    "w1     .    head   .       w2"
-    "w1     .    chest  amulet  w2"
-    "glove ring1 chest  ring2   boots"
-    ".     belt  belt   belt    ."
-    "flask flask flask flask flask";
+    ".       w1     .    head   .       w2      ."
+    "charm1  w1     .    head   .       w2      aura1"
+    "charm1  w1     .    chest  amulet  w2      aura1"
+    ".       glove  ring1 chest  ring2   boots   ."
+    ".       .      belt  belt   belt    .       ."
+    ".       flask  flask flask  flask   flask   pet";
 }
 
 /* Grid Areas Mapping */
@@ -336,6 +339,9 @@ body::before {
 .magic {
   border-color: var(--magic-blue);
 }
+.corrupted {
+  border-color: var(--corrupted-red);
+}
 
 .item-icon {
   max-width: 85%;
@@ -432,6 +438,9 @@ body::before {
 }
 .stat-white {
   color: #fff;
+}
+.stat-red {
+  color: #ff5555;
 }
 .flavor-text {
   color: var(--unique-orange);
