@@ -1,0 +1,621 @@
+:root {
+  --bg-dark: #050505;
+  --panel-bg: #111;
+  --border-color: #333;
+  --unique-orange: #af6025;
+  --rare-yellow: #ffff77;
+  --magic-blue: #8888ff;
+  --text-grey: #7f7f7f;
+  --text-white: #e0e0e0;
+}
+
+body {
+  background-color: var(--bg-dark);
+  background-image: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+  color: var(--text-white);
+  font-family: "Roboto", sans-serif;
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* --- UI LAYOUT (3 Columns) --- */
+.ui-container {
+  display: grid;
+  grid-template-columns: 300px 1fr 300px;
+  width: 95vw;
+  height: 85vh;
+  margin-top: 20px;
+  gap: 20px;
+}
+
+.panel {
+  background: var(--panel-bg);
+  border: 2px solid var(--border-color);
+  padding: 20px;
+  position: relative;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-title {
+  font-family: "Cinzel", serif;
+  color: var(--unique-orange);
+  text-align: center;
+  font-size: 20px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #333;
+  padding-bottom: 10px;
+}
+
+/* --- LEFT PANEL: STATS --- */
+.stats-list {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #ccc;
+}
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #222;
+  padding: 4px 0;
+}
+.stat-label {
+  color: #888;
+}
+.stat-val {
+  color: #fff;
+  font-weight: bold;
+}
+.res-fire {
+  color: #ff4444;
+}
+
+.res-poison {
+  color: #07ce53;
+}
+
+.res-cold {
+  color: #4444ff;
+}
+.res-light {
+  color: #ffff44;
+}
+.text-blue {
+  color: #88f;
+}
+.text-red {
+  color: #f88;
+}
+.text-green {
+  color: #8f8;
+}
+
+/* --- CENTER PANEL: PAPER DOLL --- */
+.paper-doll {
+  display: grid;
+  grid-template-columns: 80px 60px 80px 60px 80px;
+  grid-template-rows: 40px 40px 80px 40px 50px 80px;
+  gap: 6px;
+  justify-content: center;
+  align-content: center;
+  background: url("https://www.transparenttextures.com/patterns/dark-matter.png");
+  grid-template-areas:
+    "w1     .    head   .       w2"
+    "w1     .    head   .       w2"
+    "w1     .    chest  amulet  w2"
+    "glove ring1 chest  ring2   boots"
+    ".     belt  belt   belt    ."
+    "flask flask flask flask flask";
+}
+
+/* Grid Areas Mapping */
+.slot-head {
+  grid-area: head;
+}
+.slot-chest {
+  grid-area: chest;
+}
+.slot-w1 {
+  grid-area: w1;
+  justify-self: end;
+}
+.slot-w2 {
+  grid-area: w2;
+  justify-self: start;
+}
+.slot-hands {
+  grid-area: glove;
+  align-self: start;
+  justify-self: end;
+}
+.slot-feet {
+  grid-area: boots;
+  align-self: start;
+  justify-self: start;
+}
+.slot-amulet {
+  grid-area: amulet;
+  justify-self: center;
+  align-self: center;
+}
+.slot-ring1 {
+  grid-area: ring1;
+  justify-self: center;
+  align-self: center;
+}
+.slot-ring2 {
+  grid-area: ring2;
+  justify-self: center;
+  align-self: center;
+}
+.slot-belt {
+  grid-area: belt;
+  width: 140px !important;
+  justify-self: center;
+  align-self: center;
+}
+
+.flask-row {
+  grid-area: flask;
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+/* --- ITEMS STYLING --- */
+.inventory-slot {
+  width: 80px;
+  height: 80px;
+  background-color: #0a0a0a;
+  border: 1px solid #333;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: inset 0 0 10px #000;
+}
+
+.inventory-slot.small {
+  width: 40px;
+  height: 40px;
+}
+.inventory-slot.wide {
+  width: 140px;
+  height: 40px;
+}
+.inventory-slot.tall {
+  height: 100%;
+}
+.inventory-slot.flask {
+  width: 40px;
+  height: 80px;
+  border-radius: 4px;
+}
+
+.inventory-slot:hover {
+  border-color: #fff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  z-index: 10;
+}
+
+.unique {
+  border-color: var(--unique-orange);
+}
+.rare {
+  border-color: var(--rare-yellow);
+}
+.magic {
+  border-color: var(--magic-blue);
+}
+
+.item-icon {
+  max-width: 85%;
+  max-height: 85%;
+  filter: drop-shadow(0 0 5px rgba(0, 0, 0, 1));
+}
+
+/* --- TOOLTIPS --- */
+.poe-tooltip {
+  display: none;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.98);
+  border: 1px solid;
+  width: 320px;
+  z-index: 100;
+  pointer-events: none;
+  text-align: center;
+  padding-bottom: 5px;
+  font-size: 14px;
+  top: 0;
+  box-shadow: 0 0 20px #000;
+}
+.tooltip-right .poe-tooltip {
+  left: 105%;
+  top: 0;
+}
+.tooltip-left .poe-tooltip {
+  right: 105%;
+  top: 0;
+}
+.tooltip-up .poe-tooltip {
+  bottom: 105%;
+  left: 50%;
+  transform: translateX(-50%);
+  top: auto;
+  width: 250px;
+}
+
+.inventory-slot:hover .poe-tooltip {
+  display: block;
+}
+
+.item-header {
+  padding: 8px;
+  background: linear-gradient(to bottom, #1a1a1a, #000);
+  border-bottom: 1px solid;
+}
+.item-name {
+  font-family: "Cinzel", serif;
+  font-size: 16px;
+  text-transform: uppercase;
+  display: block;
+  font-weight: 700;
+}
+.item-base {
+  font-family: "Cinzel", serif;
+  font-size: 12px;
+  display: block;
+  margin-top: 2px;
+}
+
+.unique .item-name,
+.unique .item-base,
+.unique .poe-tooltip {
+  color: var(--unique-orange);
+  border-color: var(--unique-orange);
+}
+.rare .item-name,
+.rare .item-base,
+.rare .poe-tooltip {
+  color: var(--rare-yellow);
+  border-color: var(--rare-yellow);
+}
+.magic .item-name,
+.magic .item-base,
+.magic .poe-tooltip {
+  color: var(--magic-blue);
+  border-color: var(--magic-blue);
+}
+
+.item-content {
+  padding: 10px;
+  line-height: 1.4;
+  text-align: center;
+}
+.separator {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #555, transparent);
+  margin: 8px 0;
+}
+.stat-blue {
+  color: #8888ff;
+  font-weight: bold;
+}
+.stat-white {
+  color: #fff;
+}
+.flavor-text {
+  color: var(--unique-orange);
+  font-style: italic;
+  font-size: 12px;
+  margin-top: 10px;
+}
+
+/* --- BOTTOM BAR --- */
+.bottom-bar {
+  position: fixed;
+  bottom: 20px;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  background: #111;
+  padding: 10px 30px;
+  border: 2px solid #333;
+  border-radius: 5px;
+  z-index: 50;
+}
+.skill-container {
+  display: flex;
+  gap: 8px;
+}
+.skill-slot {
+  width: 50px;
+  height: 50px;
+  border: 2px solid #444;
+  background: #000;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.skill-slot:hover {
+  border-color: #fff;
+}
+.skill-key {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 10px;
+  color: #fff;
+  font-weight: bold;
+}
+.skill-icon {
+  width: 80%;
+  height: 80%;
+}
+
+.tree-btn {
+  background: linear-gradient(to bottom, #2f1b0c, #000);
+  border: 2px solid var(--unique-orange);
+  color: var(--unique-orange);
+  font-family: "Cinzel", serif;
+  font-size: 16px;
+  padding: 0 25px;
+  height: 54px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: 0.2s;
+}
+.tree-btn:hover {
+  box-shadow: 0 0 15px var(--unique-orange);
+  color: #fff;
+}
+
+/* --- TREE MODAL & CANVAS --- */
+#tree-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #0d0d0d;
+  z-index: 200;
+}
+.close-modal {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: #fff;
+  font-size: 30px;
+  cursor: pointer;
+  z-index: 210;
+  background: #000;
+  padding: 5px 15px;
+  border: 1px solid #444;
+}
+
+#tree-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  cursor: grab;
+  position: relative;
+}
+#tree-container:active {
+  cursor: grabbing;
+}
+#tree-canvas {
+  width: 3000px;
+  height: 3000px;
+  transform-origin: 0 0;
+  position: relative;
+}
+
+/* SVG Layer needs to be properly positioned */
+svg#svg-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.section-label {
+  position: absolute;
+  font-size: 100px;
+  font-weight: 900;
+  color: #fff;
+  opacity: 0.04;
+  pointer-events: none;
+  white-space: nowrap;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+
+/* --- TREE NODES & LINES --- */
+.link {
+  stroke: #333;
+  stroke-width: 3;
+  opacity: 0.4;
+  transition: stroke 0.4s;
+  stroke-linecap: round;
+}
+.link.active {
+  stroke: #c0a040;
+  opacity: 0.8;
+  stroke-width: 4;
+}
+
+.node {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: #1a1a1a;
+  border: 2px solid #444;
+  border-radius: 50%;
+  z-index: 2;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  transition: all 0.2s;
+  font-size: 18px;
+}
+.node:hover {
+  border-color: #fff;
+  transform: translate(-50%, -50%) scale(1.15);
+  z-index: 100;
+}
+
+/* Allocated Logic - MUST be specific to override regions */
+.node.allocated {
+  background: #c0a040;
+  border-color: #ffe680;
+  color: #000;
+  box-shadow: 0 0 8px rgba(192, 160, 64, 0.5);
+}
+
+/* Region Colors & Allocated Overrides */
+.node.north {
+  border-color: #2d5b8e;
+  color: #8cb6ea;
+}
+.node.north.allocated {
+  background: #2d5b8e;
+  border-color: #8cb6ea;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(45, 91, 142, 0.6);
+}
+
+.node.south {
+  border-color: #8e2d2d;
+  color: #ea8c8c;
+}
+.node.south.allocated {
+  background: #8e2d2d;
+  border-color: #ea8c8c;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(142, 45, 45, 0.6);
+}
+
+.node.east {
+  border-color: #6b2d8e;
+  color: #ca8cea;
+}
+.node.east.allocated {
+  background: #6b2d8e;
+  border-color: #ca8cea;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(107, 45, 142, 0.6);
+}
+
+.node.west {
+  border-color: #2d8e75;
+  color: #8ceac9;
+}
+.node.west.allocated {
+  background: #2d8e75;
+  border-color: #8ceac9;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(45, 142, 117, 0.6);
+}
+
+/* Keystone & Start */
+.node.keystone {
+  width: 50px;
+  height: 50px;
+  border-radius: 5px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: #111;
+  border-width: 3px;
+}
+.node.keystone .icon {
+  transform: rotate(-45deg);
+}
+
+.node.start {
+  width: 60px;
+  height: 60px;
+  border: 2px solid #446655;
+  background: #11221a;
+  font-size: 26px;
+}
+.node.start.allocated {
+  background: #c0a040;
+  border-color: #fff;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(34, 136, 102, 0.6);
+}
+
+/* Animação para fazer o Keystone "respirar" */
+@keyframes keystonePulse {
+  0% {
+    box-shadow: 0 0 10px currentColor;
+    transform: translate(-50%, -50%) rotate(45deg) scale(1);
+  }
+  50% {
+    box-shadow: 0 0 25px currentColor;
+    transform: translate(-50%, -50%) rotate(45deg) scale(1.1);
+  }
+  100% {
+    box-shadow: 0 0 10px currentColor;
+    transform: translate(-50%, -50%) rotate(45deg) scale(1);
+  }
+}
+
+/* Estilo Base do Keystone */
+.node.keystone {
+  width: 55px;
+  height: 55px;
+  border-radius: 4px; /* Pontas levemente arredondadas */
+  transform: translate(-50%, -50%) rotate(45deg);
+  background: #000;
+  border-width: 3px;
+  z-index: 10; /* Garante que fique acima das linhas */
+}
+
+/* Keystone Alocado (Ativo) - A MÁGICA ACONTECE AQUI */
+.node.keystone.allocated {
+  /* Usa a animação criada acima */
+  animation: keystonePulse 3s infinite ease-in-out;
+  background: #111; /* Fundo escuro para contraste */
+  color: #fff !important; /* Ícone branco */
+  border-width: 4px; /* Borda mais grossa */
+}
+
+/* Cores específicas para cada região ficarem NEON quando alocadas */
+.node.keystone.north.allocated {
+  border-color: #4da6ff;
+  color: #4da6ff;
+  box-shadow: 0 0 20px #4da6ff;
+}
+.node.keystone.south.allocated {
+  border-color: #ff4d4d;
+  color: #ff4d4d;
+  box-shadow: 0 0 20px #ff4d4d;
+}
+.node.keystone.east.allocated {
+  border-color: #d24dff;
+  color: #d24dff;
+  box-shadow: 0 0 20px #d24dff;
+}
+.node.keystone.west.allocated {
+  border-color: #4dffb8;
+  color: #4dffb8;
+  box-shadow: 0 0 20px #4dffb8;
+}
