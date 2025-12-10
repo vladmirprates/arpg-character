@@ -562,7 +562,7 @@ svg#svg-layer {
   box-shadow: 0 0 15px rgba(34, 136, 102, 0.6);
 }
 
-/* Animação para fazer o Keystone "respirar" */
+/* Pulse Keystone Animation */
 @keyframes keystonePulse {
   0% {
     box-shadow: 0 0 10px currentColor;
@@ -578,27 +578,26 @@ svg#svg-layer {
   }
 }
 
-/* Estilo Base do Keystone */
+/* Base Keystone Style */
 .node.keystone {
   width: 55px;
   height: 55px;
-  border-radius: 4px; /* Pontas levemente arredondadas */
+  border-radius: 4px;
   transform: translate(-50%, -50%) rotate(45deg);
   background: #000;
   border-width: 3px;
-  z-index: 10; /* Garante que fique acima das linhas */
+  z-index: 10;
 }
 
-/* Keystone Alocado (Ativo) - A MÁGICA ACONTECE AQUI */
+/* Allocated Keystone (Active) */
 .node.keystone.allocated {
-  /* Usa a animação criada acima */
   animation: keystonePulse 3s infinite ease-in-out;
-  background: #111; /* Fundo escuro para contraste */
-  color: #fff !important; /* Ícone branco */
-  border-width: 4px; /* Borda mais grossa */
+  background: #111;
+  color: #fff !important;
+  border-width: 4px;
 }
 
-/* Cores específicas para cada região ficarem NEON quando alocadas */
+/* Color for Specific Regions */
 .node.keystone.north.allocated {
   border-color: #4da6ff;
   color: #4da6ff;

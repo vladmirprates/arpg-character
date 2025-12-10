@@ -1018,7 +1018,7 @@
 
       // --- GRAPH TRAVERSAL LOGIC (BFS) ---
 
-      // Converte a lista de links em uma lista de adjacência (grafo)
+      // Converts the list of links into an adjacency list 
       function getAdjacencyList() {
         const adj = new Map();
         treeData.forEach((node) => adj.set(node.id, new Set()));
@@ -1029,7 +1029,7 @@
         return adj;
       }
 
-      // Realiza uma Busca em Largura (BFS) a partir do nó "start"
+      // Performs a Breadth-First Search (BFS) starting from the "start" node
       function getReachableNodes(currentAllocated) {
         const adj = getAdjacencyList();
         const reachable = new Set(["start"]);
@@ -1039,7 +1039,6 @@
           const currentId = queue.shift();
 
           adj.get(currentId).forEach((neighborId) => {
-            // Um vizinho é alcançável se estiver alocado e não tiver sido visitado
             if (
               currentAllocated.has(neighborId) &&
               !reachable.has(neighborId)
@@ -1056,10 +1055,10 @@
         if (id === "start") return;
 
         if (allocated.has(id)) {
-          // Tenta desalocar
+          // Try to unspecc
           allocated.delete(id);
 
-          // Revalida a árvore: remove nós "órfãos" (desconectados do "start")
+          // Revalidate the tree
           const trulyReachable = getReachableNodes(allocated);
 
           const nodesToRemove = [];
@@ -1071,8 +1070,8 @@
 
           nodesToRemove.forEach((nodeId) => allocated.delete(nodeId));
         } else {
-          // Tenta alocar
-          // Verifica se o nó é adjacente a QUALQUER nó alocado (regra de alocação)
+          // Try to allocate
+          // Verify if any adjacent node is allocated
           const adj = getAdjacencyList();
           const neighbors = adj.get(id);
           let isReachable = false;
@@ -1096,7 +1095,7 @@
           const el = document.getElementById(n.id);
           if (allocated.has(n.id)) {
             el.classList.add("allocated");
-            // Adiciona a classe 'allocated' ao keystone para a animação
+            // add class 'Allocated' on Keystone
             if (n.type === "keystone") el.classList.add("allocated");
           } else {
             el.classList.remove("allocated");
@@ -1109,7 +1108,6 @@
           else line.classList.remove("active");
         });
         const counter = document.getElementById("points-counter");
-        // O contador deve subtrair 1 para não contar o nó "start"
         if (counter) counter.innerText = allocated.size - 1;
       }
 
@@ -1122,7 +1120,7 @@
       }
 
       document.addEventListener("DOMContentLoaded", function () {
-        // Configuração Comum
+        // Common Config
         const commonConfig = {
           allowHTML: true,
           placement: "top",
@@ -1130,8 +1128,6 @@
           interactive: true,
           duration: [200, 0],
           delay: [50, 0],
-          // Se o tema "translucent" não existir no seu CSS, o Tippy usa o padrão (preto)
-          // Removemos o tema específico para evitar conflitos visuais
         };
 
         // 1. Inspect Element (Q)
