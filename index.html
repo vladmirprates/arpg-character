@@ -333,7 +333,96 @@
             </div>
           </div>
         </div>
+        <div
+          class="inventory-slot slot-pet companion unique tooltip-left"
+          id="pet"
+        >
+          <img
+            src="https://game-icons.net/icons/ffffff/000000/1x1/delapouite/plastic-duck.svg"
+            class="item-icon"
+          />
+          <div class="poe-tooltip">
+            <div class="item-header">
+              <span class="item-name">Junior Rubber Duck</span
+              ><span class="item-base">Legendary Companion</span>
+            </div>
+            <div class="item-content">
+              <div class="stat-blue">Item Level: 100</div>
+              <div class="separator"></div>
+              <div>
+                <div>
+                  Absorbs <span class="stat-blue">50%</span> of Mental Stress
+                </div>
+                <div>Listens to your logic problems without judgment</div>
+                <div><span class="stat-white">"Quack."</span></div>
+                <div class="flavor-text">A lonely QA's best friend.</div>
+              </div>
+            </div>
+          </div>
+        </div>
 
+        <div
+          class="inventory-slot slot-charm1 charm magic tooltip-right"
+          id="charm1"
+        >
+          <img
+            src="https://game-icons.net/icons/ffffff/000000/1x1/lorc/rune-stone.svg"
+            class="item-icon"
+          />
+          <div class="poe-tooltip">
+            <div class="item-header">
+              <span class="item-name">Stone of the Self-Taught</span
+              ><span class="item-base">Small Charm</span>
+            </div>
+            <div class="item-content">
+              <div class="stat-blue">Requires Level: Mid-Level</div>
+              <div class="separator"></div>
+              <div>
+                <div>
+                  <span class="stat-blue">+20</span> to Critical Thinking
+                </div>
+                <div>
+                  <span class="stat-blue">50%</span> increased effectiveness of
+                  <span class="stat-white">Exploratory Testing</span>
+                </div>
+                <div>
+                  Immune to
+                  <span class="stat-white">"By the Book"</span> constraints
+                </div>
+                <div class="flavor-text">
+                  "I don't need a certificate to know it's broken."
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="inventory-slot slot-aura1 aura rare tooltip-left"
+          id="aura1"
+        >
+          <img
+            src="https://game-icons.net/icons/ffffff/000000/1x1/delapouite/shaking-hands.svg"
+            class="item-icon"
+          />
+          <div class="poe-tooltip">
+            <div class="item-header">
+              <span class="item-name">Collaboration Aura</span>
+              <span class="item-base">Passive Skill</span>
+            </div>
+            <div class="item-content">
+              <div class="separator"></div>
+              <div>
+                Grants <span class="stat-blue">Empathy</span> to nearby allies
+              </div>
+              <div>
+                Reduces Developer hostility by
+                <span class="stat-blue">20%</span>
+              </div>
+              <div><span class="stat-white">Always Active</span></div>
+            </div>
+          </div>
+        </div>
         <div class="flask-row">
           <div class="inventory-slot flask unique tooltip-up">
             <img
@@ -440,7 +529,10 @@
         <div
           style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px"
         >
-          <div class="inventory-slot small magic" id="backpack-scroll">
+          <div
+            class="inventory-slot small magic tooltip-left"
+            id="backpack-scroll"
+          >
             <img
               src="https://game-icons.net/icons/ffffff/000000/1x1/delapouite/scroll-quill.svg"
               class="item-icon"
@@ -468,7 +560,10 @@
             </div>
           </div>
           <div class="inventory-slot small">
-            <div class="inventory-slot small rare currency" id="backpack-chaos">
+            <div
+              class="inventory-slot small rare currency tooltip-left"
+              id="backpack-chaos"
+            >
               <img
                 src="https://game-icons.net/icons/ffffff/000000/1x1/lorc/unstable-orb.svg"
                 class="item-icon"
@@ -500,7 +595,7 @@
           </div>
           <div class="inventory-slot small">
             <div
-              class="inventory-slot small corrupted currency"
+              class="inventory-slot small corrupted currency tooltip-left"
               id="backpack-vaal"
             >
               <img
@@ -531,16 +626,17 @@
               </div>
             </div>
           </div>
-          <div class="inventory-slot small" style="opacity: 0.3"></div>
-          <div class="inventory-slot small" style="opacity: 0.3"></div>
-          <div class="inventory-slot small unique currency" id="backpack-mirror">
+          <div
+            class="inventory-slot small unique currency tooltip-left"
+            id="backpack-mirror"
+          >
             <img
               src="https://game-icons.net/icons/ffffff/000000/1x1/lorc/mirror-mirror.svg"
               class="item-icon"
             />
             <div class="poe-tooltip">
               <div class="item-header">
-                <span class="item-name">Mirror of Reproduction</span>
+                <span class="item-name">Mirror of Replication</span>
                 <span class="item-base">Currency</span>
               </div>
               <div class="item-content">
@@ -560,33 +656,38 @@
               </div>
             </div>
           </div>
-          <div class="inventory-slot small rare" id="backpack-potion">
+          <div class="inventory-slot small" style="opacity: 0.3"></div>
+          <div
+            class="inventory-slot small magic currency tooltip-left"
+            id="backpack-whetstone"
+          >
             <img
-              src="https://game-icons.net/icons/ffffff/000000/1x1/lorc/potion-ball.svg"
+              src="https://game-icons.net/icons/ffffff/000000/1x1/lorc/rock.svg"
               class="item-icon"
             />
             <div class="poe-tooltip">
               <div class="item-header">
-                <span class="item-name">Emergency Coffee</span>
-                <span class="item-base">Utility Flask</span>
+                <span class="item-name">Ticket Whetstone</span>
+                <span class="item-base">Currency</span>
               </div>
               <div class="item-content">
-                <div class="stat-blue">Restores 100% Sanity</div>
+                <div class="stat-blue">Stack Size: 20/20</div>
                 <div class="separator"></div>
                 <div>
-                  Consumes 1 Charge on
-                  <span class="stat-red">Critical Bug</span> discovery.
+                  Improves the <span class="stat-white">Quality</span> of a Bug
+                  Report.
                 </div>
                 <div>
-                  Grants <span class="stat-blue">Immunity to Sleep</span> for 4
-                  hours.
+                  Adds <span class="stat-blue">+20% Clarity</span> by attaching
+                  Logs and Screenshots.
                 </div>
                 <div class="flavor-text">
-                  "Do not shake before use. Or do. I'm not a cop."
+                  "Sharp details cut through developer excuses."
                 </div>
               </div>
             </div>
           </div>
+          <div class="inventory-slot small" style="opacity: 0.3"></div>
           <div class="inventory-slot small" style="opacity: 0.3"></div>
         </div>
         <div
