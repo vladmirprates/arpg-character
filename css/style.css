@@ -582,7 +582,7 @@ svg#svg-layer {
 
 /* TREE NODES & LINES */
 .link {
-  stroke: #333;
+  stroke: #444;
   stroke-width: 3;
   opacity: 1;
   transition: stroke 0.4s;
