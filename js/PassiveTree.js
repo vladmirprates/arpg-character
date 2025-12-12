@@ -27,7 +27,7 @@ export class PassiveTree {
 
     // Draw Section Labels
     const labels = [
-      { text: "GAMEPLAY", x: this.cx, y: this.cy - 600 },
+      { text: "SYSTEMS", x: this.cx, y: this.cy - 600 },
       { text: "BUG REPORT", x: this.cx, y: this.cy + 600 },
       { text: "TECHNICAL", x: this.cx + 850, y: this.cy },
       { text: "PROCESS", x: this.cx - 900, y: this.cy },
