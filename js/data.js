@@ -250,7 +250,7 @@ export const treeData = [
   {
     id: "tech_api",
     x: 1680,
-    y: 1600,
+    y: 1560,
     icon: "🔌",
     name: "API REST & Integration Testing",
     desc: "Testing backend endpoints and complex system integrations.",
