@@ -36,7 +36,7 @@ body {
       rgba(30, 35, 45, 1) 0%,
       rgba(5, 5, 5, 1) 100%
     ),
-    url("https://www.transparenttextures.com/patterns/stardust.png"); /* Optional subtle noise */
+    url("../icons/stardust.png");
   background-size: 240% 240%;
   animation: abyss-breathe 18s ease infinite;
   box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.9);
@@ -203,7 +203,7 @@ body::before {
   gap: 6px;
   justify-content: center;
   align-content: center;
-  background: url("https://www.transparenttextures.com/patterns/dark-matter.png");
+  background: url("../icons/dark-matter.png");
 
   /* Visual map */
   grid-template-areas:
@@ -524,7 +524,7 @@ body::before {
   height: 100vh;
   z-index: 200;
   background-color: #050505;
-  background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+  background-image: url("../icons/stardust.png");
   animation: abyss-breathe 60s ease infinite;
 }
 .close-modal {
@@ -878,32 +878,23 @@ svg#svg-layer {
 /* Textures for panels */
 .panel-left, .panel-right, .panel-skill {
   background-color: #000;
-  background-image: url("https://www.transparenttextures.com/patterns/buried.png");
+  background-image: url("../icons/buried.png");
   box-shadow: 
     inset 0 0 40px rgba(0,0,0,0.9),
     0 0 20px rgba(0,0,0,0.5);
   background-repeat: repeat;
 }
 
-/* --- CORES DAS RUNAS NA PASSIVE TREE (AZUL/COSMIC) --- */
+/* --- Runes colors passive tree --- */
 
-/* Altera o Anel Externo (Bordas e Sombras) */
 #tree-modal .rune-circle-outer {
-  /* Substitui a cor laranja por Azul Ciano */
   border-color: rgba(100, 220, 255, 0.2);
   box-shadow: 
     0 0 20px rgba(0, 150, 255, 0.1),
     0 0 60px rgba(0, 100, 200, 0.2),
     inset 0 0 30px rgba(0, 150, 255, 0.2);
 }
-
-/* Altera o Anel Interno (O desenho SVG) */
 #tree-modal .rune-circle-inner {
-  /* O SVG é laranja por padrão. 
-     Hue-rotate(190deg) gira do laranja para o azul. 
-     Brightness aumenta o brilho para parecer neon. */
   filter: hue-rotate(190deg) brightness(0.8) drop-shadow(0 0 10px rgba(0, 200, 255, 0.3));
-  
-  /* Borda fina azul */
   border-color: rgba(100, 220, 255, 0.2);
 }
