@@ -1,4 +1,4 @@
-import { treeData, links } from './data.js';
+import { treeData, links } from "./data.js";
 
 export class PassiveTree {
   constructor() {
@@ -22,7 +22,7 @@ export class PassiveTree {
           <div class="rune-circle-outer" style="width: 1000px; height: 1000px;"></div>
       `;
     runeContainer.style.position = "absolute";
-    runeContainer.style.zIndex = "0"; 
+    runeContainer.style.zIndex = "0";
     canvas.appendChild(runeContainer);
 
     // Draw Section Labels
@@ -73,7 +73,7 @@ export class PassiveTree {
       el.style.left = n.x + "px";
       el.style.top = n.y + "px";
       el.innerHTML = `<span class="icon">${n.icon}</span>`;
-      
+
       // BINDING CLICK EVENT TO CLASS METHOD
       el.onclick = () => this.toggleNode(n.id);
 
@@ -98,6 +98,7 @@ export class PassiveTree {
       minScale: 0.3,
       contain: "outside",
       startScale: 0.8,
+      touchAction: "none",
     });
     document
       .getElementById("tree-container")
@@ -134,10 +135,7 @@ export class PassiveTree {
       const currentId = queue.shift();
 
       adj.get(currentId).forEach((neighborId) => {
-        if (
-          currentAllocated.has(neighborId) &&
-          !reachable.has(neighborId)
-        ) {
+        if (currentAllocated.has(neighborId) && !reachable.has(neighborId)) {
           reachable.add(neighborId);
           queue.push(neighborId);
         }

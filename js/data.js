@@ -308,7 +308,7 @@ export const treeData = [
   {
     id: "proc_smoke",
     x: 1320,
-    y: 1400,
+    y: 1430,
     icon: "💨",
     name: "Smoke Test",
     desc: "Quick check to ensure the build is testable.",
@@ -316,7 +316,7 @@ export const treeData = [
   {
     id: "proc_standup",
     x: 1220,
-    y: 1400,
+    y: 1430,
     icon: "☕",
     name: "Agile Ceremonies",
     desc: "Active participation in Daily Standups and Retrospectives.",
@@ -357,11 +357,10 @@ export const links = [
   { from: "gm_mechanics", to: "gm_collision" },
   { from: "gm_mechanics", to: "gm_ui" },
   { from: "gm_mechanics", to: "gm_save" },
+  { from: "gm_mechanics", to: "gm_audio" },
   { from: "gm_collision", to: "gm_progression" },
-  { from: "gm_ui", to: "gm_progression" },
   { from: "gm_progression", to: "gm_master" },
-  { from: "gm_ui", to: "gm_audio" },
-  { from: "gm_ui", to: "gm_loc" },
+  { from: "gm_progression", to: "gm_loc" },
   { from: "gm_mechanics", to: "gm_physics" },
   { from: "gm_progression", to: "gm_tuto" },
   { from: "gm_master", to: "gm_balance" },
@@ -369,12 +368,12 @@ export const links = [
   { from: "bug_write", to: "bug_steps" },
   { from: "bug_steps", to: "bug_media" },
   { from: "bug_steps", to: "bug_sev" },
+  { from: "bug_expected", to: "bug_corner" },
   { from: "bug_media", to: "bug_master" },
   { from: "bug_sev", to: "bug_master" },
   { from: "bug_write", to: "bug_search" },
+  { from: "bug_search", to: "bug_version" },
   { from: "bug_write", to: "bug_expected" },
-  { from: "bug_steps", to: "bug_version" },
-  { from: "bug_sev", to: "bug_corner" },
   { from: "bug_master", to: "bug_reopen" },
   // East
   { from: "tech_jira", to: "tech_logs" },
@@ -396,5 +395,5 @@ export const links = [
   { from: "proc_smoke", to: "proc_standup" },
   { from: "proc_comm", to: "proc_docs" },
   { from: "proc_testplan", to: "proc_risk" },
-  // { from: "proc_master", to: "proc_lead" }, // Removed as per user request to not have QA Lead node
+  { from: "proc_master", to: "proc_lead" },
 ];

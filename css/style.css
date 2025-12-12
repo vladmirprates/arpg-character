@@ -38,8 +38,7 @@ body {
     ),
     url("../icons/stardust.png");
   background-size: 240% 240%;
-  animation: abyss-breathe 18s ease infinite;
-  box-shadow: inset 0 0 150px rgba(0, 0, 0, 0.9);
+  animation: abyss-breathe 15s ease infinite;
 }
 
 @keyframes abyss-breathe {
@@ -378,7 +377,9 @@ body::before {
   width: 250px;
 }
 
-.inventory-slot:hover .poe-tooltip {
+.inventory-slot:hover .poe-tooltip,
+.inventory-slot:active .poe-tooltip,
+.inventory-slot:focus .poe-tooltip {
   display: block;
 }
 
@@ -573,7 +574,7 @@ svg#svg-layer {
   font-size: 100px;
   font-weight: 900;
   color: #fff;
-  opacity: 0.30;
+  opacity: 0.3;
   pointer-events: none;
   white-space: nowrap;
   transform: translate(-50%, -50%);
@@ -828,7 +829,7 @@ svg#svg-layer {
   border-radius: 50%;
   border: 2px dashed rgba(255, 180, 100, 0.6);
   box-shadow: 0 0 5px rgba(255, 150, 50, 0.8), 0 0 50px rgba(175, 96, 37, 0.4),
-  inset 0 0 20px rgba(255, 150, 50, 0.3);
+    inset 0 0 20px rgba(255, 150, 50, 0.3);
   animation: spinRune 80s linear infinite;
   opacity: 0.8;
   top: 50%;
@@ -876,25 +877,128 @@ svg#svg-layer {
 }
 
 /* Textures for panels */
-.panel-left, .panel-right, .panel-skill {
+.panel-left,
+.panel-right,
+.panel-skill {
   background-color: #000;
   background-image: url("../icons/buried.png");
-  box-shadow: 
-    inset 0 0 40px rgba(0,0,0,0.9),
-    0 0 20px rgba(0,0,0,0.5);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.5);
   background-repeat: repeat;
 }
 
-/* --- Runes colors passive tree --- */
+/* Runes colors passive tree */
 
 #tree-modal .rune-circle-outer {
   border-color: rgba(100, 220, 255, 0.2);
-  box-shadow: 
-    0 0 20px rgba(0, 150, 255, 0.1),
-    0 0 60px rgba(0, 100, 200, 0.2),
+  box-shadow: 0 0 20px rgba(0, 150, 255, 0.1), 0 0 60px rgba(0, 100, 200, 0.2),
     inset 0 0 30px rgba(0, 150, 255, 0.2);
 }
 #tree-modal .rune-circle-inner {
-  filter: hue-rotate(190deg) brightness(0.8) drop-shadow(0 0 10px rgba(0, 200, 255, 0.3));
+  filter: hue-rotate(190deg) brightness(0.8)
+    drop-shadow(0 0 10px rgba(0, 200, 255, 0.3));
   border-color: rgba(100, 220, 255, 0.2);
+}
+
+/* RESPONSIVE DESIGN */
+
+@media (max-width: 1200px) {
+  .ui-container {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    overflow-y: auto;
+    align-items: center;
+    padding-bottom: 100px;
+  }
+
+  .panel {
+    width: 90%;
+    max-width: 600px;
+    margin-bottom: 20px;
+  }
+
+  .panel.paper-doll {
+    order: 1;
+  }
+  .panel-left {
+    order: 2;
+  }
+  .panel-right {
+    order: 3;
+  }
+
+  body {
+    height: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+/* RESPONSIVE MOBILE (MAX 600PX) */
+@media (max-width: 600px) {
+  .panel.paper-doll {
+    width: 95%;
+    transform-origin: top center;
+    transform: scale(0.75);
+    margin-bottom: -100px;
+  }
+
+  .panel-left,
+  .panel-right {
+    width: 90%;
+    margin: 10px 0;
+  }
+
+  .skill-slot {
+    width: 40px;
+    height: 40px;
+  }
+
+  .tree-btn {
+    font-size: 12px;
+    padding: 0 10px;
+    height: 44px;
+  }
+
+  .bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 0;
+    border: none;
+    padding: 15px 10px;
+    justify-content: center;
+    gap: 8px;
+    background-color: rgba(17, 17, 17, 0.98);
+    z-index: 900;
+  }
+
+  .ui-container {
+    padding-bottom: 120px;
+  }
+
+  .poe-tooltip,
+  .inventory-slot:hover .poe-tooltip,
+  .tooltip-right .poe-tooltip,
+  .tooltip-left .poe-tooltip,
+  .tooltip-up .poe-tooltip {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90vw !important;
+    max-width: 380px;
+    font-size: 16px;
+    z-index: 2000 !important;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 1);
+    pointer-events: none;
+    display: none;
+  }
+
+  .inventory-slot:hover .poe-tooltip,
+  .inventory-slot:active .poe-tooltip {
+    display: block !important;
+  }
 }

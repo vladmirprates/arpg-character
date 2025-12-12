@@ -110,3 +110,11 @@ export function setupTooltips() {
     `,
   });
 }
+
+document.addEventListener("touchstart", function (e) {
+  if (!e.target.closest(".inventory-slot")) {
+    if (document.activeElement) {
+      document.activeElement.blur();
+    }
+  }
+});
