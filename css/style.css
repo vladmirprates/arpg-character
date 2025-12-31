@@ -1414,3 +1414,67 @@ svg#svg-layer {
     font-size: 9px;
   }
 }
+
+.crafting-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+  width: 100%;
+}
+.crafting-controls select {
+  margin-bottom: 0;
+  height: 44px;
+}
+
+@media (max-width: 600px) {
+  .crafting-controls {
+    flex-direction: column;
+  }
+  .crafting-controls select,
+  .crafting-controls button {
+    width: 100%;
+  }
+}
+
+/* --- Stash Notification Popup --- */
+.stash-notification {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 10, 10, 0.95);
+  border: 1px solid var(--unique-orange);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), 0 0 10px rgba(175, 96, 37, 0.3);
+  padding: 15px 30px;
+  z-index: 3000;
+  pointer-events: none;
+
+  font-family: "Cinzel", serif;
+  font-size: 18px;
+  color: var(--unique-orange);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 5px rgba(0, 0, 0, 1);
+
+  animation: notifEnter 0.4s ease-out, notifFade 0.4s ease-in 1.5s forwards;
+}
+
+@keyframes notifEnter {
+  from {
+    top: -50px;
+    opacity: 0;
+  }
+  to {
+    top: 10%;
+    opacity: 1;
+  }
+}
+
+@keyframes notifFade {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+}

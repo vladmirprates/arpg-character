@@ -142,6 +142,12 @@ export class CraftingBench {
         this.changeBase(e.target.value);
       });
     }
+
+    // New Save Button
+    const saveBtn = document.getElementById("btn-save-item");
+    if (saveBtn) {
+      saveBtn.addEventListener("click", () => this.saveToStash());
+    }
   }
 
   openBench() {
@@ -286,15 +292,24 @@ export class CraftingBench {
     const roll = Math.random();
 
     // Outcome 1: Randomize 1-3 Affixes
-    if (roll < 0.2) {
+    if (roll < 0.33) {
       if (this.currentItem.mods.length > 0) {
         const loops = Math.min(
           this.currentItem.mods.length,
           Math.floor(Math.random() * 3) + 1
         );
+
         for (let i = 0; i < loops; i++) {
-          this.currentItem.mods.pop();
+          if (this.currentItem.mods.length === 0) break;
+          const randomIdx = Math.floor(
+            Math.random() * this.currentItem.mods.length
+          );
+          this.currentItem.mods.splice(randomIdx, 1);
+        }
+
+        for (let i = 0; i < loops; i++) {
           this.addRandomMod();
+
           const newModIndex = this.currentItem.mods.length - 1;
           if (newModIndex >= 0) {
             this.currentItem.mods[newModIndex].shining = true;
@@ -303,11 +318,11 @@ export class CraftingBench {
       }
     }
     // Outcome 2: Add Corrupted Implicit
-    else if (roll < 0.6) {
+    else if (roll < 0.66) {
       const imps = this.pools[this.currentType].implicits;
       this.currentItem.implicit = imps[Math.floor(Math.random() * imps.length)];
     }
-    // Outcome 3: BRICK
+    // Outcome 3: BRICK (Transform into Unique)
     else {
       this.currentItem.rarity = "unique";
       this.currentItem.baseName = "Undocumented Feature";
@@ -431,7 +446,6 @@ export class CraftingBench {
       modsEl.innerHTML =
         '<span style="color:#555; font-style:italic;">No properties</span>';
     } else {
-      
       if (this.currentItem.rarity === "unique") {
         this.currentItem.mods.forEach((mod) => {
           const div = document.createElement("div");
@@ -485,5 +499,136 @@ export class CraftingBench {
     el.classList.remove("crafting-anim", "error-anim");
     void el.offsetWidth;
     el.classList.add(animClass);
+  }
+
+  saveToStash() {
+    const slots = document.querySelectorAll(".stash-slot");
+    let targetSlot = null;
+
+    for (const slot of slots) {
+      if (!slot.hasChildNodes()) {
+        targetSlot = slot;
+        break;
+      }
+    }
+
+    if (!targetSlot) {
+      alert("Stash is full! Remove items to save new ones.");
+      return;
+    }
+    let iconPath = "icons/backpack1.svg";
+    const rarityClass = this.currentItem.rarity;
+    let finalName = "";
+    let rarityColor = "#e0e0e0";
+    if (rarityClass === "magic") rarityColor = "#8888ff";
+    if (rarityClass === "rare") rarityColor = "#ffff77";
+    if (rarityClass === "unique") rarityColor = "#af6025";
+    if (rarityClass === "normal")
+      finalName = "Blank " + this.currentItem.baseName;
+    else if (rarityClass === "magic") {
+      const p = this.currentItem.mods.find((m) => m.type === "prefix");
+      const s = this.currentItem.mods.find((m) => m.type === "suffix");
+      finalName = `${p ? p.data.name + " " : ""}${this.currentItem.baseName}${
+        s ? " " + s.data.name : ""
+      }`;
+    } else if (rarityClass === "rare") finalName = this.currentItem.rareName;
+    else if (rarityClass === "unique") finalName = "Undocumented Feature";
+    let modsHtml = "";
+
+    if (rarityClass === "unique") {
+      this.currentItem.mods.forEach((m) => {
+        modsHtml += `<div class="stat-line" style="color:${rarityColor}; margin: 2px 0;">${m.data.effect}</div>`;
+      });
+    } else {
+      const prefixes = this.currentItem.mods.filter((m) => m.type === "prefix");
+      const suffixes = this.currentItem.mods.filter((m) => m.type === "suffix");
+
+      const createHeader = (text) => `
+            <div class="mod-section-header" style="
+                font-size: 10px; 
+                text-align: left; 
+                padding-left: 0;
+                margin-top: 8px; 
+                width: 100%;
+                box-sizing: border-box;
+                color: #777; 
+            ">${text}</div>`;
+
+      if (prefixes.length > 0) {
+        modsHtml += createHeader("PREFIXES");
+        prefixes.forEach(
+          (m) =>
+            (modsHtml += `<div class="stat-line" style="color:${rarityColor}">${m.data.effect}</div>`)
+        );
+      }
+
+      if (suffixes.length > 0) {
+        modsHtml += createHeader("SUFFIXES");
+        suffixes.forEach(
+          (m) =>
+            (modsHtml += `<div class="stat-line" style="color:${rarityColor}">${m.data.effect}</div>`)
+        );
+      }
+    }
+
+    const implicitHtml = this.currentItem.implicit
+      ? `<div class="item-implicit" style="display:block; margin-bottom:5px; color:#fff;">${this.currentItem.implicit}</div><div class="separator"></div>`
+      : "";
+
+    const corruptedTag = this.currentItem.corrupted
+      ? `<div class="corrupted-tag" style="display:block; margin-top:15px; font-size:16px; color: var(--corrupted-red);">CORRUPTED</div>`
+      : "";
+
+    targetSlot.innerHTML = `
+      <img src="${iconPath}" class="item-icon" style="${
+      this.currentItem.corrupted
+        ? "filter: sepia(1) hue-rotate(-50deg) saturate(3);"
+        : ""
+    }">
+      
+      <div class="poe-tooltip" style="min-width: 300px;">
+        <div class="item-header ${rarityClass}" 
+             style="${
+               this.currentItem.corrupted
+                 ? "border-bottom-color: var(--corrupted-red);"
+                 : ""
+             }">
+          <span class="item-name" style="color: ${rarityColor}">${finalName}</span>
+          <span class="item-base" style="color: ${rarityColor}">${
+      this.currentItem.baseName
+    }</span>
+        </div>
+        
+        <div class="item-content" style="padding: 10px;">
+          ${implicitHtml}
+          <div style="width:100%; display:flex; flex-direction:column; align-items:center;">
+             ${modsHtml}
+          </div>
+          ${corruptedTag}
+        </div>
+      </div>
+    `;
+
+    targetSlot.className = `inventory-slot small stash-slot ${rarityClass} tooltip-left`;
+    if (this.currentItem.corrupted) {
+      targetSlot.classList.add("corrupted");
+      targetSlot.style.borderColor = "var(--corrupted-red)";
+    }
+
+    this.showNotification("Item Saved to Stash");
+    this.triggerAnimation("crafting-anim");
+    this.applyCurrency("scouring");
+  }
+
+  showNotification(text) {
+    const notif = document.createElement("div");
+    notif.className = "stash-notification";
+    notif.innerText = text;
+
+    document.body.appendChild(notif);
+
+    setTimeout(() => {
+      notif.remove();
+    }, 2000);
   }
 }
