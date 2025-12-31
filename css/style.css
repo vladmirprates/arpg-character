@@ -498,7 +498,7 @@ body::before {
   height: 80%;
 }
 
-.tree-btn {
+.ui-btn {
   background: linear-gradient(to bottom, #2f1b0c, #000);
   border: 2px solid var(--unique-orange);
   color: var(--unique-orange);
@@ -510,7 +510,7 @@ body::before {
   text-transform: uppercase;
   transition: 0.2s;
 }
-.tree-btn:hover {
+.ui-btn:hover {
   box-shadow: 0 0 15px var(--unique-orange);
   color: #fff;
 }
@@ -954,7 +954,7 @@ svg#svg-layer {
     height: 40px;
   }
 
-  .tree-btn {
+  .ui-btn {
     font-size: 12px;
     padding: 0 10px;
     height: 44px;
@@ -1001,4 +1001,354 @@ svg#svg-layer {
   .inventory-slot:active .poe-tooltip {
     display: block !important;
   }
+}
+
+/* --- CRAFTING BENCH MODAL & UI --- */
+
+#crafting-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 200;
+  background-color: #050505;
+  background-image: url("../icons/stardust.png");
+  animation: abyss-breathe 60s ease infinite;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The Bench Panel */
+.bench-container {
+  width: 900px;
+  padding: 40px;
+  position: relative;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 0 35px rgba(0, 0, 0, 0.9), 0 0 0 4px #444;
+  text-align: center;
+  background-image: url("../icons/buried.png");
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+}
+
+/* Corners for Bench */
+.bench-container::after {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  right: -6px;
+  bottom: -6px;
+  pointer-events: none;
+  z-index: 11;
+  background: linear-gradient(
+        to right,
+        var(--unique-orange) 2px,
+        transparent 2px
+      )
+      0 0,
+    linear-gradient(to bottom, var(--unique-orange) 2px, transparent 2px) 0 0,
+    linear-gradient(to left, var(--unique-orange) 2px, transparent 2px) 100% 0,
+    linear-gradient(to bottom, var(--unique-orange) 2px, transparent 2px) 100% 0,
+    linear-gradient(to right, var(--unique-orange) 2px, transparent 2px) 0 100%,
+    linear-gradient(to top, var(--unique-orange) 2px, transparent 2px) 0 100%,
+    linear-gradient(to left, var(--unique-orange) 2px, transparent 2px) 100%
+      100%,
+    linear-gradient(to top, var(--unique-orange) 2px, transparent 2px) 100% 100%;
+  background-repeat: no-repeat;
+  background-size: 20px 20px;
+}
+
+/* Crafting Item Display Area */
+.item-display {
+  background: #131313;
+  border: 1px solid var(--border-color);
+  min-height: 180px;
+  margin: 0px;
+  width: 65%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+  box-shadow: inset 0 0 20px #000;
+}
+
+.item-display .item-header {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  background: linear-gradient(to bottom, #1a1a1a, #000);
+  border-bottom: 1px solid var(--border-color);
+  text-align: center;
+}
+
+.item-display .item-content {
+  padding: 20px;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.item-display.normal {
+  border-color: var(--border-color);
+}
+.item-display.normal .item-name {
+  color: var(--text-grey);
+}
+
+.item-display.magic {
+  border-color: var(--magic-blue);
+}
+.item-display.magic .item-name,
+.item-display.magic .stat-line {
+  color: var(--magic-blue);
+}
+.item-display.magic .item-header {
+  border-bottom-color: var(--magic-blue);
+}
+
+.item-display.rare {
+  border-color: var(--rare-yellow);
+}
+.item-display.rare .item-name,
+.item-display.rare .stat-line {
+  color: var(--rare-yellow);
+}
+.item-display.rare .item-header {
+  border-bottom-color: var(--rare-yellow);
+}
+
+.item-display.unique {
+  border-color: var(--unique-orange);
+}
+.item-display.unique .item-name,
+.item-display.unique .stat-line,
+.item-display.unique .item-base {
+  color: var(--unique-orange);
+}
+.item-display.unique .item-header {
+  border-bottom-color: var(--unique-orange);
+}
+
+/* Corrupted Style */
+.item-display.is-corrupted {
+  border-color: var(--corrupted-red);
+}
+.item-display.is-corrupted .item-header {
+  border-bottom-color: var(--corrupted-red);
+}
+
+/* Corrupted Tag */
+.corrupted-tag {
+  color: var(--corrupted-red);
+  font-family: "Cinzel", serif;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 15px;
+  text-shadow: 0 0 5px rgba(202, 2, 2, 0.5);
+  letter-spacing: 2px;
+  display: none;
+}
+.item-display.is-corrupted .corrupted-tag {
+  display: block;
+}
+
+/* Currency Belt Grid */
+.currency-belt {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 10px;
+  margin-top: 0;
+  padding: 10px;
+}
+
+.currency-slot {
+  width: 60px;
+  height: 60px;
+  background: #111;
+  border: 1px solid #444;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.2s;
+  margin: 0 auto;
+}
+
+.currency-slot:hover {
+  border-color: #fff;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+  transform: scale(1.1);
+  z-index: 10;
+}
+
+.currency-slot:active {
+  transform: scale(0.95);
+}
+.currency-slot img {
+  width: 70%;
+  height: 70%;
+}
+
+/* Currency Labels */
+.currency-label {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  text-align: center;
+  font-size: 11px;
+  color: #aaa;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  background: rgba(0, 0, 0, 0.95);
+  padding: 6px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  z-index: 20;
+  box-shadow: 0 0 10px #000;
+}
+.currency-slot:hover .currency-label {
+  opacity: 1;
+}
+
+/* Select Box Styling */
+.crafting-controls select {
+  background: #000;
+  color: var(--text-white);
+  border: 1px solid var(--unique-orange);
+  padding: 10px 20px;
+  font-family: "Cinzel", serif;
+  font-size: 16px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+.crafting-controls select:hover {
+  box-shadow: 0 0 10px var(--unique-orange);
+}
+
+/* Animations */
+@keyframes flash {
+  0% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(2);
+  }
+  100% {
+    filter: brightness(1);
+  }
+}
+.crafting-anim {
+  animation: flash 0.2s ease-out;
+}
+.error-anim {
+  animation: shake 0.3s ease-in-out;
+  border-color: red !important;
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* --- Shine mods on randomization corruption outcome --- */
+@keyframes modShineAnim {
+  0% {
+    color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 10px var(--corrupted-red);
+    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.1);
+  }
+  100% {
+    color: inherit;
+    text-shadow: none;
+    transform: scale(1);
+    background: transparent;
+  }
+}
+
+.mod-shine {
+  animation: modShineAnim 1s ease-out forwards;
+}
+
+.bench-container h2 {
+  font-family: "Cinzel", serif;
+  font-size: 32px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  text-shadow: 5px 5px 5px #000;
+  margin-top: 0;
+  margin-bottom: 25px;
+  position: relative;
+  z-index: 5;
+  background: linear-gradient(to bottom, #f7ab48 0%, var(--unique-orange) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 10px rgba(175, 96, 37, 0.6));
+}
+
+/* --- Crafting currency coloring --- */
+.icon-filter-magic {
+  filter: invert(45%) sepia(52%) saturate(5840%) hue-rotate(216deg) brightness(101%) contrast(101%);
+}
+.icon-filter-rare {
+  filter: sepia(100%) saturate(838%) hue-rotate(323deg) brightness(101%) contrast(101%);
+}
+.icon-filter-corrupted {
+  filter: invert(27%) sepia(96%) saturate(7483%) hue-rotate(358deg) brightness(91%) contrast(107%);
+}
+
+/* --- Color of the border of currency  --- */
+
+.currency-slot[data-currency="transmute"],
+.currency-slot[data-currency="augmentation"],
+.currency-slot[data-currency="alteration"] {
+  border-color: var(--magic-blue);
+  box-shadow: inset 0 0 10px rgba(136, 136, 255, 0.1); 
+}
+
+.currency-slot[data-currency="regal"],
+.currency-slot[data-currency="chaos"],
+.currency-slot[data-currency="exalted"] {
+  border-color: var(--rare-yellow);
+  box-shadow: inset 0 0 10px rgba(255, 255, 119, 0.1);
+}
+
+.currency-slot[data-currency="vaal"] {
+  border-color: var(--corrupted-red);
+  box-shadow: inset 0 0 10px rgba(202, 2, 2, 0.15);
+}
+
+.currency-slot[data-currency="annulment"],
+.currency-slot[data-currency="scouring"] {
+  border-color: var(--text-white);
+}
+
+.currency-slot:hover {
+  border-color: #fff !important;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }

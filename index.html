@@ -645,6 +645,10 @@
         >
           Currency: 40x Jira Tickets, 2x Divine Recs
         </div>
+        <br />
+        <center>
+          <button class="ui-btn craft-btn">Crafting Bench</button>
+        </center>
       </div>
     </div>
 
@@ -676,7 +680,7 @@
         </div>
       </div>
 
-      <button class="tree-btn">Passive Tree</button>
+      <button class="ui-btn tree-btn">Passive Tree</button>
     </div>
 
     <div id="tree-modal">
@@ -702,7 +706,135 @@
         <div id="tree-canvas"><svg id="svg-layer"></svg></div>
       </div>
     </div>
+    <div id="crafting-modal">
+      <div class="close-modal">X</div>
 
+      <div class="bench-container">
+        <h2>QA Crafting Bench</h2>
+
+        <div class="crafting-controls">
+          <select id="base-selector">
+            <option value="bug">Base: Bug Report</option>
+            <option value="testcase">Base: Test Case</option>
+            <option value="script">Base: Auto Script</option>
+          </select>
+        </div>
+
+        <div id="crafting-item" class="item-display normal">
+          <div class="item-header">
+            <span class="item-name">Blank Ticket</span>
+            <span class="item-base">Bug Report</span>
+          </div>
+
+          <div class="item-content">
+            <div id="item-implicit" style="display: none">
+              <div class="item-implicit" id="implicit-text"></div>
+              <div class="separator"></div>
+            </div>
+
+            <div class="item-stats" id="item-mods">
+              <span style="color: #555; font-style: italic">No properties</span>
+            </div>
+
+            <div class="corrupted-tag">CORRUPTED</div>
+          </div>
+        </div>
+        <div class="currency-belt">
+          <div class="currency-slot" data-currency="transmute">
+            <img
+              src="icons/crystal-ball.svg"
+              class="currency-icon icon-filter-magic"
+            />
+            <div class="currency-label">
+              <strong style="color: var(--magic-blue)">Orb of Triage</strong
+              ><br />Upgrades a Normal item to Magic
+            </div>
+          </div>
+
+          <div class="currency-slot" data-currency="augmentation">
+            <img
+              src="icons/orb-direction.svg"
+              class="currency-icon icon-filter-magic"
+            />
+            <div class="currency-label">
+              <strong style="color: var(--magic-blue)">Orb of Scope</strong
+              ><br />Add 1 Modifier to a Magic item
+            </div>
+          </div>
+
+          <div class="currency-slot" data-currency="alteration">
+            <img
+              src="icons/orbit.svg"
+              class="currency-icon icon-filter-magic"
+            />
+            <div class="currency-label">
+              <strong style="color: var(--magic-blue)">Orb of Revision</strong
+              ><br />Reroll 1 Magic Modifier
+            </div>
+          </div>
+
+          <div class="currency-slot" data-currency="regal">
+            <img
+              src="icons/orbital-rays.svg"
+              class="currency-icon icon-filter-rare"
+            />
+            <div class="currency-label">
+              <strong style="color: var(--rare-yellow)">Promotion Orb</strong
+              ><br />Upgrades a Magic item to Rare
+            </div>
+          </div>
+
+          <div class="currency-slot" data-currency="chaos">
+            <img
+              src="icons/orbital.svg"
+              class="currency-icon icon-filter-rare"
+            />
+            <div class="currency-label">
+              <strong style="color: var(--rare-yellow)">Entropy Orb</strong
+              ><br />Reroll 1 Rare Modifier
+            </div>
+          </div>
+
+          <div class="currency-slot" data-currency="exalted">
+            <img
+              src="icons/gold-shell.svg"
+              class="currency-icon icon-filter-rare"
+            />
+            <div class="currency-label">
+              <strong style="color: var(--rare-yellow)">Insight Orb</strong
+              ><br />Add 1 Modifier to a Rare item
+            </div>
+          </div>
+
+          <div class="currency-slot" data-currency="annulment">
+            <img src="icons/star-satellites.svg" />
+            <div class="currency-label">
+              <strong style="color: var(--text-white)">Orb of Omission</strong
+              ><br />Remove 1 Modifier
+            </div>
+          </div>
+
+          <div class="currency-slot" data-currency="scouring">
+            <img src="icons/ubisoft-sun.svg" />
+            <div class="currency-label">
+              <strong style="color: var(--text-white)">Revert Orb</strong
+              ><br />Reset to Base
+            </div>
+          </div>
+
+          <div class="currency-slot" data-currency="vaal">
+            <img
+              src="icons/double-ringed-orb.svg"
+              class="currency-icon icon-filter-corrupted"
+            />
+            <div class="currency-label">
+              <strong style="color: var(--corrupted-red)">Deployment Orb</strong
+              ><br />Corrupt the Item
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="js/main.js"></script>
   </body>
 </html>
