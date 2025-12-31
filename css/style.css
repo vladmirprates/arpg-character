@@ -1352,3 +1352,20 @@ svg#svg-layer {
   border-color: #fff !important;
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
+
+/* --- Mod Section Indicators --- */
+.mod-section-header {
+  font-family: "Roboto", sans-serif;
+  font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #555;
+  text-align: left;
+  text-transform: uppercase;
+  border-bottom: 1px solid #333;
+  margin-bottom: 4px;
+  padding-bottom: 2px;
+  width: 100%;
+  display: block;
+}
+

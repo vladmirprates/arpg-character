@@ -9,12 +9,26 @@ export class CraftingBench {
           { name: "Clean", effect: "+10% Readability" },
           { name: "Visual", effect: "Includes Video Evidence" },
           { name: "Backend", effect: "Contains Server Logs" },
+          { name: "Blocking", effect: "Prevents Release Deployment" },
+          { name: "Intermittent", effect: "Reproduces 50% of the time" },
+          { name: "Regression", effect: "Was working in previous build" },
+          { name: "Security", effect: "Exposes Vulnerability" },
+          { name: "Performance", effect: "Page Load > 5000ms" },
         ],
         suffixes: [
           { name: "of the Intern", effect: "10% chance to crash on open" },
           { name: "of Friday", effect: "Deploy time set to 17:00" },
           { name: "of Coffee", effect: "Developers work 20% faster" },
           { name: "of the Legacy", effect: "References 2015 Codebase" },
+          {
+            name: "of the Heisenbug",
+            effect: "Disappears when Debugger is open",
+          },
+          { name: "of the Cache", effect: "Fixed by Hard Refresh" },
+          { name: "of the User", effect: "Closed as PEBKAC / User Error" },
+          { name: "of the Typo", effect: "Fixed by changing one character" },
+          { name: "of the Ping-Pong", effect: "Reassigned back to QA 3 times" },
+          { name: "of the Duplicate", effect: "Linked to a ticket from 2019" },
         ],
         implicits: [
           "Grants Level 10 'Blame the User' Skill",
@@ -23,13 +37,18 @@ export class CraftingBench {
         ],
       },
       testcase: {
-        baseName: "Gherkin Case",
+        baseName: "Test Case",
         prefixes: [
           { name: "Reusable", effect: "Can be used in Regression Suite" },
           { name: "Data-Driven", effect: "Runs with 50 Dataset variations" },
           { name: "Atomic", effect: "Tests only 1 feature independently" },
           { name: "Declarative", effect: "+20% 'When/Then' clarity" },
           { name: "Negative", effect: "Focuses on Error Handling" },
+          { name: "End-to-End", effect: "Validates full User Journey" },
+          { name: "Boundary", effect: "Tests Min/Max input limits" },
+          { name: "Accessibility", effect: "WCAG 2.1 Compliant" },
+          { name: "Integrated", effect: "Connects 3 Microservices" },
+          { name: "Smoke", effect: "Fast Critical Path verification" },
         ],
         suffixes: [
           {
@@ -39,6 +58,18 @@ export class CraftingBench {
           { name: "of the Spaghetti", effect: "Scenario has 40 steps" },
           { name: "of Coverage", effect: "Increases Code Coverage by 2%" },
           { name: "of the Manual", effect: "Cannot be automated" },
+          { name: "of the False Positive", effect: "Passes even when broken" },
+          {
+            name: "of the Hardcoding",
+            effect: "Breaks on Staging Environment",
+          },
+          { name: "of the Copy-Paste", effect: "Duplicate steps detected" },
+          {
+            name: "of the Missing Precondition",
+            effect: "Assumes user is logged in",
+          },
+          { name: "of the Outdated", effect: "References removed button ID" },
+          { name: "of the Bloat", effect: "Scenario file exceeds 500 lines" },
         ],
         implicits: [
           "Steps are read 20% faster",
@@ -54,12 +85,23 @@ export class CraftingBench {
           { name: "Retryable", effect: "Auto-retries on flake (Max 3)" },
           { name: "Modular", effect: "Uses Page Object Model" },
           { name: "API-First", effect: "Bypasses UI layer entirely" },
+          { name: "Cross-Browser", effect: "Runs on Chrome, Firefox & Safari" },
+          { name: "Dockerized", effect: "Runs in isolated container" },
+          { name: "Self-Healing", effect: "Finds elements even if ID changes" },
+          { name: "Mocked", effect: "Simulates external dependencies" },
+          { name: "Async", effect: "Non-blocking execution flow" },
         ],
         suffixes: [
           { name: "of Flakiness", effect: "Fails randomly 15% of the time" },
           { name: "of Timeout", effect: "Waits 30s for elements" },
           { name: "of Hardcoding", effect: "Contains 'sleep(5000)'" },
           { name: "of the Selector", effect: "Uses absolute XPath" },
+          { name: "of the Race Condition", effect: "Fails on faster machines" },
+          { name: "of the Memory Leak", effect: "Crashes after 100 runs" },
+          { name: "of the Spaghetti Code", effect: "-20% Maintainability" },
+          { name: "of the Dependency Hell", effect: "node_modules is 2GB" },
+          { name: "of the Update", effect: "Breaks with Chrome v130 update" },
+          { name: "of the Localhost", effect: "Works locally, fails on CI/CD" },
         ],
         implicits: [
           "Bypasses Captcha Verification",
@@ -261,7 +303,7 @@ export class CraftingBench {
       }
     }
     // Outcome 2: Add Corrupted Implicit
-    else if (roll < 0.60) {
+    else if (roll < 0.6) {
       const imps = this.pools[this.currentType].implicits;
       this.currentItem.implicit = imps[Math.floor(Math.random() * imps.length)];
     }
@@ -282,7 +324,17 @@ export class CraftingBench {
 
   addRandomMod() {
     const pool = this.pools[this.currentType];
+
+    const limit = this.currentItem.rarity === "magic" ? 1 : 3;
+
+    const currentPrefixCount = this.currentItem.mods.filter(
+      (m) => m.type === "prefix"
+    ).length;
+    const currentSuffixCount = this.currentItem.mods.filter(
+      (m) => m.type === "suffix"
+    ).length;
     const currentNames = this.currentItem.mods.map((m) => m.data.name);
+
     const availPrefix = pool.prefixes.filter(
       (p) => !currentNames.includes(p.name)
     );
@@ -291,9 +343,14 @@ export class CraftingBench {
     );
 
     const candidates = [];
-    availPrefix.forEach((p) => candidates.push({ type: "prefix", data: p }));
-    availSuffix.forEach((s) => candidates.push({ type: "suffix", data: s }));
 
+    if (currentPrefixCount < limit) {
+      availPrefix.forEach((p) => candidates.push({ type: "prefix", data: p }));
+    }
+
+    if (currentSuffixCount < limit) {
+      availSuffix.forEach((s) => candidates.push({ type: "suffix", data: s }));
+    }
     if (candidates.length === 0) return;
     const pick = candidates[Math.floor(Math.random() * candidates.length)];
     this.currentItem.mods.push(pick);
@@ -327,7 +384,7 @@ export class CraftingBench {
 
     const randAdj = adj[Math.floor(Math.random() * adj.length)];
     const randNoun = noun[Math.floor(Math.random() * noun.length)];
-    return `${randAdj} ${randNoun} ${this.currentItem.baseName}`;
+    return `${randAdj} ${randNoun}`;
   }
 
   updateDisplay() {
@@ -343,6 +400,7 @@ export class CraftingBench {
     }`;
     baseEl.innerText = this.currentItem.baseName;
 
+    // --- Name Display Logic ---
     if (this.currentItem.rarity === "normal") {
       nameEl.innerText = "Blank " + this.currentItem.baseName;
     } else if (this.currentItem.rarity === "magic") {
@@ -358,6 +416,7 @@ export class CraftingBench {
       nameEl.innerText = "Undocumented Feature";
     }
 
+    // --- Implicit Display ---
     if (this.currentItem.implicit) {
       implicitContainer.style.display = "block";
       implicitText.innerText = this.currentItem.implicit;
@@ -365,23 +424,60 @@ export class CraftingBench {
       implicitContainer.style.display = "none";
     }
 
+    // --- Mods Display Logic ---
     modsEl.innerHTML = "";
+
     if (this.currentItem.mods.length === 0) {
       modsEl.innerHTML =
         '<span style="color:#555; font-style:italic;">No properties</span>';
     } else {
-      this.currentItem.mods.forEach((mod) => {
-        const div = document.createElement("div");
-        div.className = "stat-line";
-        div.innerText = mod.data.effect;
-        if (mod.shining) {
-          div.classList.add("mod-shine");
-          mod.shining = false;
-        }
-        modsEl.appendChild(div);
-      });
-    }
+      
+      if (this.currentItem.rarity === "unique") {
+        this.currentItem.mods.forEach((mod) => {
+          const div = document.createElement("div");
+          div.className = "stat-line";
+          div.innerText = mod.data.effect;
+          modsEl.appendChild(div);
+        });
+        return;
+      }
 
+      // Standard Logic for Magic/Rare (Prefix/Suffix Split)
+      const prefixes = this.currentItem.mods.filter((m) => m.type === "prefix");
+      const suffixes = this.currentItem.mods.filter((m) => m.type === "suffix");
+
+      const renderGroup = (title, list) => {
+        if (list.length === 0) return;
+
+        const header = document.createElement("div");
+        header.className = "mod-section-header";
+        const max = this.currentItem.rarity === "rare" ? 3 : 1;
+        header.innerText = `${title} (${list.length}/${max})`;
+        modsEl.appendChild(header);
+
+        list.forEach((mod) => {
+          const div = document.createElement("div");
+          div.className = "stat-line";
+          div.innerText = mod.data.effect;
+
+          if (mod.shining) {
+            div.classList.add("mod-shine");
+            mod.shining = false;
+          }
+          modsEl.appendChild(div);
+        });
+      };
+
+      renderGroup("PREFIXES", prefixes);
+
+      if (prefixes.length > 0 && suffixes.length > 0) {
+        const spacer = document.createElement("div");
+        spacer.style.height = "8px";
+        modsEl.appendChild(spacer);
+      }
+
+      renderGroup("SUFFIXES", suffixes);
+    }
   }
 
   triggerAnimation(animClass) {
