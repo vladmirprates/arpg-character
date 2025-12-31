@@ -1313,13 +1313,16 @@ svg#svg-layer {
 
 /* --- Crafting currency coloring --- */
 .icon-filter-magic {
-  filter: invert(45%) sepia(52%) saturate(5840%) hue-rotate(216deg) brightness(101%) contrast(101%);
+  filter: invert(45%) sepia(52%) saturate(5840%) hue-rotate(216deg)
+    brightness(101%) contrast(101%);
 }
 .icon-filter-rare {
-  filter: sepia(100%) saturate(838%) hue-rotate(323deg) brightness(101%) contrast(101%);
+  filter: sepia(100%) saturate(838%) hue-rotate(323deg) brightness(101%)
+    contrast(101%);
 }
 .icon-filter-corrupted {
-  filter: invert(27%) sepia(96%) saturate(7483%) hue-rotate(358deg) brightness(91%) contrast(107%);
+  filter: invert(27%) sepia(96%) saturate(7483%) hue-rotate(358deg)
+    brightness(91%) contrast(107%);
 }
 
 /* --- Color of the border of currency  --- */
@@ -1328,7 +1331,7 @@ svg#svg-layer {
 .currency-slot[data-currency="augmentation"],
 .currency-slot[data-currency="alteration"] {
   border-color: var(--magic-blue);
-  box-shadow: inset 0 0 10px rgba(136, 136, 255, 0.1); 
+  box-shadow: inset 0 0 10px rgba(136, 136, 255, 0.1);
 }
 
 .currency-slot[data-currency="regal"],
@@ -1369,3 +1372,45 @@ svg#svg-layer {
   display: block;
 }
 
+/* Tablet & Mobile: Crafting Bench */
+@media (max-width: 950px) {
+  .bench-container {
+    width: 95%;
+    max-width: 900px;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .item-display {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .currency-belt {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    grid-template-columns: none;
+    gap: 15px;
+  }
+
+  .currency-slot {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+  }
+}
+
+@media (max-width: 600px) {
+  .bench-container h2 {
+    font-size: 24px;
+  }
+
+  .item-display .item-name {
+    font-size: 14px;
+  }
+
+  .mod-section-header {
+    font-size: 9px;
+  }
+}
