@@ -353,7 +353,7 @@ body::before {
   background-color: rgba(0, 0, 0, 0.98);
   border: 1px solid;
   width: 320px;
-  z-index: 100;
+  z-index: 99999;
   pointer-events: none;
   text-align: center;
   padding-bottom: 5px;
@@ -972,29 +972,45 @@ svg#svg-layer {
     justify-content: center;
     gap: 8px;
     background-color: rgba(17, 17, 17, 0.98);
-    z-index: 900;
+    z-index: 50;
   }
 
   .ui-container {
     padding-bottom: 120px;
   }
+}
 
-  .poe-tooltip,
-  .inventory-slot:hover .poe-tooltip,
-  .tooltip-right .poe-tooltip,
-  .tooltip-left .poe-tooltip,
-  .tooltip-up .poe-tooltip {
-    position: fixed !important;
+@media (max-width: 950px) {
+  .panel-right .mobile-tooltip-right .poe-tooltip 
+ {
+    position: absolute !important;
     top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
+    left: 400% !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: translate(-35%, -50%) !important;
+
     width: 90vw !important;
-    max-width: 380px;
-    font-size: 16px;
-    z-index: 2000 !important;
-    box-shadow: 0 0 50px rgba(0, 0, 0, 1);
+    max-width: 340px;
     pointer-events: none;
     display: none;
+    z-index: 9999 !important;
+  }
+
+  .panel-right .mobile-tooltip-left .poe-tooltip 
+ {
+    position: absolute !important;
+    top: -50% !important;
+    left: -100% !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: translate(-50%, -35%) !important;
+
+    width: 90vw !important;
+    max-width: 340px;
+    pointer-events: none;
+    display: none;
+    z-index: 9999 !important;
   }
 
   .inventory-slot:hover .poe-tooltip,
@@ -1477,4 +1493,11 @@ svg#svg-layer {
     opacity: 0;
     transform: translate(-50%, -20px);
   }
+}
+
+/* --- Fix right bar tooptips on mobile --- */
+.inventory-slot:hover,
+.inventory-slot:active,
+.inventory-slot:focus-within {
+  z-index: 100 !important;
 }

@@ -501,13 +501,15 @@ export class CraftingBench {
     el.classList.add(animClass);
   }
 
-  saveToStash() {
+saveToStash() {
     const slots = document.querySelectorAll(".stash-slot");
     let targetSlot = null;
+    let targetIndex = -1;
 
-    for (const slot of slots) {
-      if (!slot.hasChildNodes()) {
-        targetSlot = slot;
+    for (let i = 0; i < slots.length; i++) {
+      if (!slots[i].hasChildNodes()) {
+        targetSlot = slots[i];
+        targetIndex = i;
         break;
       }
     }
@@ -516,6 +518,7 @@ export class CraftingBench {
       alert("Stash is full! Remove items to save new ones.");
       return;
     }
+
     let iconPath = "icons/backpack1.svg";
     const rarityClass = this.currentItem.rarity;
     let finalName = "";
@@ -523,6 +526,8 @@ export class CraftingBench {
     if (rarityClass === "magic") rarityColor = "#8888ff";
     if (rarityClass === "rare") rarityColor = "#ffff77";
     if (rarityClass === "unique") rarityColor = "#af6025";
+    
+    // Name Logic
     if (rarityClass === "normal")
       finalName = "Blank " + this.currentItem.baseName;
     else if (rarityClass === "magic") {
@@ -533,8 +538,9 @@ export class CraftingBench {
       }`;
     } else if (rarityClass === "rare") finalName = this.currentItem.rareName;
     else if (rarityClass === "unique") finalName = "Undocumented Feature";
+    
+    // Mods Logic
     let modsHtml = "";
-
     if (rarityClass === "unique") {
       this.currentItem.mods.forEach((m) => {
         modsHtml += `<div class="stat-line" style="color:${rarityColor}; margin: 2px 0;">${m.data.effect}</div>`;
@@ -594,9 +600,7 @@ export class CraftingBench {
                  : ""
              }">
           <span class="item-name" style="color: ${rarityColor}">${finalName}</span>
-          <span class="item-base" style="color: ${rarityColor}">${
-      this.currentItem.baseName
-    }</span>
+          <span class="item-base" style="color: ${rarityColor}">${this.currentItem.baseName}</span>
         </div>
         
         <div class="item-content" style="padding: 10px;">
@@ -609,7 +613,13 @@ export class CraftingBench {
       </div>
     `;
 
-    targetSlot.className = `inventory-slot small stash-slot ${rarityClass} tooltip-left`;
+    // Logic for mobile tooltip direction
+    let mobileDirection = "mobile-tooltip-left"; 
+    if (targetIndex === 0 || targetIndex === 1 || targetIndex === 4 || targetIndex === 5) {
+        mobileDirection = "mobile-tooltip-right";
+    }
+    targetSlot.className = `inventory-slot small stash-slot ${rarityClass} tooltip-left ${mobileDirection}`;
+    
     if (this.currentItem.corrupted) {
       targetSlot.classList.add("corrupted");
       targetSlot.style.borderColor = "var(--corrupted-red)";
