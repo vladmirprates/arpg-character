@@ -9,6 +9,7 @@ export class PassiveTree {
     this.panzoomInstance = null;
   }
 
+  // --- Tree Initialization & Drawing ---
   initTree() {
     if (this.treeInitialized) return;
     const canvas = document.getElementById("tree-canvas");
@@ -92,7 +93,7 @@ export class PassiveTree {
       canvas.appendChild(el);
     });
 
-    // USING GLOBAL PANZOOM FROM SCRIPT TAG
+    // Initialize Panzoom
     this.panzoomInstance = Panzoom(canvas, {
       maxScale: 2,
       minScale: 0.3,
@@ -106,6 +107,8 @@ export class PassiveTree {
 
     this.updateVisuals();
     this.treeInitialized = true;
+
+    // Recenter
     setTimeout(
       () =>
         this.panzoomInstance.pan(
@@ -116,6 +119,7 @@ export class PassiveTree {
     );
   }
 
+  // --- Helper: Adjacency Map for Graph Logic ---
   getAdjacencyList() {
     const adj = new Map();
     treeData.forEach((node) => adj.set(node.id, new Set()));
@@ -126,6 +130,7 @@ export class PassiveTree {
     return adj;
   }
 
+  // --- Pathfinding (BFS) to validate connections ---
   getReachableNodes(currentAllocated) {
     const adj = this.getAdjacencyList();
     const reachable = new Set(["start"]);
@@ -144,14 +149,15 @@ export class PassiveTree {
     return reachable;
   }
 
+  // --- Interaction Logic ---
   toggleNode(id) {
     if (id === "start") return;
 
     if (this.allocated.has(id)) {
-      // Try to unspecc
+      // Try to unspecc (Unallocating)
       this.allocated.delete(id);
 
-      // Revalidate the tree
+      // Revalidate the tree (Remove disconnected islands)
       const trulyReachable = this.getReachableNodes(this.allocated);
 
       const nodesToRemove = [];
@@ -183,6 +189,7 @@ export class PassiveTree {
   }
 
   updateVisuals() {
+    // Update Node Styles
     treeData.forEach((n) => {
       const el = document.getElementById(n.id);
       if (this.allocated.has(n.id)) {
@@ -192,16 +199,19 @@ export class PassiveTree {
         el.classList.remove("allocated");
       }
     });
+    // Update Connection Lines
     links.forEach((l) => {
       const line = document.getElementById(`link-${l.from}-${l.to}`);
       if (this.allocated.has(l.from) && this.allocated.has(l.to))
         line.classList.add("active");
       else line.classList.remove("active");
     });
+    // Update Counter
     const counter = document.getElementById("points-counter");
     if (counter) counter.innerText = this.allocated.size - 1;
   }
 
+  // --- Modal Controls ---
   openTree() {
     document.getElementById("tree-modal").style.display = "block";
 

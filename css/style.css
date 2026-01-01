@@ -1,3 +1,4 @@
+/* --- Global Variables --- */
 :root {
   --bg-dark: #050505;
   --panel-bg: #111;
@@ -10,6 +11,7 @@
   --corrupted-red: rgb(202, 2, 2);
 }
 
+/* --- Body & Background Animations --- */
 body {
   background-color: var(--bg-dark);
   background-image: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
@@ -67,7 +69,7 @@ body::before {
   z-index: -1;
 }
 
-/* UI LAYOUT (3 Columns) */
+/* --- UI Layout (Main Grid) --- */
 .ui-container {
   display: grid;
   grid-template-columns: 300px 1fr 300px;
@@ -77,7 +79,7 @@ body::before {
   gap: 20px;
 }
 
-/* PANEL ARCANA */
+/* --- Panel Styling (The Arcana Look) --- */
 .panel {
   position: relative;
   background: #0a0807;
@@ -151,7 +153,7 @@ body::before {
   padding-bottom: 10px;
 }
 
-/* LEFT PANEL: STATS */
+/* --- Left Panel (Attributes & Stats) --- */
 .stats-list {
   font-size: 14px;
   line-height: 1.8;
@@ -194,7 +196,7 @@ body::before {
   color: #8f8;
 }
 
-/* CENTER PANEL: PAPER DOLL */
+/* --- Center Panel (Paper Doll Layout) --- */
 .paper-doll {
   display: grid;
   grid-template-columns: 100px 80px 60px 80px 60px 80px 100px;
@@ -288,7 +290,7 @@ body::before {
   margin-top: 15px;
 }
 
-/* ITEMS STYLING */
+/* --- Inventory Slots --- */
 .inventory-slot {
   width: 80px;
   height: 80px;
@@ -346,7 +348,7 @@ body::before {
   filter: drop-shadow(0 0 5px rgba(0, 0, 0, 1));
 }
 
-/* TOOLTIPS */
+/* --- Tooltips (PoE Style) --- */
 .poe-tooltip {
   display: none;
   position: absolute;
@@ -454,7 +456,7 @@ body::before {
   margin-top: 10px;
 }
 
-/* BOTTOM BAR */
+/* --- Bottom Bar / Skills --- */
 .bottom-bar {
   position: fixed;
   bottom: 20px;
@@ -515,7 +517,7 @@ body::before {
   color: #fff;
 }
 
-/* TREE MODAL & CANVAS */
+/* --- Passive Tree Modal --- */
 #tree-modal {
   display: none;
   position: fixed;
@@ -581,7 +583,7 @@ svg#svg-layer {
   z-index: 0;
 }
 
-/* TREE NODES & LINES */
+/* Tree Nodes & Lines */
 .link {
   stroke: #444;
   stroke-width: 3;
@@ -801,8 +803,7 @@ svg#svg-layer {
   transition: all 0.3s ease;
 }
 
-/* Runes Circle */
-
+/* --- Rune Circle Animations --- */
 .rune-circle-container {
   position: absolute;
   top: 0;
@@ -887,7 +888,6 @@ svg#svg-layer {
 }
 
 /* Runes colors passive tree */
-
 #tree-modal .rune-circle-outer {
   border-color: rgba(100, 220, 255, 0.2);
   box-shadow: 0 0 20px rgba(0, 150, 255, 0.1), 0 0 60px rgba(0, 100, 200, 0.2),
@@ -899,7 +899,7 @@ svg#svg-layer {
   border-color: rgba(100, 220, 255, 0.2);
 }
 
-/* --- CRAFTING BENCH MODAL & UI --- */
+/* --- CRAFTING BENCH MODAL --- */
 
 #crafting-modal {
   display: none;
@@ -1137,7 +1137,7 @@ svg#svg-layer {
   box-shadow: 0 0 10px var(--unique-orange);
 }
 
-/* Animations */
+/* --- Crafting Animations --- */
 @keyframes flash {
   0% {
     filter: brightness(1);
@@ -1171,13 +1171,12 @@ svg#svg-layer {
   }
 }
 
-/* --- Shine mods on randomization corruption outcome --- */
+/* Shine mods on outcome */
 @keyframes modShineAnim {
   0% {
     color: #fff;
     text-shadow: 0 0 5px #fff, 0 0 10px var(--corrupted-red);
     transform: scale(1.05);
-    background: rgba(255, 255, 255, 0.1);
   }
   100% {
     color: inherit;
@@ -1188,7 +1187,7 @@ svg#svg-layer {
 }
 
 .mod-shine {
-  animation: modShineAnim 1s ease-out forwards;
+  animation: modShineAnim 0.5s ease-out forwards;
 }
 
 .bench-container h2 {
@@ -1207,7 +1206,7 @@ svg#svg-layer {
   filter: drop-shadow(0 0 10px rgba(175, 96, 37, 0.6));
 }
 
-/* --- Crafting currency coloring --- */
+/* Crafting currency coloring filters */
 .icon-filter-magic {
   filter: invert(45%) sepia(52%) saturate(5840%) hue-rotate(216deg)
     brightness(101%) contrast(101%);
@@ -1221,8 +1220,7 @@ svg#svg-layer {
     brightness(91%) contrast(107%);
 }
 
-/* --- Color of the border of currency  --- */
-
+/* Currency Border Colors */
 .currency-slot[data-currency="transmute"],
 .currency-slot[data-currency="augmentation"],
 .currency-slot[data-currency="alteration"] {
@@ -1309,7 +1307,7 @@ svg#svg-layer {
   }
 }
 
-/* --- Fix right bar tooptips on mobile --- */
+/* Fix right bar tooptips on mobile */
 .inventory-slot:hover,
 .inventory-slot:active,
 .inventory-slot:focus-within {

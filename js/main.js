@@ -3,14 +3,14 @@ import { setupTooltips } from "./tooltips.js";
 import { CraftingBench } from "./CraftingBench.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Instance Tree
+  // 1. Instance Modules
   const myTree = new PassiveTree();
   const myBench = new CraftingBench();
 
-  // 2. Config Tooltips
+  // 2. Config Tooltips (Tippy.js)
   setupTooltips();
 
-  // 3. Event Listeners
+  // 3. Global Event Listeners
   const treeBtn = document.querySelector(".tree-btn");
   if (treeBtn) {
     treeBtn.addEventListener("click", () => {
