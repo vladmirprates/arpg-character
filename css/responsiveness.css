@@ -1,0 +1,168 @@
+@media (max-width: 1200px) {
+  .ui-container {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    overflow-y: auto;
+    align-items: center;
+    padding-bottom: 100px;
+  }
+
+  .panel {
+    width: 90%;
+    max-width: 600px;
+    margin-bottom: 20px;
+  }
+
+  .panel.paper-doll {
+    order: 1;
+  }
+  .panel-left {
+    order: 2;
+  }
+  .panel-right {
+    order: 3;
+  }
+
+  body {
+    height: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+/* RESPONSIVE MOBILE (MAX 600PX) */
+@media (max-width: 600px) {
+  .panel.paper-doll {
+    width: 95%;
+    transform-origin: top center;
+    transform: scale(0.75);
+    margin-bottom: -100px;
+  }
+
+  .panel-left,
+  .panel-right {
+    width: 90%;
+    margin: 10px 0;
+  }
+
+  .skill-slot {
+    width: 40px;
+    height: 40px;
+  }
+
+  .ui-btn {
+    font-size: 12px;
+    padding: 0 10px;
+    height: 44px;
+  }
+
+  .bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 0;
+    border: none;
+    padding: 15px 10px;
+    justify-content: center;
+    gap: 8px;
+    background-color: rgba(17, 17, 17, 0.98);
+    z-index: 50;
+  }
+
+  .ui-container {
+    padding-bottom: 120px;
+  }
+}
+
+@media (max-width: 950px) {
+  .panel-right .mobile-tooltip-right .poe-tooltip {
+    position: absolute !important;
+    top: 50% !important;
+    left: 400% !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: translate(-35%, -50%) !important;
+
+    width: 90vw !important;
+    max-width: 340px;
+    pointer-events: none;
+    display: none;
+    z-index: 9999 !important;
+  }
+
+  .panel-right .mobile-tooltip-left .poe-tooltip {
+    position: absolute !important;
+    top: -50% !important;
+    left: -100% !important;
+    right: auto !important;
+    bottom: auto !important;
+    transform: translate(-50%, -35%) !important;
+
+    width: 90vw !important;
+    max-width: 340px;
+    pointer-events: none;
+    display: none;
+    z-index: 9999 !important;
+  }
+
+  .inventory-slot:hover .poe-tooltip,
+  .inventory-slot:active .poe-tooltip {
+    display: block !important;
+  }
+}
+
+/* Tablet & Mobile: Crafting Bench */
+@media (max-width: 950px) {
+  .bench-container {
+    width: 95%;
+    max-width: 900px;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+
+  .item-display {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .currency-belt {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    grid-template-columns: none;
+    gap: 15px;
+  }
+
+  .currency-slot {
+    width: 50px;
+    height: 50px;
+    margin: 5px;
+  }
+}
+
+@media (max-width: 600px) {
+  .bench-container h2 {
+    font-size: 24px;
+  }
+
+  .item-display .item-name {
+    font-size: 14px;
+  }
+
+  .mod-section-header {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 600px) {
+  .crafting-controls {
+    flex-direction: column;
+  }
+  .crafting-controls select,
+  .crafting-controls button {
+    width: 100%;
+  }
+}
