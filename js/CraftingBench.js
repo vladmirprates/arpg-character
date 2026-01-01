@@ -199,6 +199,7 @@ export class CraftingBench {
     let targetSlot = null;
     let targetIndex = -1;
 
+    // 1. Find first empty slot
     for (let i = 0; i < slots.length; i++) {
       if (!slots[i].hasChildNodes()) {
         targetSlot = slots[i];
@@ -213,8 +214,6 @@ export class CraftingBench {
     }
 
     const item = this.system.getItem();
-    let iconPath = "icons/backpack1.svg";
-
     const rarityColors = {
       [RARITY.NORMAL]: "#e0e0e0",
       [RARITY.MAGIC]: "#8888ff",
@@ -224,45 +223,137 @@ export class CraftingBench {
     const rarityColor = rarityColors[item.rarity] || "#e0e0e0";
     const finalName = this.constructItemName(item);
 
-    let modsHtml = "";
+    // 2. Create Icon Image (Safe DOM creation)
+    const img = document.createElement("img");
+    img.src = "icons/backpack1.svg";
+    img.className = "item-icon";
+    if (item.corrupted) {
+      img.style.filter = "sepia(1) hue-rotate(-50deg) saturate(3)";
+    }
+
+    // 3. Create Tooltip Container
+    const tooltip = document.createElement("div");
+    tooltip.className = "poe-tooltip";
+    tooltip.style.minWidth = "300px";
+
+    // 3a. Tooltip Header
+    const header = document.createElement("div");
+    header.className = `item-header ${item.rarity}`;
+    if (item.corrupted) {
+      header.style.borderBottomColor = "var(--corrupted-red)";
+    }
+
+    const nameSpan = document.createElement("span");
+    nameSpan.className = "item-name";
+    nameSpan.style.color = rarityColor;
+    nameSpan.textContent = finalName;
+
+    const baseSpan = document.createElement("span");
+    baseSpan.className = "item-base";
+    baseSpan.style.color = rarityColor;
+    baseSpan.textContent = item.baseName;
+
+    header.appendChild(nameSpan);
+    header.appendChild(baseSpan);
+
+    // 3b. Tooltip Content
+    const content = document.createElement("div");
+    content.className = "item-content";
+    content.style.padding = "10px";
+
+    // Implicit
+    if (item.implicit) {
+      const impDiv = document.createElement("div");
+      impDiv.className = "item-implicit";
+      impDiv.style.display = "block";
+      impDiv.style.marginBottom = "5px";
+      impDiv.style.color = "#fff";
+      impDiv.textContent = item.implicit;
+
+      const sep = document.createElement("div");
+      sep.className = "separator";
+
+      content.appendChild(impDiv);
+      content.appendChild(sep);
+    }
+
+    // Mods Container
+    const modsDiv = document.createElement("div");
+    modsDiv.style.width = "100%";
+    modsDiv.style.display = "flex";
+    modsDiv.style.flexDirection = "column";
+    modsDiv.style.alignItems = "center";
+
+    // Helper to create mod lines safely
+    const createModLine = (text) => {
+      const line = document.createElement("div");
+      line.className = "stat-line";
+      line.style.color = rarityColor;
+      line.textContent = text;
+      return line;
+    };
+
     if (item.rarity === RARITY.UNIQUE) {
       item.mods.forEach((m) => {
-        modsHtml += `<div class="stat-line" style="color:${rarityColor}; margin: 2px 0;">${m.data.effect}</div>`;
+        const line = createModLine(m.data.effect);
+        line.style.margin = "2px 0";
+        modsDiv.appendChild(line);
       });
     } else {
       const prefixes = item.mods.filter((m) => m.type === "prefix");
       const suffixes = item.mods.filter((m) => m.type === "suffix");
-      const headerStyle = `font-size: 10px; text-align: left; margin-top: 8px; width: 100%; color: #777;`;
-
       const limit = item.rarity === RARITY.MAGIC ? 1 : 3;
 
+      const headerStyle =
+        "font-size: 10px; text-align: left; margin-top: 8px; width: 100%; color: #777;";
+
       if (prefixes.length > 0) {
-        modsHtml += `<div class="mod-section-header" style="${headerStyle}">PREFIXES (${prefixes.length}/${limit})</div>`;
-        prefixes.forEach(
-          (m) =>
-            (modsHtml += `<div class="stat-line" style="color:${rarityColor}">${m.data.effect}</div>`)
+        const pHeader = document.createElement("div");
+        pHeader.className = "mod-section-header";
+        pHeader.style.cssText = headerStyle;
+        pHeader.textContent = `PREFIXES (${prefixes.length}/${limit})`;
+        modsDiv.appendChild(pHeader);
+
+        prefixes.forEach((m) =>
+          modsDiv.appendChild(createModLine(m.data.effect))
         );
       }
+
       if (suffixes.length > 0) {
-        modsHtml += `<div class="mod-section-header" style="${headerStyle}">SUFFIXES (${suffixes.length}/${limit})</div>`;
-        suffixes.forEach(
-          (m) =>
-            (modsHtml += `<div class="stat-line" style="color:${rarityColor}">${m.data.effect}</div>`)
+        const sHeader = document.createElement("div");
+        sHeader.className = "mod-section-header";
+        sHeader.style.cssText = headerStyle;
+        sHeader.textContent = `SUFFIXES (${suffixes.length}/${limit})`;
+        modsDiv.appendChild(sHeader);
+
+        suffixes.forEach((m) =>
+          modsDiv.appendChild(createModLine(m.data.effect))
         );
       }
     }
+    content.appendChild(modsDiv);
 
-    const implicitHtml = item.implicit
-      ? `<div class="item-implicit" style="display:block; margin-bottom:5px; color:#fff;">${item.implicit}</div><div class="separator"></div>`
-      : "";
+    // Corrupted Tag
+    if (item.corrupted) {
+      const corrTag = document.createElement("div");
+      corrTag.className = "corrupted-tag";
+      corrTag.style.display = "block";
+      corrTag.style.marginTop = "15px";
+      corrTag.style.fontSize = "16px";
+      corrTag.style.color = "var(--corrupted-red)";
+      corrTag.textContent = "CORRUPTED";
+      content.appendChild(corrTag);
+    }
 
-    const corruptedHtml = item.corrupted
-      ? `<div class="corrupted-tag" style="display:block; margin-top:15px; font-size:16px; color: var(--corrupted-red);">CORRUPTED</div>`
-      : "";
+    // Assemble Tooltip
+    tooltip.appendChild(header);
+    tooltip.appendChild(content);
 
+    // 4. Assemble Slot
     let mobileDirection = "mobile-tooltip-left";
-    if ([0, 1, 4, 5].includes(targetIndex))
+    if ([0, 1, 4, 5].includes(targetIndex)) {
       mobileDirection = "mobile-tooltip-right";
+    }
 
     targetSlot.className = `inventory-slot small stash-slot ${item.rarity} tooltip-left ${mobileDirection}`;
     if (item.corrupted) {
@@ -270,28 +361,10 @@ export class CraftingBench {
       targetSlot.style.borderColor = "var(--corrupted-red)";
     }
 
-    targetSlot.innerHTML = `
-      <img src="${iconPath}" class="item-icon" style="${
-      item.corrupted ? "filter: sepia(1) hue-rotate(-50deg) saturate(3);" : ""
-    }">
-      <div class="poe-tooltip" style="min-width: 300px;">
-        <div class="item-header ${item.rarity}" style="${
-      item.corrupted ? "border-bottom-color: var(--corrupted-red);" : ""
-    }">
-          <span class="item-name" style="color: ${rarityColor}">${finalName}</span>
-          <span class="item-base" style="color: ${rarityColor}">${
-      item.baseName
-    }</span>
-        </div>
-        <div class="item-content" style="padding: 10px;">
-          ${implicitHtml}
-          <div style="width:100%; display:flex; flex-direction:column; align-items:center;">
-             ${modsHtml}
-          </div>
-          ${corruptedHtml}
-        </div>
-      </div>
-    `;
+    // Clear and append new elements
+    targetSlot.innerHTML = "";
+    targetSlot.appendChild(img);
+    targetSlot.appendChild(tooltip);
 
     this.showNotification("Item Saved to Stash");
 
