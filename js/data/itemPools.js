@@ -1,0 +1,113 @@
+import { ITEM_TYPE } from "./constants.js";
+
+// Define the Mod Pools for each Item Type
+export const ITEM_POOLS = {
+  [ITEM_TYPE.BUG]: {
+    baseName: "Bug Report",
+    prefixes: [
+      { name: "Detailed", effect: "Adds 2 Reproduction Steps" },
+      { name: "Urgent", effect: "Sets Priority to Critical" },
+      { name: "Clean", effect: "+10% Readability" },
+      { name: "Visual", effect: "Includes Video Evidence" },
+      { name: "Backend", effect: "Contains Server Logs" },
+      { name: "Blocking", effect: "Prevents Release Deployment" },
+      { name: "Intermittent", effect: "Reproduces 50% of the time" },
+      { name: "Regression", effect: "Was working in previous build" },
+      { name: "Security", effect: "Exposes Vulnerability" },
+      { name: "Performance", effect: "Page Load > 5000ms" },
+    ],
+    suffixes: [
+      { name: "of the Intern", effect: "10% chance to crash on open" },
+      { name: "of Friday", effect: "Deploy time set to 17:00" },
+      { name: "of Coffee", effect: "Developers work 20% faster" },
+      { name: "of the Legacy", effect: "References 2015 Codebase" },
+      {
+        name: "of the Heisenbug",
+        effect: "Disappears when Debugger is open",
+      },
+      { name: "of the Cache", effect: "Fixed by Hard Refresh" },
+      { name: "of the User", effect: "Closed as PEBKAC / User Error" },
+      { name: "of the Typo", effect: "Fixed by changing one character" },
+      { name: "of the Ping-Pong", effect: "Reassigned back to QA 3 times" },
+      { name: "of the Duplicate", effect: "Linked to a ticket from 2019" },
+    ],
+    implicits: [
+      "Grants Level 10 'Blame the User' Skill",
+      "Cannot be closed as 'Works on My Machine'",
+      "10% chance to become a Feature",
+    ],
+  },
+  [ITEM_TYPE.TESTCASE]: {
+    baseName: "Test Case",
+    prefixes: [
+      { name: "Reusable", effect: "Can be used in Regression Suite" },
+      { name: "Data-Driven", effect: "Runs with 50 Dataset variations" },
+      { name: "Atomic", effect: "Tests only 1 feature independently" },
+      { name: "Declarative", effect: "+20% 'When/Then' clarity" },
+      { name: "Negative", effect: "Focuses on Error Handling" },
+      { name: "End-to-End", effect: "Validates full User Journey" },
+      { name: "Boundary", effect: "Tests Min/Max input limits" },
+      { name: "Accessibility", effect: "WCAG 2.1 Compliant" },
+      { name: "Integrated", effect: "Connects 3 Microservices" },
+      { name: "Smoke", effect: "Fast Critical Path verification" },
+    ],
+    suffixes: [
+      {
+        name: "of Ambiguity",
+        effect: "Devs misinterpret the 'Given' step",
+      },
+      { name: "of the Spaghetti", effect: "Scenario has 40 steps" },
+      { name: "of Coverage", effect: "Increases Code Coverage by 2%" },
+      { name: "of the Manual", effect: "Cannot be automated" },
+      { name: "of the False Positive", effect: "Passes even when broken" },
+      {
+        name: "of the Hardcoding",
+        effect: "Breaks on Staging Environment",
+      },
+      { name: "of the Copy-Paste", effect: "Duplicate steps detected" },
+      {
+        name: "of the Missing Precondition",
+        effect: "Assumes user is logged in",
+      },
+      { name: "of the Outdated", effect: "References removed button ID" },
+      { name: "of the Bloat", effect: "Scenario file exceeds 500 lines" },
+    ],
+    implicits: [
+      "Steps are read 20% faster",
+      "Syntactic Sugar: +10% Coolness",
+      "Grants 'Cucumber' Aura",
+    ],
+  },
+  [ITEM_TYPE.SCRIPT]: {
+    baseName: "Auto Script",
+    prefixes: [
+      { name: "Headless", effect: "+50% Execution Speed (No UI)" },
+      { name: "Parallel", effect: "Can run on 4 nodes simultaneously" },
+      { name: "Retryable", effect: "Auto-retries on flake (Max 3)" },
+      { name: "Modular", effect: "Uses Page Object Model" },
+      { name: "API-First", effect: "Bypasses UI layer entirely" },
+      { name: "Cross-Browser", effect: "Runs on Chrome, Firefox & Safari" },
+      { name: "Dockerized", effect: "Runs in isolated container" },
+      { name: "Self-Healing", effect: "Finds elements even if ID changes" },
+      { name: "Mocked", effect: "Simulates external dependencies" },
+      { name: "Async", effect: "Non-blocking execution flow" },
+    ],
+    suffixes: [
+      { name: "of Flakiness", effect: "Fails randomly 15% of the time" },
+      { name: "of Timeout", effect: "Waits 30s for elements" },
+      { name: "of Hardcoding", effect: "Contains 'sleep(5000)'" },
+      { name: "of the Selector", effect: "Uses absolute XPath" },
+      { name: "of the Race Condition", effect: "Fails on faster machines" },
+      { name: "of the Memory Leak", effect: "Crashes after 100 runs" },
+      { name: "of the Spaghetti Code", effect: "-20% Maintainability" },
+      { name: "of the Dependency Hell", effect: "node_modules is 2GB" },
+      { name: "of the Update", effect: "Breaks with Chrome v130 update" },
+      { name: "of the Localhost", effect: "Works locally, fails on CI/CD" },
+    ],
+    implicits: [
+      "Bypasses Captcha Verification",
+      "Runs successfully on IE11",
+      "Consumes 50% less Memory",
+    ],
+  },
+};

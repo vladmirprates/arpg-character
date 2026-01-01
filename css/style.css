@@ -1307,6 +1307,14 @@ svg#svg-layer {
   }
 }
 
+/* --- Error Notification Variant --- */
+.stash-notification.error {
+  border-color: var(--corrupted-red);
+  color: var(--corrupted-red);
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.2), 0 0 10px rgba(202, 2, 2, 0.3);
+  background: rgba(20, 5, 5, 0.95);
+}
+
 /* Fix right bar tooptips on mobile */
 .inventory-slot:hover,
 .inventory-slot:active,

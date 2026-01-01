@@ -1,6 +1,6 @@
 // js/CraftingBench.js
 import { CraftingSystem } from "./CraftingSystem.js";
-import { RARITY, ITEM_TYPE } from "./constants.js";
+import { RARITY, ITEM_TYPE } from "./data/constants.js";
 
 export class CraftingBench {
   constructor() {
@@ -60,13 +60,14 @@ export class CraftingBench {
 
   // --- Logic Bridge ---
   handleCraft(currencyType) {
-    const success = this.system.craft(currencyType);
+    const result = this.system.craft(currencyType);
 
-    if (success) {
+    if (result.success) {
       this.triggerAnimation("crafting-anim");
       this.updateDisplay();
     } else {
       this.triggerAnimation("error-anim");
+      this.showNotification(result.error, "error");
     }
   }
 
@@ -305,9 +306,12 @@ export class CraftingBench {
     el.classList.add(animClass);
   }
 
-  showNotification(text) {
+  showNotification(text, type = "success") {
     const notif = document.createElement("div");
     notif.className = "stash-notification";
+    if (type === "error") {
+      notif.classList.add("error");
+    }
     notif.innerText = text;
     document.body.appendChild(notif);
     setTimeout(() => notif.remove(), 2000);

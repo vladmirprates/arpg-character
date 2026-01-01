@@ -1,4 +1,4 @@
-import { treeData, links } from "./data.js";
+import { treeData, links } from "./data/treeData.js";
 
 export class PassiveTree {
   constructor() {
