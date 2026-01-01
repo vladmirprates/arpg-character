@@ -1,283 +1,66 @@
+// js/CraftingBench.js
+import { CraftingSystem } from "./CraftingSystem.js";
+import { RARITY, ITEM_TYPE } from "./constants.js";
+
 export class CraftingBench {
   constructor() {
-    this.pools = {
-      bug: {
-        baseName: "Bug Report",
-        prefixes: [
-          { name: "Detailed", effect: "Adds 2 Reproduction Steps" },
-          { name: "Urgent", effect: "Sets Priority to Critical" },
-          { name: "Clean", effect: "+10% Readability" },
-          { name: "Visual", effect: "Includes Video Evidence" },
-          { name: "Backend", effect: "Contains Server Logs" },
-          { name: "Blocking", effect: "Prevents Release Deployment" },
-          { name: "Intermittent", effect: "Reproduces 50% of the time" },
-          { name: "Regression", effect: "Was working in previous build" },
-          { name: "Security", effect: "Exposes Vulnerability" },
-          { name: "Performance", effect: "Page Load > 5000ms" },
-        ],
-        suffixes: [
-          { name: "of the Intern", effect: "10% chance to crash on open" },
-          { name: "of Friday", effect: "Deploy time set to 17:00" },
-          { name: "of Coffee", effect: "Developers work 20% faster" },
-          { name: "of the Legacy", effect: "References 2015 Codebase" },
-          {
-            name: "of the Heisenbug",
-            effect: "Disappears when Debugger is open",
-          },
-          { name: "of the Cache", effect: "Fixed by Hard Refresh" },
-          { name: "of the User", effect: "Closed as PEBKAC / User Error" },
-          { name: "of the Typo", effect: "Fixed by changing one character" },
-          { name: "of the Ping-Pong", effect: "Reassigned back to QA 3 times" },
-          { name: "of the Duplicate", effect: "Linked to a ticket from 2019" },
-        ],
-        implicits: [
-          "Grants Level 10 'Blame the User' Skill",
-          "Cannot be closed as 'Works on My Machine'",
-          "10% chance to become a Feature",
-        ],
-      },
-      testcase: {
-        baseName: "Test Case",
-        prefixes: [
-          { name: "Reusable", effect: "Can be used in Regression Suite" },
-          { name: "Data-Driven", effect: "Runs with 50 Dataset variations" },
-          { name: "Atomic", effect: "Tests only 1 feature independently" },
-          { name: "Declarative", effect: "+20% 'When/Then' clarity" },
-          { name: "Negative", effect: "Focuses on Error Handling" },
-          { name: "End-to-End", effect: "Validates full User Journey" },
-          { name: "Boundary", effect: "Tests Min/Max input limits" },
-          { name: "Accessibility", effect: "WCAG 2.1 Compliant" },
-          { name: "Integrated", effect: "Connects 3 Microservices" },
-          { name: "Smoke", effect: "Fast Critical Path verification" },
-        ],
-        suffixes: [
-          {
-            name: "of Ambiguity",
-            effect: "Devs misinterpret the 'Given' step",
-          },
-          { name: "of the Spaghetti", effect: "Scenario has 40 steps" },
-          { name: "of Coverage", effect: "Increases Code Coverage by 2%" },
-          { name: "of the Manual", effect: "Cannot be automated" },
-          { name: "of the False Positive", effect: "Passes even when broken" },
-          {
-            name: "of the Hardcoding",
-            effect: "Breaks on Staging Environment",
-          },
-          { name: "of the Copy-Paste", effect: "Duplicate steps detected" },
-          {
-            name: "of the Missing Precondition",
-            effect: "Assumes user is logged in",
-          },
-          { name: "of the Outdated", effect: "References removed button ID" },
-          { name: "of the Bloat", effect: "Scenario file exceeds 500 lines" },
-        ],
-        implicits: [
-          "Steps are read 20% faster",
-          "Syntactic Sugar: +10% Coolness",
-          "Grants 'Cucumber' Aura",
-        ],
-      },
-      script: {
-        baseName: "Auto Script",
-        prefixes: [
-          { name: "Headless", effect: "+50% Execution Speed (No UI)" },
-          { name: "Parallel", effect: "Can run on 4 nodes simultaneously" },
-          { name: "Retryable", effect: "Auto-retries on flake (Max 3)" },
-          { name: "Modular", effect: "Uses Page Object Model" },
-          { name: "API-First", effect: "Bypasses UI layer entirely" },
-          { name: "Cross-Browser", effect: "Runs on Chrome, Firefox & Safari" },
-          { name: "Dockerized", effect: "Runs in isolated container" },
-          { name: "Self-Healing", effect: "Finds elements even if ID changes" },
-          { name: "Mocked", effect: "Simulates external dependencies" },
-          { name: "Async", effect: "Non-blocking execution flow" },
-        ],
-        suffixes: [
-          { name: "of Flakiness", effect: "Fails randomly 15% of the time" },
-          { name: "of Timeout", effect: "Waits 30s for elements" },
-          { name: "of Hardcoding", effect: "Contains 'sleep(5000)'" },
-          { name: "of the Selector", effect: "Uses absolute XPath" },
-          { name: "of the Race Condition", effect: "Fails on faster machines" },
-          { name: "of the Memory Leak", effect: "Crashes after 100 runs" },
-          { name: "of the Spaghetti Code", effect: "-20% Maintainability" },
-          { name: "of the Dependency Hell", effect: "node_modules is 2GB" },
-          { name: "of the Update", effect: "Breaks with Chrome v130 update" },
-          { name: "of the Localhost", effect: "Works locally, fails on CI/CD" },
-        ],
-        implicits: [
-          "Bypasses Captcha Verification",
-          "Runs successfully on IE11",
-          "Consumes 50% less Memory",
-        ],
-      },
-    };
-
-    this.currentType = "bug";
-    this.currentItem = {
-      rarity: "normal",
-      baseName: "Bug Report",
-      rareName: "",
-      mods: [],
-      implicit: null,
-      corrupted: false,
-    };
-    this.MAX_MODS = 6;
-
+    this.system = new CraftingSystem();
+    this.initDOM();
     this.bindEvents();
-    this.changeBase("bug"); // Init
+    this.updateDisplay();
+  }
+
+  // --- Setup & Caching ---
+  initDOM() {
+    const container = document.getElementById("crafting-item");
+
+    this.elements = {
+      modal: document.getElementById("crafting-modal"),
+      itemContainer: container,
+      itemName: container.querySelector(".item-name"),
+      itemBase: container.querySelector(".item-base"),
+      modsContainer: document.getElementById("item-mods"),
+      implicitContainer: document.getElementById("item-implicit"),
+      implicitText: document.getElementById("implicit-text"),
+      corruptedTag: container.querySelector(".corrupted-tag"),
+      baseSelector: document.getElementById("base-selector"),
+      saveBtn: document.getElementById("btn-save-item"),
+      stashSlots: document.querySelectorAll(".stash-slot"),
+    };
   }
 
   bindEvents() {
-    // Currency clicks
     document.querySelectorAll(".currency-slot").forEach((slot) => {
-      slot.addEventListener("click", (e) => {
+      slot.addEventListener("click", () => {
         const type = slot.getAttribute("data-currency");
-        if (type) this.applyCurrency(type);
+        this.handleCraft(type);
       });
     });
 
-    // Base Selector
-    const selector = document.getElementById("base-selector");
-    if (selector) {
-      selector.addEventListener("change", (e) => {
-        this.changeBase(e.target.value);
+    if (this.elements.baseSelector) {
+      this.elements.baseSelector.addEventListener("change", (e) => {
+        this.system.resetItem(e.target.value);
+        this.updateDisplay();
+        this.triggerAnimation("crafting-anim");
       });
     }
 
-    // New Save Button
-    const saveBtn = document.getElementById("btn-save-item");
-    if (saveBtn) {
-      saveBtn.addEventListener("click", () => this.saveToStash());
+    if (this.elements.saveBtn) {
+      this.elements.saveBtn.addEventListener("click", () => this.saveToStash());
     }
   }
 
   openBench() {
-    document.getElementById("crafting-modal").style.display = "flex";
+    this.elements.modal.style.display = "flex";
   }
 
   closeBench() {
-    document.getElementById("crafting-modal").style.display = "none";
+    this.elements.modal.style.display = "none";
   }
 
-  changeBase(type) {
-    this.currentType = type;
-    this.applyCurrency("scouring");
-    this.currentItem.baseName = this.pools[this.currentType].baseName;
-    this.updateDisplay();
-  }
-
-  applyCurrency(type) {
-    let success = false;
-
-    // GLOBAL CHECK: If corrupted, only Scouring works
-    if (this.currentItem.corrupted && type !== "scouring") {
-      this.triggerAnimation("error-anim");
-      return;
-    }
-
-    switch (type) {
-      case "transmute":
-        if (this.currentItem.rarity === "normal") {
-          this.currentItem.rarity = "magic";
-          this.addRandomMod();
-          success = true;
-        }
-        break;
-
-      case "augmentation":
-        if (
-          this.currentItem.rarity === "magic" &&
-          this.currentItem.mods.length < 2
-        ) {
-          this.addRandomMod();
-          success = true;
-        }
-        break;
-
-      case "alteration":
-        if (
-          this.currentItem.rarity === "magic" &&
-          this.currentItem.mods.length > 0
-        ) {
-          const idx = Math.floor(Math.random() * this.currentItem.mods.length);
-          this.currentItem.mods.splice(idx, 1);
-          this.addRandomMod();
-          success = true;
-        }
-        break;
-
-      case "regal":
-        if (this.currentItem.rarity === "magic") {
-          this.currentItem.rarity = "rare";
-          this.currentItem.rareName = this.generateRareName();
-          this.addRandomMod();
-          success = true;
-        }
-        break;
-
-      case "chaos":
-        if (
-          this.currentItem.rarity === "rare" &&
-          this.currentItem.mods.length > 0
-        ) {
-          const idx = Math.floor(Math.random() * this.currentItem.mods.length);
-          this.currentItem.mods.splice(idx, 1);
-          this.addRandomMod();
-          this.currentItem.rareName = this.generateRareName();
-          success = true;
-        }
-        break;
-
-      case "exalted":
-        if (
-          this.currentItem.rarity === "rare" &&
-          this.currentItem.mods.length < this.MAX_MODS
-        ) {
-          this.addRandomMod();
-          success = true;
-        }
-        break;
-
-      case "annulment":
-        if (this.currentItem.mods.length > 0) {
-          const idx = Math.floor(Math.random() * this.currentItem.mods.length);
-          this.currentItem.mods.splice(idx, 1);
-
-          if (this.currentItem.mods.length === 0) {
-            this.currentItem.rarity = "normal";
-          } else if (
-            this.currentItem.mods.length <= 2 &&
-            this.currentItem.rarity === "rare"
-          ) {
-            this.currentItem.rarity = "magic";
-          }
-          success = true;
-        }
-        break;
-
-      case "vaal":
-        if (
-          !this.currentItem.corrupted &&
-          this.currentItem.rarity !== "normal"
-        ) {
-          this.applyCorruption();
-          success = true;
-        }
-        break;
-
-      case "scouring":
-        if (
-          this.currentItem.rarity !== "normal" ||
-          this.currentItem.corrupted
-        ) {
-          this.currentItem.rarity = "normal";
-          this.currentItem.mods = [];
-          this.currentItem.implicit = null;
-          this.currentItem.corrupted = false;
-          this.currentItem.baseName = this.pools[this.currentType].baseName;
-          success = true;
-        }
-        break;
-    }
+  // --- Logic Bridge ---
+  handleCraft(currencyType) {
+    const success = this.system.craft(currencyType);
 
     if (success) {
       this.triggerAnimation("crafting-anim");
@@ -287,222 +70,131 @@ export class CraftingBench {
     }
   }
 
-  applyCorruption() {
-    this.currentItem.corrupted = true;
-    const roll = Math.random();
-
-    // Outcome 1: Randomize 1-3 Affixes
-    if (roll < 0.33) {
-      if (this.currentItem.mods.length > 0) {
-        const loops = Math.min(
-          this.currentItem.mods.length,
-          Math.floor(Math.random() * 3) + 1
-        );
-
-        for (let i = 0; i < loops; i++) {
-          if (this.currentItem.mods.length === 0) break;
-          const randomIdx = Math.floor(
-            Math.random() * this.currentItem.mods.length
-          );
-          this.currentItem.mods.splice(randomIdx, 1);
-        }
-
-        for (let i = 0; i < loops; i++) {
-          this.addRandomMod();
-
-          const newModIndex = this.currentItem.mods.length - 1;
-          if (newModIndex >= 0) {
-            this.currentItem.mods[newModIndex].shining = true;
-          }
-        }
-      }
-    }
-    // Outcome 2: Add Corrupted Implicit
-    else if (roll < 0.66) {
-      const imps = this.pools[this.currentType].implicits;
-      this.currentItem.implicit = imps[Math.floor(Math.random() * imps.length)];
-    }
-    // Outcome 3: BRICK (Transform into Unique)
-    else {
-      this.currentItem.rarity = "unique";
-      this.currentItem.baseName = "Undocumented Feature";
-      this.currentItem.rareName = "";
-      this.currentItem.implicit = "Cannot be Fixed";
-      this.currentItem.mods = [
-        { data: { effect: "Closed as 'Won't Fix'" } },
-        { data: { effect: "Grants Level 20 'Denial' Aura" } },
-        { data: { effect: "100% Increased Confusion" } },
-        { data: { effect: "Developers take 0 Damage from Logic" } },
-      ];
-    }
-  }
-
-  addRandomMod() {
-    const pool = this.pools[this.currentType];
-
-    const limit = this.currentItem.rarity === "magic" ? 1 : 3;
-
-    const currentPrefixCount = this.currentItem.mods.filter(
-      (m) => m.type === "prefix"
-    ).length;
-    const currentSuffixCount = this.currentItem.mods.filter(
-      (m) => m.type === "suffix"
-    ).length;
-    const currentNames = this.currentItem.mods.map((m) => m.data.name);
-
-    const availPrefix = pool.prefixes.filter(
-      (p) => !currentNames.includes(p.name)
-    );
-    const availSuffix = pool.suffixes.filter(
-      (s) => !currentNames.includes(s.name)
-    );
-
-    const candidates = [];
-
-    if (currentPrefixCount < limit) {
-      availPrefix.forEach((p) => candidates.push({ type: "prefix", data: p }));
-    }
-
-    if (currentSuffixCount < limit) {
-      availSuffix.forEach((s) => candidates.push({ type: "suffix", data: s }));
-    }
-    if (candidates.length === 0) return;
-    const pick = candidates[Math.floor(Math.random() * candidates.length)];
-    this.currentItem.mods.push(pick);
-  }
-
-  generateRareName() {
-    const adj = [
-      "Null",
-      "Recursive",
-      "Orphaned",
-      "Fatal",
-      "Silent",
-      "Infinite",
-      "Mocked",
-      "Async",
-      "Zombie",
-      "Headless",
-    ];
-    const noun = [
-      "Exception",
-      "Overflow",
-      "Deadlock",
-      "Promise",
-      "Thread",
-      "Socket",
-      "Handler",
-      "Memory",
-      "Cluster",
-      "Pipeline",
-    ];
-
-    const randAdj = adj[Math.floor(Math.random() * adj.length)];
-    const randNoun = noun[Math.floor(Math.random() * noun.length)];
-    return `${randAdj} ${randNoun}`;
-  }
-
+  // --- UI Rendering (Core Function) ---
   updateDisplay() {
-    const el = document.getElementById("crafting-item");
-    const nameEl = el.querySelector(".item-name");
-    const baseEl = el.querySelector(".item-base");
-    const modsEl = document.getElementById("item-mods");
-    const implicitContainer = document.getElementById("item-implicit");
-    const implicitText = document.getElementById("implicit-text");
+    const item = this.system.getItem();
+    const {
+      itemContainer,
+      itemName,
+      itemBase,
+      modsContainer,
+      implicitContainer,
+      implicitText,
+    } = this.elements;
 
-    el.className = `item-display ${this.currentItem.rarity} ${
-      this.currentItem.corrupted ? "is-corrupted" : ""
+    // 1. Classes e Base
+    itemContainer.className = `item-display ${item.rarity} ${
+      item.corrupted ? "is-corrupted" : ""
     }`;
-    baseEl.innerText = this.currentItem.baseName;
+    itemBase.textContent = item.baseName;
 
-    // --- Name Display Logic ---
-    if (this.currentItem.rarity === "normal") {
-      nameEl.innerText = "Blank " + this.currentItem.baseName;
-    } else if (this.currentItem.rarity === "magic") {
-      let name = this.currentItem.baseName;
-      const p = this.currentItem.mods.find((m) => m.type === "prefix");
-      const s = this.currentItem.mods.find((m) => m.type === "suffix");
-      if (p) name = `${p.data.name} ${name}`;
-      if (s) name = `${name} ${s.data.name}`;
-      nameEl.innerText = name;
-    } else if (this.currentItem.rarity === "rare") {
-      nameEl.innerText = this.currentItem.rareName;
-    } else if (this.currentItem.rarity === "unique") {
-      nameEl.innerText = "Undocumented Feature";
-    }
+    // 2. Item name
+    itemName.textContent = this.constructItemName(item);
 
-    // --- Implicit Display ---
-    if (this.currentItem.implicit) {
+    // 3. Implicits
+    if (item.implicit) {
       implicitContainer.style.display = "block";
-      implicitText.innerText = this.currentItem.implicit;
+      implicitText.textContent = item.implicit;
     } else {
       implicitContainer.style.display = "none";
     }
 
-    // --- Mods Display Logic ---
-    modsEl.innerHTML = "";
+    // 4. Mods
+    modsContainer.innerHTML = "";
 
-    if (this.currentItem.mods.length === 0) {
-      modsEl.innerHTML =
-        '<span style="color:#555; font-style:italic;">No properties</span>';
+    if (item.mods.length === 0) {
+      const noProp = document.createElement("span");
+      Object.assign(noProp.style, { color: "#555", fontStyle: "italic" });
+      noProp.textContent = "No properties";
+      modsContainer.appendChild(noProp);
     } else {
-      if (this.currentItem.rarity === "unique") {
-        this.currentItem.mods.forEach((mod) => {
-          const div = document.createElement("div");
-          div.className = "stat-line";
-          div.innerText = mod.data.effect;
-          modsEl.appendChild(div);
-        });
-        return;
-      }
-
-      // Standard Logic for Magic/Rare (Prefix/Suffix Split)
-      const prefixes = this.currentItem.mods.filter((m) => m.type === "prefix");
-      const suffixes = this.currentItem.mods.filter((m) => m.type === "suffix");
-
-      const renderGroup = (title, list) => {
-        if (list.length === 0) return;
-
-        const header = document.createElement("div");
-        header.className = "mod-section-header";
-        const max = this.currentItem.rarity === "rare" ? 3 : 1;
-        header.innerText = `${title} (${list.length}/${max})`;
-        modsEl.appendChild(header);
-
-        list.forEach((mod) => {
-          const div = document.createElement("div");
-          div.className = "stat-line";
-          div.innerText = mod.data.effect;
-
-          if (mod.shining) {
-            div.classList.add("mod-shine");
-            mod.shining = false;
-          }
-          modsEl.appendChild(div);
-        });
+      const createLine = (text, isShining) => {
+        const div = document.createElement("div");
+        div.className = "stat-line";
+        div.textContent = text;
+        if (isShining) {
+          div.classList.add("mod-shine");
+          setTimeout(() => div.classList.remove("mod-shine"), 500);
+        }
+        return div;
       };
 
-      renderGroup("PREFIXES", prefixes);
+      const uniques = item.mods.filter((m) => m.type === "unique");
 
-      if (prefixes.length > 0 && suffixes.length > 0) {
-        const spacer = document.createElement("div");
-        spacer.style.height = "8px";
-        modsEl.appendChild(spacer);
+      if (uniques.length > 0) {
+        uniques.forEach((mod) =>
+          modsContainer.appendChild(createLine(mod.data.effect, mod.shining))
+        );
+      } else {
+        const prefixes = item.mods.filter((m) => m.type === "prefix");
+        const suffixes = item.mods.filter((m) => m.type === "suffix");
+
+        // Limit: Magic = 1, Rare = 3
+        const limit = item.rarity === RARITY.MAGIC ? 1 : 3;
+
+        // Render groups
+        this.renderAffixGroup(
+          modsContainer,
+          "PREFIXES",
+          prefixes,
+          createLine,
+          prefixes.length,
+          limit
+        );
+
+        const hasSuffix = suffixes.length > 0;
+        if (prefixes.length > 0 && hasSuffix) {
+          const spacer = document.createElement("div");
+          spacer.style.height = "8px";
+          modsContainer.appendChild(spacer);
+        }
+
+        this.renderAffixGroup(
+          modsContainer,
+          "SUFFIXES",
+          suffixes,
+          createLine,
+          suffixes.length,
+          limit
+        );
       }
-
-      renderGroup("SUFFIXES", suffixes);
+      item.mods.forEach((m) => (m.shining = false));
     }
   }
 
-  triggerAnimation(animClass) {
-    const el = document.getElementById("crafting-item");
-    el.classList.remove("crafting-anim", "error-anim");
-    void el.offsetWidth;
-    el.classList.add(animClass);
+  renderAffixGroup(container, title, list, createLineFn, count, limit) {
+    if (list.length === 0) return;
+
+    const header = document.createElement("div");
+    header.className = "mod-section-header";
+    // Format: PREFIXES (1/3)
+    header.textContent = `${title} (${count}/${limit})`;
+    container.appendChild(header);
+
+    list.forEach((item) =>
+      container.appendChild(createLineFn(item.data.effect, item.shining))
+    );
   }
 
-saveToStash() {
-    const slots = document.querySelectorAll(".stash-slot");
+  constructItemName(item) {
+    if (item.rarity === RARITY.NORMAL) return `Blank ${item.baseName}`;
+    if (item.rarity === RARITY.RARE) return item.rareName;
+    if (item.rarity === RARITY.UNIQUE) return "Undocumented Feature";
+
+    if (item.rarity === RARITY.MAGIC) {
+      const p = item.mods.find((m) => m.type === "prefix");
+      const s = item.mods.find((m) => m.type === "suffix");
+      let name = item.baseName;
+      if (p && p.data && p.data.name) name = `${p.data.name} ${name}`;
+      if (s && s.data && s.data.name) name = `${name} ${s.data.name}`;
+      return name;
+    }
+    return item.baseName;
+  }
+
+  // --- Stash Management ---
+  saveToStash() {
+    const slots = this.elements.stashSlots;
     let targetSlot = null;
     let targetIndex = -1;
 
@@ -515,61 +207,43 @@ saveToStash() {
     }
 
     if (!targetSlot) {
-      alert("Stash is full! Remove items to save new ones.");
+      alert("Stash is full!");
       return;
     }
 
+    const item = this.system.getItem();
     let iconPath = "icons/backpack1.svg";
-    const rarityClass = this.currentItem.rarity;
-    let finalName = "";
-    let rarityColor = "#e0e0e0";
-    if (rarityClass === "magic") rarityColor = "#8888ff";
-    if (rarityClass === "rare") rarityColor = "#ffff77";
-    if (rarityClass === "unique") rarityColor = "#af6025";
-    
-    // Name Logic
-    if (rarityClass === "normal")
-      finalName = "Blank " + this.currentItem.baseName;
-    else if (rarityClass === "magic") {
-      const p = this.currentItem.mods.find((m) => m.type === "prefix");
-      const s = this.currentItem.mods.find((m) => m.type === "suffix");
-      finalName = `${p ? p.data.name + " " : ""}${this.currentItem.baseName}${
-        s ? " " + s.data.name : ""
-      }`;
-    } else if (rarityClass === "rare") finalName = this.currentItem.rareName;
-    else if (rarityClass === "unique") finalName = "Undocumented Feature";
-    
-    // Mods Logic
+
+    const rarityColors = {
+      [RARITY.NORMAL]: "#e0e0e0",
+      [RARITY.MAGIC]: "#8888ff",
+      [RARITY.RARE]: "#ffff77",
+      [RARITY.UNIQUE]: "#af6025",
+    };
+    const rarityColor = rarityColors[item.rarity] || "#e0e0e0";
+    const finalName = this.constructItemName(item);
+
     let modsHtml = "";
-    if (rarityClass === "unique") {
-      this.currentItem.mods.forEach((m) => {
+    if (item.rarity === RARITY.UNIQUE) {
+      item.mods.forEach((m) => {
         modsHtml += `<div class="stat-line" style="color:${rarityColor}; margin: 2px 0;">${m.data.effect}</div>`;
       });
     } else {
-      const prefixes = this.currentItem.mods.filter((m) => m.type === "prefix");
-      const suffixes = this.currentItem.mods.filter((m) => m.type === "suffix");
+      const prefixes = item.mods.filter((m) => m.type === "prefix");
+      const suffixes = item.mods.filter((m) => m.type === "suffix");
+      const headerStyle = `font-size: 10px; text-align: left; margin-top: 8px; width: 100%; color: #777;`;
 
-      const createHeader = (text) => `
-            <div class="mod-section-header" style="
-                font-size: 10px; 
-                text-align: left; 
-                padding-left: 0;
-                margin-top: 8px; 
-                width: 100%;
-                box-sizing: border-box;
-                color: #777; 
-            ">${text}</div>`;
+      const limit = item.rarity === RARITY.MAGIC ? 1 : 3;
 
       if (prefixes.length > 0) {
-        modsHtml += createHeader("PREFIXES");
+        modsHtml += `<div class="mod-section-header" style="${headerStyle}">PREFIXES (${prefixes.length}/${limit})</div>`;
         prefixes.forEach(
           (m) =>
             (modsHtml += `<div class="stat-line" style="color:${rarityColor}">${m.data.effect}</div>`)
         );
       }
-
       if (suffixes.length > 0) {
-        modsHtml += createHeader("SUFFIXES");
+        modsHtml += `<div class="mod-section-header" style="${headerStyle}">SUFFIXES (${suffixes.length}/${limit})</div>`;
         suffixes.forEach(
           (m) =>
             (modsHtml += `<div class="stat-line" style="color:${rarityColor}">${m.data.effect}</div>`)
@@ -577,68 +251,65 @@ saveToStash() {
       }
     }
 
-    const implicitHtml = this.currentItem.implicit
-      ? `<div class="item-implicit" style="display:block; margin-bottom:5px; color:#fff;">${this.currentItem.implicit}</div><div class="separator"></div>`
+    const implicitHtml = item.implicit
+      ? `<div class="item-implicit" style="display:block; margin-bottom:5px; color:#fff;">${item.implicit}</div><div class="separator"></div>`
       : "";
 
-    const corruptedTag = this.currentItem.corrupted
+    const corruptedHtml = item.corrupted
       ? `<div class="corrupted-tag" style="display:block; margin-top:15px; font-size:16px; color: var(--corrupted-red);">CORRUPTED</div>`
       : "";
 
+    let mobileDirection = "mobile-tooltip-left";
+    if ([0, 1, 4, 5].includes(targetIndex))
+      mobileDirection = "mobile-tooltip-right";
+
+    targetSlot.className = `inventory-slot small stash-slot ${item.rarity} tooltip-left ${mobileDirection}`;
+    if (item.corrupted) {
+      targetSlot.classList.add("corrupted");
+      targetSlot.style.borderColor = "var(--corrupted-red)";
+    }
+
     targetSlot.innerHTML = `
       <img src="${iconPath}" class="item-icon" style="${
-      this.currentItem.corrupted
-        ? "filter: sepia(1) hue-rotate(-50deg) saturate(3);"
-        : ""
+      item.corrupted ? "filter: sepia(1) hue-rotate(-50deg) saturate(3);" : ""
     }">
-      
       <div class="poe-tooltip" style="min-width: 300px;">
-        <div class="item-header ${rarityClass}" 
-             style="${
-               this.currentItem.corrupted
-                 ? "border-bottom-color: var(--corrupted-red);"
-                 : ""
-             }">
+        <div class="item-header ${item.rarity}" style="${
+      item.corrupted ? "border-bottom-color: var(--corrupted-red);" : ""
+    }">
           <span class="item-name" style="color: ${rarityColor}">${finalName}</span>
-          <span class="item-base" style="color: ${rarityColor}">${this.currentItem.baseName}</span>
+          <span class="item-base" style="color: ${rarityColor}">${
+      item.baseName
+    }</span>
         </div>
-        
         <div class="item-content" style="padding: 10px;">
           ${implicitHtml}
           <div style="width:100%; display:flex; flex-direction:column; align-items:center;">
              ${modsHtml}
           </div>
-          ${corruptedTag}
+          ${corruptedHtml}
         </div>
       </div>
     `;
 
-    // Logic for mobile tooltip direction
-    let mobileDirection = "mobile-tooltip-left"; 
-    if (targetIndex === 0 || targetIndex === 1 || targetIndex === 4 || targetIndex === 5) {
-        mobileDirection = "mobile-tooltip-right";
-    }
-    targetSlot.className = `inventory-slot small stash-slot ${rarityClass} tooltip-left ${mobileDirection}`;
-    
-    if (this.currentItem.corrupted) {
-      targetSlot.classList.add("corrupted");
-      targetSlot.style.borderColor = "var(--corrupted-red)";
-    }
-
     this.showNotification("Item Saved to Stash");
-    this.triggerAnimation("crafting-anim");
-    this.applyCurrency("scouring");
+
+    this.system.resetItem(this.system.currentType);
+    this.updateDisplay();
+  }
+
+  triggerAnimation(animClass) {
+    const el = this.elements.itemContainer;
+    el.classList.remove("crafting-anim", "error-anim");
+    void el.offsetWidth;
+    el.classList.add(animClass);
   }
 
   showNotification(text) {
     const notif = document.createElement("div");
     notif.className = "stash-notification";
     notif.innerText = text;
-
     document.body.appendChild(notif);
-
-    setTimeout(() => {
-      notif.remove();
-    }, 2000);
+    setTimeout(() => notif.remove(), 2000);
   }
 }

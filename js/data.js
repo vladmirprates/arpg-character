@@ -1,5 +1,5 @@
 export const treeData = [
-  // CENTER
+  // CENTER START
   {
     id: "start",
     x: 1500,
@@ -9,6 +9,7 @@ export const treeData = [
     name: "QA Specialist",
     desc: "Software Quality and Complex System Validation Expert.",
   },
+
   // NORTH (COMPLEX SYSTEMS / UX / L10n)
   {
     id: "gm_mechanics",
@@ -99,6 +100,7 @@ export const treeData = [
     name: "Systemic Risk Analysis",
     desc: "Analyzing the impact of changes on system stability and integrity.",
   },
+
   // SOUTH (BUG REPORT / AUTOMATION)
   {
     id: "bug_write",
@@ -181,6 +183,7 @@ export const treeData = [
     name: "Fix Verification",
     desc: "Confirming the bug fix and closing the ticket.",
   },
+
   // EAST (TECHNICAL / AUTOMATION)
   {
     id: "tech_jira",
@@ -263,6 +266,7 @@ export const treeData = [
     name: "Crash Dump Analysis",
     desc: "Locating and submitting .dmp files after critical failures.",
   },
+
   // WEST (PROCESS / COMMUNITY / LEADERSHIP)
   {
     id: "proc_comm",
@@ -347,6 +351,7 @@ export const treeData = [
   },
 ];
 
+// Graph Connections
 export const links = [
   // Center
   { from: "start", to: "gm_mechanics" },

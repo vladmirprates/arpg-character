@@ -1,4 +1,5 @@
 export function setupTooltips() {
+  // Config for PoE Style Tooltips
   const commonConfig = {
     allowHTML: true,
     placement: "top",
@@ -7,6 +8,8 @@ export function setupTooltips() {
     duration: [200, 0],
     delay: [50, 0],
   };
+
+  // --- Skill Bar Tooltips ---
 
   tippy("#skill-q", {
     ...commonConfig,
@@ -111,6 +114,7 @@ export function setupTooltips() {
   });
 }
 
+// Close tooltips on mobile/touch if tapping outside
 document.addEventListener("touchstart", function (e) {
   if (!e.target.closest(".inventory-slot")) {
     if (document.activeElement) {

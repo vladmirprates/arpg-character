@@ -1,3 +1,4 @@
+/* --- Desktop/Laptop Tweaks --- */
 @media (max-width: 1200px) {
   .ui-container {
     display: flex;
@@ -14,6 +15,7 @@
     margin-bottom: 20px;
   }
 
+  /* Stack Order Reversal */
   .panel.paper-doll {
     order: 1;
   }
@@ -31,8 +33,9 @@
   }
 }
 
-/* RESPONSIVE MOBILE (MAX 600PX) */
+/* --- Mobile Breakpoint (Max 600px) --- */
 @media (max-width: 600px) {
+  /* Scale down the character sheet */
   .panel.paper-doll {
     width: 95%;
     transform-origin: top center;
@@ -77,6 +80,7 @@
   }
 }
 
+/* Tooltip Mobile Behavior */
 @media (max-width: 950px) {
   .panel-right .mobile-tooltip-right .poe-tooltip {
     position: absolute !important;
@@ -114,7 +118,7 @@
   }
 }
 
-/* Tablet & Mobile: Crafting Bench */
+/* --- Crafting Bench Responsiveness --- */
 @media (max-width: 950px) {
   .bench-container {
     width: 95%;
