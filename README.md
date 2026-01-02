@@ -1,54 +1,120 @@
-# QA Character Sheet & Crafting Bench 🛡️🎲
+# 🛡️ QA Character Sheet & Crafting Bench
 
-**A Gamified QA Portfolio inspired by Action RPGs (PoE, Diablo, Last Epoch).**
+> An interactive, gamified portfolio combining my passion for ARPGs with my career in **Quality Assurance**.
 
-This project transforms a standard QA Engineer resume into an interactive RPG character sheet. It gamifies technical skills, tools, and daily workflows using mechanics familiar to ARPG players, such as passive skill trees, inventory management, and item crafting.
+![Project Status](https://img.shields.io/badge/Status-Complete-success)
+![Tests](https://img.shields.io/badge/Tests-Passing-brightgreen)
+![Accessibility](https://img.shields.io/badge/A11y-WCAG_2.1-blue)
 
-## 🌟 Project Concept
+## 🎯 About The Project
 
-The goal is to demonstrate technical proficiency in **Frontend Development** (HTML/CSS/JS) and **Logic** while showcasing **QA competencies** in a creative, engaging way.
+This project is a personal experiment: **"What if my resume was an Action RPG like Path of Exile, Diablo, Last Epoch and etc?"**
 
--   **The "Character":** A Mid-Level QA
--   **The "Skills":** Represented as a complex node-based Passive Tree
--   **The "Work":** Represented as a Crafting Bench where "Bug Reports", "Test Cases" and "Automation Scripts" are rolled using currency orbs like in Path of Exile crafting system (logic algorithms)
+As a **Mid-Level QA Engineer**, my goal was to step out of my comfort zone and combine work with fun. I wanted to build something interactive to demonstrate my technical skills, but also use this project as a **learning laboratory**.
 
-## ✨ Key Features
+The focus isn't just on showing code, but on how I apply the **QA Mindset** to software development: ensuring it is testable, accessible, and well-structured from day one.
 
-### 🌳 Interactive Passive Tree
-A fully navigable SVG-based skill tree that visualizes professional competencies.
--   **Pathfinding Logic:** Nodes are only allocated if connected to the start, simulating skill progression
--   **Categories:** Zones dedicated to Automation, Manual Testing, Process Management, and specialized testing (Localization, Physics, etc)
--   **Zoom & Pan:** Smooth navigation using mouse interactions
-
-### 🔨 The Crafting Bench
-A simulation of RNG-based crafting systems applied to QA artifacts.
--   **Item Bases:** Users can craft "Bug Reports", "Test Cases", or "Automation Scripts"
--   **Currency System:** Custom "orbs" that modify item properties (e.g., *Orb of Triage* turns a ticket into a Magic item; *Orb of Deployment* corrupts the item)
--   **Affix System:** Logic that randomly assigns prefixes and suffixes based on the item's type and rarity (e.g., *"of the Heisenbug"* or *"Headless"*)
-
-### 🎒 Inventory & Equipment
--   **Tooltips:** Dynamic, hover-over tooltips that describe tools (Jira, Playwright, Jenkins) as if they were legendary weapons and armor
--   **Responsive UI:** A layout that adapts from desktop to mobile, maintaining the "game interface" aesthetic
-
-## 🛠️ Tech Stack
-
--   **Core:** Vanilla JavaScript (ES6+), HTML5, CSS3
--   **Visualization:** SVG for the tree connections
--   **Libraries:**
-    -   `Panzoom` (for canvas navigation).
-    -   `Tippy.js` & `Popper.js` (for advanced tooltips).
--   **Style:** Custom CSS with heavy use of CSS Variables, Flexbox, Grid, and Animations
-
-
-## 🚧 Roadmap & Future Improvements
-
-This project is currently under active refactoring to align with Engineering and QA best practices. Upcoming updates include:
-
--   ~~**Architecture:** Separating UI rendering logic from Game/Business logic (MVC pattern)~~
--   **Testing:** Implementation of Unit Tests (Jest/Vitest) for the Crafting and Tree pathfinding algorithms
--   **Accessibility:** Improving ARIA labels and keyboard navigation for the inventory and tree
--   ~~**Security:** Sanitizing DOM manipulation to prevent injection risks~~
-
+**Key Features:**
+* **Passive Skill Tree:** An interactive graph (with zoom/pan) visualizing my QA competencies in a playful way.
+* **Crafting Bench:** A fully functional simulator where you use "Orbs" to modify *Bug Reports* and *Test Cases*, applying real business logic (probabilities, prefixes/suffixes constraints). This is basically a replica of the basic currency crafting from Path of Exile.
+* **Inventory System:** Equipment slots representing the tools I use daily (Jira, Playwright, etc.).
 
 ---
-*Created by Vladmir Prates - QA Professional & ARPG Enthusiast*
+
+## 🛠️ What I Learned & Applied (Technical Highlights)
+
+This project was an opportunity to practice advanced concepts that I value in my daily work routine.
+
+### 1. 🧪 Automated Testing (Jest)
+I believe quality must be guaranteed by code, not just manual effort.
+* Decoupled business logic (`CraftingSystem.js`) from the UI to facilitate testing.
+* Created **Unit Tests** to validate item probabilities and rule constraints.
+* Used **Integration Tests** to ensure the interface responds correctly to user actions.
+
+### 2. ♿ Accessibility (A11y)
+Quality software must be usable by everyone. I strove to apply WCAG best practices:
+* The project is **100% navigable via keyboard** (Tab, Enter, Esc).
+* Implemented **"Focus Traps"** in modals so keyboard users don't get lost.
+* Used semantic `roles` and dynamic `aria-labels` so screen readers can understand the context (e.g., crafting results are announced automatically).
+
+### 3. 🏗️ Architecture & Organization
+I tried to keep the code clean and organized to make future maintenance easier.
+* **MVC Pattern:** Clear separation between Logic (Model), Interface (View/Controller), and Data.
+* **Security:** Basic XSS prevention by avoiding unsafe DOM manipulation.
+
+---
+
+## 🚀 How to Run Locally
+
+If you want to test the application or run the test suite on your machine:
+
+### Prerequisites
+* **Node.js** (Required only for running automated tests)
+* A modern web browser.
+
+### Installation
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/vladmirprates/arpg-character.git
+    cd arpg-character
+    ```
+
+2.  **Install dependencies (for testing):**
+    ```bash
+    npm install
+    ```
+
+## 🟢 Running Tests 
+To see the business rule validation in action:
+
+```bash
+npm test
+```
+You should see all tests passing in the terminal.
+
+### Running the Application
+Since this project uses modern ES Modules, it requires a simple local server.
+
+
+Option A: Using Python
+
+```bash
+python -m http.server
+```
+Open http://localhost:8000 in your browser
+
+
+Option B: Using VS Code
+
+Install the Live Server extension.
+Right-click index.html and select "Open with Live Server".
+
+## 📂 Project Structure
+```
+/
+│
+│   ├── js/
+│   │   ├── data/             # Static Data (Item Pools, Tree Nodes, Text)
+│   │   ├── CraftingBench.js  # UI Controller
+│   │   ├── CraftingSystem.js # Pure Logic (Game Rules)
+│   │   ├── PassiveTree.js    # Graph Logic & Zoom
+│   │   ├── main.js           # Entry Point
+│   │   └── tooltips.js       # Tooltip Configuration
+│   ├── css/                  # Styles & Responsiveness
+│   └── icons/                # Visual Assets
+├── tests/                    # Test Suite (Jest)
+│   ├── CraftingBench.test.js
+│   ├── CraftingSystem.test.js
+│   └── PassiveTree.test.js
+├── index.html                # Main HTML
+├── package.json              # NPM Config
+└── babel.config.js           # Babel Config (for Jest)
+```
+
+### 👤 Author
+**Vladmir Prates** - QA Engineer (Mid-Level)
+
+Hobbies: ARPGs, Gaming in general and learning new tech
+
+This is a portfolio project made with care. All "bugs" found in the items are (mostly) purely fictional. 😉
