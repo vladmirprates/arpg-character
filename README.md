@@ -56,7 +56,7 @@ If you want to test the application or run the test suite on your machine:
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/vladmirprates/arpg-character.git](https://github.com/vladmirprates/arpg-character.git)
+    git clone https://github.com/vladmirprates/arpg-character.git
     cd arpg-character
     ```
 
