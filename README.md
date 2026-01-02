@@ -65,7 +65,7 @@ If you want to test the application or run the test suite on your machine:
     npm install
     ```
 
-### Running Tests 🟢
+## 🟢 Running Tests 
 To see the business rule validation in action:
 
 ```bash
@@ -90,7 +90,7 @@ Option B: Using VS Code
 Install the Live Server extension.
 Right-click index.html and select "Open with Live Server".
 
-### 📂 Project Structure
+## 📂 Project Structure
 ```
 /
 │
