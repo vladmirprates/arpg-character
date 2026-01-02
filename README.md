@@ -1,3 +1,4 @@
+> **Falante de Português?** Leia a [Versão em Português aqui](README-pt.md)
 # 🛡️ QA Character Sheet & Crafting Bench
 
 > An interactive, gamified portfolio combining my passion for ARPGs with my career in **Quality Assurance**.
