@@ -6,8 +6,8 @@ export const treeData = [
     y: 1500,
     type: "start",
     icon: "🎯",
-    name: "QA Specialist",
-    desc: "Software Quality and Complex System Validation Expert.",
+    name: "QA Skills",
+    desc: "Software Quality and Complex System Validation Expertise.",
   },
 
   // NORTH (COMPLEX SYSTEMS / UX / L10n)
@@ -191,7 +191,7 @@ export const treeData = [
     y: 1500,
     icon: "🎫",
     name: "JIRA / Azure DevOps",
-    desc: "Workflow management and ticket lifecycle control.",
+    desc: "Workflow management and Card lifecycle control.",
   },
   {
     id: "tech_logs",
@@ -323,7 +323,7 @@ export const treeData = [
     y: 1430,
     icon: "☕",
     name: "Agile Ceremonies",
-    desc: "Active participation in Daily Standups and Retrospectives.",
+    desc: "Active participation in Daily Standups and other Agile Ceremonies.",
   },
   {
     id: "proc_docs",
