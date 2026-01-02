@@ -22,44 +22,50 @@
   </head>
   <body>
     <div class="ui-container">
-      <div class="panel panel-left">
-        <div class="panel-title">Attributes</div>
-        <div class="stats-list">
-          <div class="stat-row">
+      
+<div class="panel panel-left" role="region" aria-label="Character Attributes Panel">
+        <div class="panel-title" tabindex="0" role="heading" aria-level="2">Attributes</div>
+        
+        <div class="stats-list" role="list">
+          
+          <div class="stat-row" tabindex="0" role="listitem">
             <span class="stat-label">Class</span>
             <span class="stat-val">QA Engineer</span>
           </div>
-          <div class="stat-row">
+          <div class="stat-row" tabindex="0" role="listitem">
             <span class="stat-label">Level</span>
             <span class="stat-val">Mid-Level (25)</span>
           </div>
+          
           <br />
-          <div class="stat-row">
+          
+          <div class="stat-row" tabindex="0" role="listitem" aria-label="Intelligence (Automation): 215">
             <span class="stat-label">Automation (Int)</span>
             <span class="stat-val text-blue">215</span>
           </div>
-          <div class="stat-row">
+          <div class="stat-row" tabindex="0" role="listitem" aria-label="Strength (Manual): 342">
             <span class="stat-label">Manual (Str)</span>
             <span class="stat-val text-red">342</span>
           </div>
-          <div class="stat-row">
+          <div class="stat-row" tabindex="0" role="listitem" aria-label="Dexterity (Process): 175">
             <span class="stat-label">Process (Dex)</span>
             <span class="stat-val text-green">175</span>
           </div>
+          
           <br />
-          <div class="separator"></div>
-          <div style="text-align: center; color: #888; margin-bottom: 5px">
-            Resistances
-          </div>
-          <div class="stat-row">
+          
+        <div style="margin-top: 20px; border-top: 1px solid #333; padding-top: 10px;"></div>
+          <div class="panel-title" tabindex="0" role="heading" aria-level="2"style="font-size: 16px; margin-bottom: 10px;">Resistances</div>
+          
+          <div class="stat-row" tabindex="0" role="listitem">
             <span class="stat-label">Spaghetti Code</span>
             <span class="stat-val res-poison">75% (Cap)</span>
           </div>
-          <div class="stat-row">
+          <div class="stat-row" tabindex="0" role="listitem">
             <span class="stat-label">Burnout</span>
             <span class="stat-val res-fire">40%</span>
           </div>
-          <div class="stat-row">
+          <div class="stat-row" tabindex="0" role="listitem">
             <span class="stat-label">Tight Deadlines</span>
             <span class="stat-val res-light">60%</span>
           </div>
@@ -71,8 +77,9 @@
           <div class="rune-circle-inner" id="rune-circle-inner"></div>
           <div class="rune-circle-outer" id="rune-circle-outer"></div>
         </div>
-        <div class="inventory-slot slot-w1 tall unique tooltip-right">
-          <img src="icons/weapon1.svg" class="item-icon" />
+        
+        <div class="inventory-slot slot-w1 tall unique tooltip-right" tabindex="0" role="button" aria-label="Main Hand Weapon: The Null Pointer">
+          <img src="icons/weapon1.svg" class="item-icon" alt="" />
           <div class="poe-tooltip">
             <div class="item-header">
               <span class="item-name">The Null Pointer</span
@@ -97,8 +104,8 @@
           </div>
         </div>
 
-        <div class="inventory-slot slot-head unique tooltip-right">
-          <img src="icons/head.svg" class="item-icon" />
+        <div class="inventory-slot slot-head unique tooltip-right" tabindex="0" role="button" aria-label="Helmet: Crown of the Automator">
+          <img src="icons/head.svg" class="item-icon" alt="" />
           <div class="poe-tooltip">
             <div class="item-header">
               <span class="item-name">Crown of the Automator</span
@@ -135,8 +142,8 @@
           </div>
         </div>
 
-        <div class="inventory-slot slot-amulet small unique tooltip-left">
-          <img src="icons/amulet.svg" class="item-icon" />
+        <div class="inventory-slot slot-amulet small unique tooltip-left" tabindex="0" role="button" aria-label="Amulet: StackOverflow Star">
+          <img src="icons/amulet.svg" class="item-icon" alt="" />
           <div class="poe-tooltip">
             <div class="item-header">
               <span class="item-name">StackOverflow Star</span
@@ -157,8 +164,8 @@
           </div>
         </div>
 
-        <div class="inventory-slot slot-w2 tall rare tooltip-left">
-          <img src="icons/weapon2.svg" class="item-icon" />
+        <div class="inventory-slot slot-w2 tall rare tooltip-left" tabindex="0" role="button" aria-label="Off Hand: Jira Ticket Board">
+          <img src="icons/weapon2.svg" class="item-icon" alt="" />
           <div class="poe-tooltip">
             <div class="item-header">
               <span class="item-name">Jira Ticket Board</span
@@ -183,8 +190,8 @@
           </div>
         </div>
 
-        <div class="inventory-slot slot-ring1 small magic tooltip-right">
-          <img src="icons/ring1.svg" class="item-icon" />
+        <div class="inventory-slot slot-ring1 small magic tooltip-right" tabindex="0" role="button" aria-label="Left Ring: Git Commit">
+          <img src="icons/ring1.svg" class="item-icon" alt="" />
           <div class="poe-tooltip">
             <div class="item-header">
               <span class="item-name">Git Commit</span
@@ -201,8 +208,8 @@
           </div>
         </div>
 
-        <div class="inventory-slot slot-chest tall rare tooltip-right">
-          <img src="icons/body.svg" class="item-icon" />
+        <div class="inventory-slot slot-chest tall rare tooltip-right" tabindex="0" role="button" aria-label="Body Armour: Jenkins Firewall">
+          <img src="icons/body.svg" class="item-icon" alt="" />
           <div class="poe-tooltip">
             <div class="item-header">
               <span class="item-name">Jenkins Firewall</span
@@ -223,8 +230,8 @@
           </div>
         </div>
 
-        <div class="inventory-slot slot-ring2 small magic tooltip-left">
-          <img src="icons/ring2.svg" class="item-icon" />
+        <div class="inventory-slot slot-ring2 small magic tooltip-left" tabindex="0" role="button" aria-label="Right Ring: Git Push">
+          <img src="icons/ring2.svg" class="item-icon" alt="" />
           <div class="poe-tooltip">
             <div class="item-header">
               <span class="item-name">Git Push</span
@@ -243,8 +250,8 @@
           </div>
         </div>
 
-        <div class="inventory-slot slot-hands magic tooltip-right">
-          <img src="icons/gloves.svg" class="item-icon" />
+        <div class="inventory-slot slot-hands magic tooltip-right" tabindex="0" role="button" aria-label="Gloves: Manual Testers">
+          <img src="icons/gloves.svg" class="item-icon" alt="" />
           <div class="poe-tooltip">
             <div class="item-header">
               <span class="item-name">Manual Testers</span
@@ -262,8 +269,8 @@
           </div>
         </div>
 
-        <div class="inventory-slot slot-belt wide unique tooltip-right">
-          <img src="icons/belt.svg" class="item-icon" />
+        <div class="inventory-slot slot-belt wide unique tooltip-right" tabindex="0" role="button" aria-label="Belt: The Scrum Master's Sash">
+          <img src="icons/belt.svg" class="item-icon" alt="" />
           <div class="poe-tooltip">
             <div class="item-header">
               <span class="item-name">The Scrum Master's Sash</span
@@ -290,8 +297,8 @@
           </div>
         </div>
 
-        <div class="inventory-slot slot-feet rare tooltip-left">
-          <img src="icons/boots.svg" class="item-icon" />
+        <div class="inventory-slot slot-feet rare tooltip-left" tabindex="0" role="button" aria-label="Boots: Hotfix Striders">
+          <img src="icons/boots.svg" class="item-icon" alt="" />
           <div class="poe-tooltip">
             <div class="item-header">
               <span class="item-name">Hotfix Striders</span
@@ -311,9 +318,9 @@
         </div>
         <div
           class="inventory-slot slot-pet companion unique tooltip-left"
-          id="pet"
+          id="pet" tabindex="0" role="button" aria-label="Companion: Junior Rubber Duck"
         >
-          <img src="icons/pet.svg" class="item-icon" />
+          <img src="icons/pet.svg" class="item-icon" alt="" />
           <div class="poe-tooltip">
             <div class="item-header">
               <span class="item-name">Junior Rubber Duck</span
@@ -336,9 +343,9 @@
 
         <div
           class="inventory-slot slot-charm1 charm magic tooltip-right"
-          id="charm1"
+          id="charm1" tabindex="0" role="button" aria-label="Charm: Stone of the Self-Taught"
         >
-          <img src="icons/rune.svg" class="item-icon" />
+          <img src="icons/rune.svg" class="item-icon" alt="" />
           <div class="poe-tooltip">
             <div class="item-header">
               <span class="item-name">Stone of the Self-Taught</span
@@ -369,9 +376,9 @@
 
         <div
           class="inventory-slot slot-aura1 aura rare tooltip-left"
-          id="aura1"
+          id="aura1" tabindex="0" role="button" aria-label="Aura: Collaboration Aura"
         >
-          <img src="icons/aura.svg" class="item-icon" />
+          <img src="icons/aura.svg" class="item-icon" alt="" />
           <div class="poe-tooltip">
             <div class="item-header">
               <span class="item-name">Collaboration Aura</span>
@@ -390,12 +397,14 @@
             </div>
           </div>
         </div>
+
         <div class="flask-row">
-          <div class="inventory-slot flask unique tooltip-up">
+          <div class="inventory-slot flask unique tooltip-up" tabindex="0" role="button" aria-label="Flask 1: Emergency Coffee">
             <img
               src="icons/flask1.svg"
               class="item-icon"
               style="filter: hue-rotate(280deg)"
+              alt=""
             />
             <div class="poe-tooltip">
               <div class="item-header">
@@ -419,8 +428,8 @@
               </div>
             </div>
           </div>
-          <div class="inventory-slot flask magic tooltip-up">
-            <img src="icons/flask2.svg" class="item-icon" />
+          <div class="inventory-slot flask magic tooltip-up" tabindex="0" role="button" aria-label="Flask 2: Flask of Focus">
+            <img src="icons/flask2.svg" class="item-icon" alt="" />
             <div class="poe-tooltip">
               <div class="item-header">
                 <span class="item-name">Flask of Focus</span>
@@ -433,11 +442,12 @@
               </div>
             </div>
           </div>
-          <div class="inventory-slot flask unique tooltip-up">
+          <div class="inventory-slot flask unique tooltip-up" tabindex="0" role="button" aria-label="Flask 3: Tears of the Devs">
             <img
               src="icons/flask3.svg"
               class="item-icon"
               style="filter: sepia(1)"
+              alt=""
             />
             <div class="poe-tooltip">
               <div class="item-header">
@@ -449,8 +459,8 @@
               </div>
             </div>
           </div>
-          <div class="inventory-slot flask magic tooltip-up">
-            <img src="icons/flask4.svg" class="item-icon" />
+          <div class="inventory-slot flask magic tooltip-up" tabindex="0" role="button" aria-label="Flask 4: Diamond Flask">
+            <img src="icons/flask4.svg" class="item-icon" alt="" />
             <div class="poe-tooltip">
               <div class="item-header">
                 <span class="item-name">Diamond Flask</span>
@@ -463,8 +473,8 @@
               </div>
             </div>
           </div>
-          <div class="inventory-slot flask magic tooltip-up">
-            <img src="icons/flask5.svg" class="item-icon" />
+          <div class="inventory-slot flask magic tooltip-up" tabindex="0" role="button" aria-label="Flask 5: Quicksilver Flask">
+            <img src="icons/flask5.svg" class="item-icon" alt="" />
             <div class="poe-tooltip">
               <div class="item-header">
                 <span class="item-name">Quicksilver Flask</span>
@@ -483,15 +493,15 @@
       </div>
 
       <div class="panel panel-right">
-        <div class="panel-title">Backpack</div>
+<div class="panel-title" tabindex="0" role="heading" aria-level="2">Backpack</div>
         <div
           style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px"
         >
           <div
             class="inventory-slot small magic tooltip-left mobile-tooltip-right"
-            id="backpack-scroll"
+            id="backpack-scroll" tabindex="0" role="button" aria-label="Inventory Item: Scroll of Documentation"
           >
-            <img src="icons/backpack1.svg" class="item-icon" />
+            <img src="icons/backpack1.svg" class="item-icon" alt="" />
             <div class="poe-tooltip">
               <div class="item-header">
                 <span class="item-name">Scroll of Documentation</span
@@ -514,75 +524,75 @@
               </div>
             </div>
           </div>
-          <div class="inventory-slot small">
-            <div
-              class="inventory-slot small rare currency tooltip-left mobile-tooltip-right"
-              id="backpack-chaos"
-            >
-              <img src="icons/backpack2.svg" class="item-icon" />
-              <div class="poe-tooltip">
-                <div class="item-header">
-                  <span class="item-name">Orb of Environment</span>
-                  <span class="item-base">Currency</span>
+
+          <div
+            class="inventory-slot small rare currency tooltip-left mobile-tooltip-right"
+            id="backpack-chaos" tabindex="0" role="button" aria-label="Inventory Item: Orb of Environment"
+          >
+            <img src="icons/backpack2.svg" class="item-icon" alt="" />
+            <div class="poe-tooltip">
+              <div class="item-header">
+                <span class="item-name">Orb of Environment</span>
+                <span class="item-base">Currency</span>
+              </div>
+              <div class="item-content">
+                <div class="stat-blue">Stack Size: 10/10</div>
+                <div class="separator"></div>
+                <div>
+                  Reforges a
+                  <span class="stat-white">Staging Environment</span> with new
+                  random data.
                 </div>
-                <div class="item-content">
-                  <div class="stat-blue">Stack Size: 10/10</div>
-                  <div class="separator"></div>
-                  <div>
-                    Reforges a
-                    <span class="stat-white">Staging Environment</span> with new
-                    random data.
-                  </div>
-                  <div>
-                    Right click to wipe the database and
-                    <span class="stat-blue">Restart the Docker Containers</span
-                    >.
-                  </div>
-                  <div class="flavor-text">
-                    "Have you tried turning it off and on again?"
-                  </div>
+                <div>
+                  Right click to wipe the database and
+                  <span class="stat-blue">Restart the Docker Containers</span
+                  >.
+                </div>
+                <div class="flavor-text">
+                  "Have you tried turning it off and on again?"
                 </div>
               </div>
             </div>
           </div>
-          <div class="inventory-slot small">
-            <div
-              class="inventory-slot small corrupted currency tooltip-left mobile-tooltip-left"
-              id="backpack-vaal"
-            >
-              <img
-                src="icons/backpack3.svg"
-                class="item-icon"
-                style="filter: sepia(1) hue-rotate(-50deg) saturate(3)"
-              />
-              <div class="poe-tooltip">
-                <div class="item-header">
-                  <span class="item-name" style="color: #d20000"
-                    >Orb of Hotfix</span
-                  >
-                  <span class="item-base">Currency</span>
+
+          <div
+            class="inventory-slot small corrupted currency tooltip-left mobile-tooltip-left"
+            id="backpack-vaal" tabindex="0" role="button" aria-label="Inventory Item: Orb of Hotfix"
+          >
+            <img
+              src="icons/backpack3.svg"
+              class="item-icon"
+              style="filter: sepia(1) hue-rotate(-50deg) saturate(3)"
+              alt=""
+            />
+            <div class="poe-tooltip">
+              <div class="item-header">
+                <span class="item-name" style="color: #d20000"
+                  >Orb of Hotfix</span
+                >
+                <span class="item-base">Currency</span>
+              </div>
+              <div class="item-content">
+                <div class="stat-blue">Stack Size: 1/10</div>
+                <div class="separator"></div>
+                <div>
+                  Corrupts a <span class="stat-white">Pull Request</span>,
+                  deploying it instantly.
                 </div>
-                <div class="item-content">
-                  <div class="stat-blue">Stack Size: 1/10</div>
-                  <div class="separator"></div>
-                  <div>
-                    Corrupts a <span class="stat-white">Pull Request</span>,
-                    deploying it instantly.
-                  </div>
-                  <div>
-                    <span class="stat-blue">Unpredictable Outcome:</span> May
-                    fix the bug or bring down the Server.
-                  </div>
-                  <div class="flavor-text">"We'll test it in Production."</div>
+                <div>
+                  <span class="stat-blue">Unpredictable Outcome:</span> May
+                  fix the bug or bring down the Server.
                 </div>
+                <div class="flavor-text">"We'll test it in Production."</div>
               </div>
             </div>
           </div>
+
           <div
             class="inventory-slot small unique currency tooltip-left mobile-tooltip-left"
-            id="backpack-mirror"
+            id="backpack-mirror" tabindex="0" role="button" aria-label="Inventory Item: Mirror of Replication"
           >
-            <img src="icons/backpack4.svg" class="item-icon" />
+            <img src="icons/backpack4.svg" class="item-icon" alt="" />
             <div class="poe-tooltip">
               <div class="item-header">
                 <span class="item-name">Mirror of Replication</span>
@@ -605,12 +615,14 @@
               </div>
             </div>
           </div>
-          <div class="inventory-slot small"></div>
+
+          <div class="inventory-slot small" tabindex="0" role="button" aria-label="Empty Inventory Slot"></div>
+          
           <div
             class="inventory-slot small magic currency tooltip-left mobile-tooltip-right"
-            id="backpack-whetstone"
+            id="backpack-whetstone" tabindex="0" role="button" aria-label="Inventory Item: Ticket Whetstone"
           >
-            <img src="icons/backpack6.svg" class="item-icon" />
+            <img src="icons/backpack6.svg" class="item-icon" alt="" />
             <div class="poe-tooltip">
               <div class="item-header">
                 <span class="item-name">Ticket Whetstone</span>
@@ -633,8 +645,8 @@
               </div>
             </div>
           </div>
-          <div class="inventory-slot small"></div>
-          <div class="inventory-slot small"></div>
+          <div class="inventory-slot small" tabindex="0" role="button" aria-label="Empty Inventory Slot"></div>
+          <div class="inventory-slot small" tabindex="0" role="button" aria-label="Empty Inventory Slot"></div>
         </div>
         <div
           style="
@@ -649,22 +661,22 @@
       <br>
       <br>
         <div style="margin-top: 20px; border-top: 1px solid #333; padding-top: 10px;">
-          <div class="panel-title" style="font-size: 16px; margin-bottom: 10px;">Saved Crafts</div>
+          <div class="panel-title" tabindex="0" role="heading" aria-level="2" style="font-size: 16px; margin-bottom: 10px;">Saved Crafts</div>
           <div id="stash-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;">
-            <div class="inventory-slot small stash-slot"></div>
-            <div class="inventory-slot small stash-slot"></div>
-            <div class="inventory-slot small stash-slot"></div>
-            <div class="inventory-slot small stash-slot"></div>
-            <div class="inventory-slot small stash-slot"></div>
-            <div class="inventory-slot small stash-slot"></div>
-            <div class="inventory-slot small stash-slot"></div>
-            <div class="inventory-slot small stash-slot"></div>
+            <div class="inventory-slot small stash-slot" tabindex="0" role="button" aria-label="Stash Slot 1"></div>
+            <div class="inventory-slot small stash-slot" tabindex="0" role="button" aria-label="Stash Slot 2"></div>
+            <div class="inventory-slot small stash-slot" tabindex="0" role="button" aria-label="Stash Slot 3"></div>
+            <div class="inventory-slot small stash-slot" tabindex="0" role="button" aria-label="Stash Slot 4"></div>
+            <div class="inventory-slot small stash-slot" tabindex="0" role="button" aria-label="Stash Slot 5"></div>
+            <div class="inventory-slot small stash-slot" tabindex="0" role="button" aria-label="Stash Slot 6"></div>
+            <div class="inventory-slot small stash-slot" tabindex="0" role="button" aria-label="Stash Slot 7"></div>
+            <div class="inventory-slot small stash-slot" tabindex="0" role="button" aria-label="Stash Slot 8"></div>
           </div>
         </div>
         <br>
         <br>
          <center>
-          <button class="ui-btn craft-btn">Crafting Bench</button>
+          <button class="ui-btn craft-btn" aria-label="Open Crafting Bench">Crafting Bench</button>
         </center>
       </div>
       </div>
@@ -672,37 +684,37 @@
 
     <div class="bottom-bar panel-skill">
       <div class="skill-container">
-        <div class="skill-slot" id="skill-q">
+        <div class="skill-slot" id="skill-q" tabindex="0" role="button" aria-label="Skill Q: Inspect Element">
           <span class="skill-key">Q</span>
-          <img src="icons/skill1.svg" class="skill-icon" />
+          <img src="icons/skill1.svg" class="skill-icon" alt="" />
         </div>
 
-        <div class="skill-slot" id="skill-w">
+        <div class="skill-slot" id="skill-w" tabindex="0" role="button" aria-label="Skill W: Capture Bug">
           <span class="skill-key">W</span>
-          <img src="icons/skill2.svg" class="skill-icon" />
+          <img src="icons/skill2.svg" class="skill-icon" alt="" />
         </div>
 
-        <div class="skill-slot" id="skill-e">
+        <div class="skill-slot" id="skill-e" tabindex="0" role="button" aria-label="Skill E: Automated Regression">
           <span class="skill-key">E</span>
-          <img src="icons/skill3.svg" class="skill-icon" />
+          <img src="icons/skill3.svg" class="skill-icon" alt="" />
         </div>
 
-        <div class="skill-slot" id="skill-r">
+        <div class="skill-slot" id="skill-r" tabindex="0" role="button" aria-label="Skill R: Break Production">
           <span class="skill-key">R</span>
-          <img src="icons/skill4.svg" class="skill-icon" />
+          <img src="icons/skill4.svg" class="skill-icon" alt="" />
         </div>
 
-        <div class="skill-slot" id="skill-t">
+        <div class="skill-slot" id="skill-t" tabindex="0" role="button" aria-label="Skill T: Teleport to Meeting">
           <span class="skill-key">T</span>
-          <img src="icons/skill5.svg" class="skill-icon" />
+          <img src="icons/skill5.svg" class="skill-icon" alt="" />
         </div>
       </div>
 
-      <button class="ui-btn tree-btn">Passive Tree</button>
+      <button class="ui-btn tree-btn" aria-label="Open Passive Skill Tree">Passive Tree</button>
     </div>
 
     <div id="tree-modal">
-      <div class="close-modal">X</div>
+      <div class="close-modal" tabindex="0" role="button" aria-label="Close Passive Tree">X</div>
 
       <div
         class="section-label"
@@ -724,14 +736,15 @@
         <div id="tree-canvas"><svg id="svg-layer"></svg></div>
       </div>
     </div>
+    
     <div id="crafting-modal">
-      <div class="close-modal">X</div>
+      <div class="close-modal" tabindex="0" role="button" aria-label="Close Crafting Bench">X</div>
 
       <div class="bench-container">
         <h2>QA Crafting Bench</h2>
 
         <div class="crafting-controls">
-          <select id="base-selector">
+          <select id="base-selector" aria-label="Select Item Base">
             <option value="bug">Base: Bug Report</option>
             <option value="testcase">Base: Test Case</option>
             <option value="script">Base: Auto Script</option>
@@ -740,12 +753,13 @@
             id="btn-save-item"
             class="ui-btn"
             style="height: 40px; font-size: 14px; margin-left: 10px"
+            aria-label="Save Crafted Item to Stash"
           >
             Keep Item
           </button>
         </div>
 
-        <div id="crafting-item" class="item-display normal">
+        <div id="crafting-item" class="item-display normal" tabindex="0" role="region" aria-label="Crafted Item Display" aria-live="polite">
           <div class="item-header">
             <span class="item-name">Blank Ticket</span>
             <span class="item-base">Bug Report</span>
@@ -764,11 +778,13 @@
             <div class="corrupted-tag">CORRUPTED</div>
           </div>
         </div>
+        
         <div class="currency-belt">
-          <div class="currency-slot" data-currency="transmute">
+          <div class="currency-slot" data-currency="transmute" tabindex="0" role="button" aria-label="Orb of Triage: Upgrades a Normal item to Magic">
             <img
               src="icons/crystal-ball.svg"
               class="currency-icon icon-filter-magic"
+              alt=""
             />
             <div class="currency-label">
               <strong style="color: var(--magic-blue)">Orb of Triage</strong
@@ -776,10 +792,11 @@
             </div>
           </div>
 
-          <div class="currency-slot" data-currency="augmentation">
+          <div class="currency-slot" data-currency="augmentation" tabindex="0" role="button" aria-label="Orb of Scope: Add 1 Modifier to a Magic item">
             <img
               src="icons/orb-direction.svg"
               class="currency-icon icon-filter-magic"
+              alt=""
             />
             <div class="currency-label">
               <strong style="color: var(--magic-blue)">Orb of Scope</strong
@@ -787,10 +804,11 @@
             </div>
           </div>
 
-          <div class="currency-slot" data-currency="alteration">
+          <div class="currency-slot" data-currency="alteration" tabindex="0" role="button" aria-label="Orb of Revision: Reroll 1 Magic Modifier">
             <img
               src="icons/orbit.svg"
               class="currency-icon icon-filter-magic"
+              alt=""
             />
             <div class="currency-label">
               <strong style="color: var(--magic-blue)">Orb of Revision</strong
@@ -798,10 +816,11 @@
             </div>
           </div>
 
-          <div class="currency-slot" data-currency="regal">
+          <div class="currency-slot" data-currency="regal" tabindex="0" role="button" aria-label="Promotion Orb: Upgrades a Magic item to Rare">
             <img
               src="icons/orbital-rays.svg"
               class="currency-icon icon-filter-rare"
+              alt=""
             />
             <div class="currency-label">
               <strong style="color: var(--rare-yellow)">Promotion Orb</strong
@@ -809,10 +828,11 @@
             </div>
           </div>
 
-          <div class="currency-slot" data-currency="chaos">
+          <div class="currency-slot" data-currency="chaos" tabindex="0" role="button" aria-label="Entropy Orb: Reroll 1 Rare Modifier">
             <img
               src="icons/orbital.svg"
               class="currency-icon icon-filter-rare"
+              alt=""
             />
             <div class="currency-label">
               <strong style="color: var(--rare-yellow)">Entropy Orb</strong
@@ -820,10 +840,11 @@
             </div>
           </div>
 
-          <div class="currency-slot" data-currency="exalted">
+          <div class="currency-slot" data-currency="exalted" tabindex="0" role="button" aria-label="Insight Orb: Add 1 Modifier to a Rare item">
             <img
               src="icons/gold-shell.svg"
               class="currency-icon icon-filter-rare"
+              alt=""
             />
             <div class="currency-label">
               <strong style="color: var(--rare-yellow)">Insight Orb</strong
@@ -831,26 +852,27 @@
             </div>
           </div>
 
-          <div class="currency-slot" data-currency="annulment">
-            <img src="icons/star-satellites.svg" />
+          <div class="currency-slot" data-currency="annulment" tabindex="0" role="button" aria-label="Orb of Omission: Remove 1 Modifier">
+            <img src="icons/star-satellites.svg" alt="" />
             <div class="currency-label">
               <strong style="color: var(--text-white)">Orb of Omission</strong
               ><br />Remove 1 Modifier
             </div>
           </div>
 
-          <div class="currency-slot" data-currency="scouring">
-            <img src="icons/ubisoft-sun.svg" />
+          <div class="currency-slot" data-currency="scouring" tabindex="0" role="button" aria-label="Revert Orb: Reset to Base">
+            <img src="icons/ubisoft-sun.svg" alt="" />
             <div class="currency-label">
               <strong style="color: var(--text-white)">Revert Orb</strong
               ><br />Reset to Base
             </div>
           </div>
 
-          <div class="currency-slot" data-currency="vaal">
+          <div class="currency-slot" data-currency="vaal" tabindex="0" role="button" aria-label="Deployment Orb: Corrupt the Item">
             <img
               src="icons/double-ringed-orb.svg"
               class="currency-icon icon-filter-corrupted"
+              alt=""
             />
             <div class="currency-label">
               <strong style="color: var(--corrupted-red)">Deployment Orb</strong

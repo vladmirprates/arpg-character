@@ -8,6 +8,10 @@ export class CraftingBench {
     this.initDOM();
     this.bindEvents();
     this.updateDisplay();
+
+    // Focus Trap variables
+    this.previousFocus = null;
+    this.boundFocusTrap = this.handleFocusTrap.bind(this);
   }
 
   // --- Setup & Caching ---
@@ -30,13 +34,40 @@ export class CraftingBench {
   }
 
   bindEvents() {
+    // 1. Currency Handling (Mouse + Keyboard)
     document.querySelectorAll(".currency-slot").forEach((slot) => {
+      // Mouse
       slot.addEventListener("click", () => {
         const type = slot.getAttribute("data-currency");
         this.handleCraft(type);
       });
+
+      // Keyboard
+      slot.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault(); // Prevents scroll with Space
+          const type = slot.getAttribute("data-currency");
+          this.handleCraft(type);
+        }
+      });
     });
 
+    // 2. Close Button Handling
+    const closeBtn = this.elements.modal.querySelector(".close-modal");
+    if (closeBtn) {
+      // Mouse
+      closeBtn.addEventListener("click", () => this.closeBench());
+
+      // Keyboard
+      closeBtn.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          this.closeBench();
+        }
+      });
+    }
+
+    // 3. Base Selector
     if (this.elements.baseSelector) {
       this.elements.baseSelector.addEventListener("change", (e) => {
         this.system.resetItem(e.target.value);
@@ -45,17 +76,78 @@ export class CraftingBench {
       });
     }
 
+    // 4. Save Button
     if (this.elements.saveBtn) {
       this.elements.saveBtn.addEventListener("click", () => this.saveToStash());
     }
   }
 
+  // --- Modal Controls with Focus Trap ---
+
   openBench() {
     this.elements.modal.style.display = "flex";
+
+    // 1. Save previous focus to restore later
+    this.previousFocus = document.activeElement;
+
+    // 2. Focus the Close button immediately for better UX
+    const closeBtn = this.elements.modal.querySelector(".close-modal");
+    if (closeBtn) {
+      closeBtn.focus();
+    }
+
+    // 3. Activate Focus Trap
+    document.addEventListener("keydown", this.boundFocusTrap);
   }
 
   closeBench() {
     this.elements.modal.style.display = "none";
+
+    // 1. Remove Focus Trap listener
+    document.removeEventListener("keydown", this.boundFocusTrap);
+
+    // 2. Restore focus to the button that opened the modal
+    if (this.previousFocus) {
+      this.previousFocus.focus();
+    }
+  }
+
+  // Focus Trap Logic
+  handleFocusTrap(e) {
+    if (e.key === "Escape") {
+      this.closeBench();
+      return;
+    }
+
+    if (e.key !== "Tab") return;
+
+    const modal = this.elements.modal;
+
+    // Get all focusable elements inside the modal:
+    // Close Button, Select, Save Button, Item Display (tabindex=0), Currency Slots (tabindex=0)
+    const focusableElements = modal.querySelectorAll(
+      ".close-modal, select, button, [tabindex='0']"
+    );
+
+    if (focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    // Shift + Tab (Backwards) logic
+    if (e.shiftKey) {
+      if (document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      }
+    }
+    // Tab (Forwards) logic
+    else {
+      if (document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    }
   }
 
   // --- Logic Bridge ---
@@ -83,14 +175,17 @@ export class CraftingBench {
       implicitText,
     } = this.elements;
 
-    // 1. Classes e Base
+    // Define finalName variable here to use it later
+    const finalName = this.constructItemName(item);
+
+    // 1. Classes and Base
     itemContainer.className = `item-display ${item.rarity} ${
       item.corrupted ? "is-corrupted" : ""
     }`;
     itemBase.textContent = item.baseName;
 
     // 2. Item name
-    itemName.textContent = this.constructItemName(item);
+    itemName.textContent = finalName;
 
     // 3. Implicits
     if (item.implicit) {
@@ -161,6 +256,14 @@ export class CraftingBench {
       }
       item.mods.forEach((m) => (m.shining = false));
     }
+
+    // Update the aria-label so screen readers read the full item state when focused
+    const fullText = `${finalName}, ${item.baseName}. ${item.rarity} Rarity. ${
+      item.implicit ? "Implicit: " + item.implicit + "." : ""
+    } ${item.mods.map((m) => m.data.effect).join(". ")}. ${
+      item.corrupted ? "Corrupted." : ""
+    }`;
+    itemContainer.setAttribute("aria-label", fullText);
   }
 
   renderAffixGroup(container, title, list, createLineFn, count, limit) {
@@ -381,12 +484,15 @@ export class CraftingBench {
 
   showNotification(text, type = "success") {
     const notif = document.createElement("div");
+
     notif.className = "stash-notification";
     if (type === "error") {
       notif.classList.add("error");
     }
+
     notif.innerText = text;
     document.body.appendChild(notif);
+
     setTimeout(() => notif.remove(), 2000);
   }
 }

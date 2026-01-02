@@ -7,6 +7,11 @@ export class PassiveTree {
     this.allocated = new Set(["start"]);
     this.treeInitialized = false;
     this.panzoomInstance = null;
+
+    // Variable to save previous focus before opening modal
+    this.previousFocus = null;
+    // Bind to ensure 'this' context works in event listener
+    this.boundFocusTrap = this.handleFocusTrap.bind(this);
   }
 
   // --- Tree Initialization & Drawing ---
@@ -75,9 +80,32 @@ export class PassiveTree {
       el.style.top = n.y + "px";
       el.innerHTML = `<span class="icon">${n.icon}</span>`;
 
-      // BINDING CLICK EVENT TO CLASS METHOD
-      el.onclick = () => this.toggleNode(n.id);
+      // --- ACCESSIBILITY ---
+      el.setAttribute("tabindex", "0"); // Allow Tab focus
+      el.setAttribute("role", "button"); // Semantic button
 
+      // Define initial text for screen readers
+      const status = this.allocated.has(n.id) ? "Allocated" : "Unallocated";
+      el.setAttribute("aria-label", `${n.name}: ${n.desc}. Status: ${status}`);
+
+      // 1. Mouse Click
+      el.onclick = () => {
+        this.toggleNode(n.id);
+        // Update screen reader status after click
+        this.updateNodeAriaLabel(n.id, n.name, n.desc);
+      };
+
+      // 2. Keyboard (Enter/Space)
+      el.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault(); // Prevent scrolling with Space
+          this.toggleNode(n.id);
+          // Update screen reader status after activation
+          this.updateNodeAriaLabel(n.id, n.name, n.desc);
+        }
+      });
+
+      // Tooltip Config
       tippy(el, {
         content: `<div style="text-align:center; min-width: 150px;">
                       <strong style="color: #c0a040; text-transform:uppercase;">${n.name}</strong>
@@ -211,13 +239,35 @@ export class PassiveTree {
     if (counter) counter.innerText = this.allocated.size - 1;
   }
 
-  // --- Modal Controls ---
+  // Helper to dynamically update screen reader text
+  updateNodeAriaLabel(id, name, desc) {
+    const el = document.getElementById(id);
+    if (el) {
+      const status = this.allocated.has(id) ? "Allocated" : "Unallocated";
+      el.setAttribute("aria-label", `${name}: ${desc}. Status: ${status}`);
+    }
+  }
+
+  // --- Modal Controls with Focus Trap ---
+
   openTree() {
-    document.getElementById("tree-modal").style.display = "block";
+    const modal = document.getElementById("tree-modal");
+    modal.style.display = "block";
+
+    // 1. Save where the user was before opening the modal
+    this.previousFocus = document.activeElement;
 
     if (!this.treeInitialized) {
       this.initTree();
     }
+
+    // 2. Focus on the close button first
+    const closeBtn = modal.querySelector(".close-modal");
+    if (closeBtn) closeBtn.focus();
+
+    // 3. Activate Focus Trap
+    document.addEventListener("keydown", this.boundFocusTrap);
+
     setTimeout(() => {
       const defaultScale = 1.0;
       this.panzoomInstance.zoom(defaultScale, { animate: false });
@@ -229,5 +279,50 @@ export class PassiveTree {
 
   closeTree() {
     document.getElementById("tree-modal").style.display = "none";
+
+    // 1. Remove the trap
+    document.removeEventListener("keydown", this.boundFocusTrap);
+
+    // 2. Return focus to the button that opened the modal
+    if (this.previousFocus) {
+      this.previousFocus.focus();
+    }
+  }
+
+  // Focus Trap Logic
+  handleFocusTrap(e) {
+    if (e.key === "Escape") {
+      this.closeTree();
+      return;
+    }
+
+    if (e.key !== "Tab") return;
+
+    const modal = document.getElementById("tree-modal");
+
+    // Find all focusable elements inside modal (Close Button + Tree Nodes)
+    const focusableElements = modal.querySelectorAll(
+      ".close-modal, .node[tabindex='0']"
+    );
+
+    if (focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    // If Shift + Tab and on first item -> move to last
+    if (e.shiftKey) {
+      if (document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      }
+    }
+    // If Tab only and on last item -> move to first
+    else {
+      if (document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    }
   }
 }

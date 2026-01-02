@@ -11,32 +11,33 @@ document.addEventListener("DOMContentLoaded", () => {
   setupTooltips();
 
   // 3. Global Event Listeners
+
+  // A. Tree Button (Open)
   const treeBtn = document.querySelector(".tree-btn");
   if (treeBtn) {
-    treeBtn.addEventListener("click", () => {
-      myTree.openTree();
-    });
+    treeBtn.addEventListener("click", () => myTree.openTree());
   }
-  const closeBtn = document.querySelector(".close-modal");
-  if (closeBtn) {
-    closeBtn.addEventListener("click", () => {
-      myTree.closeTree();
-    });
 
-    // Crafting Bench Listener
-    const craftBtn = document.querySelector(".craft-btn");
-    if (craftBtn) {
-      craftBtn.addEventListener("click", () => {
-        myBench.openBench();
-      });
-    }
-    const closeBenchBtn = document.querySelector(
-      "#crafting-modal .close-modal"
-    );
-    if (closeBenchBtn) {
-      closeBenchBtn.addEventListener("click", () => {
-        myBench.closeBench();
-      });
-    }
+  // B. Tree Close Button (Close)
+  const treeCloseBtn = document.querySelector("#tree-modal .close-modal");
+  if (treeCloseBtn) {
+    // Mouse
+    treeCloseBtn.addEventListener("click", () => myTree.closeTree());
+
+    // Keyboard (Enter/Space) - A CORREÇÃO ESTÁ AQUI
+    treeCloseBtn.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        myTree.closeTree();
+      }
+    });
   }
+
+  // C. Crafting Bench Button (Open)
+  const craftBtn = document.querySelector(".craft-btn");
+  if (craftBtn) {
+    craftBtn.addEventListener("click", () => myBench.openBench());
+  }
+
+  // D. Crafting Bench Close Button
 });
