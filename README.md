@@ -113,11 +113,7 @@ Right-click index.html and select "Open with Live Server".
 ```
 
 ### 👤 Author
-**Vladmir Prates**
-
-Role: QA Engineer (Mid-Level)
-
-Focus: Automation, Accessibility, UX
+**Vladmir Prates** - QA Engineer (Mid-Level)
 
 Hobbies: ARPGs, Gaming in general and learning new tech
 
