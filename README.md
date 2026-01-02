@@ -46,7 +46,7 @@ This project is currently under active refactoring to align with Engineering and
 
 -   ~~**Architecture:** Separating UI rendering logic from Game/Business logic (MVC pattern)~~
 -   **Testing:** Implementation of Unit Tests (Jest/Vitest) for the Crafting and Tree pathfinding algorithms
--   **Accessibility:** Improving ARIA labels and keyboard navigation for the inventory and tree
+-   ~~**Accessibility:** Improving ARIA labels and keyboard navigation for the inventory and tree~~
 -   ~~**Security:** Sanitizing DOM manipulation to prevent injection risks~~
 
 
