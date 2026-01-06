@@ -335,7 +335,7 @@ export class CraftingBench {
     }
 
     let modsHtml = "";
-    // Helper para criar linhas de mods
+    // Helper mod lines
     const createModLineHtml = (text) =>
       `<div class="stat-line" style="color:${rarityColor}">${text}</div>`;
 
@@ -371,9 +371,9 @@ export class CraftingBench {
       corruptedHtml = `<div class="corrupted-tag" style="display:block; margin-top:15px; font-size:16px; color:var(--corrupted-red);">CORRUPTED</div>`;
     }
 
-    // 3. Assemble HTML directly (Safe because we control the data)
+    // 3. Assemble HTML directly
     let mobileDirection = "mobile-tooltip-left";
-    if ([0, 1, 4, 5].includes(targetIndex)) {
+    if ([0, 4].includes(targetIndex)) {
       mobileDirection = "mobile-tooltip-right";
     }
 
@@ -383,7 +383,7 @@ export class CraftingBench {
       targetSlot.style.borderColor = "var(--corrupted-red)";
     }
 
-    // --- A11Y FIX: Generate Full Description String ---
+    // --- A11Y: Generate Full Description String ---
     // This string replicates what is visible in the tooltip but for Screen Readers
     const screenReaderText = `
       ${finalName}, ${item.baseName}. 

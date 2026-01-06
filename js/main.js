@@ -26,13 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
     // Mouse
     treeCloseBtn.addEventListener("click", () => myTree.closeTree());
 
-    // Keyboard (Enter/Space) - A CORREÇÃO ESTÁ AQUI
+    // Keyboard (Enter/Space)
     treeCloseBtn.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         myTree.closeTree();
       }
-    });
+    }); 
   }
 
   // C. Crafting Bench Button (Open)
@@ -40,6 +40,4 @@ document.addEventListener("DOMContentLoaded", () => {
   if (craftBtn) {
     craftBtn.addEventListener("click", () => myBench.openBench());
   }
-
-  // D. Crafting Bench Close Button
 });
