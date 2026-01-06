@@ -85,4 +85,24 @@ describe('PassiveTree Logic & Graph', () => {
 
     expect(modal.style.display).toBe('none');
   });
+
+
+    test('getReachableNodes should correctly identify connected components', () => {
+    const allocated = new Set(['start', 'gm_mechanics', 'gm_collision']);
+    const reachable = tree.getReachableNodes(allocated);
+    
+    // Every node should be reachable from the start
+    expect(reachable.has('start')).toBe(true);
+    expect(reachable.has('gm_mechanics')).toBe(true);
+    expect(reachable.has('gm_collision')).toBe(true);
+    
+    // Isolated node ('gm_master' is not connected to 'start')
+    const withIsland = new Set(['start', 'gm_master']); 
+    const reachable2 = tree.getReachableNodes(withIsland);
+    
+    // 'gm_master' should not be reachable from 'start'
+    expect(reachable2.has('start')).toBe(true);
+    expect(reachable2.has('gm_master')).toBe(false);
+  });
+
 });

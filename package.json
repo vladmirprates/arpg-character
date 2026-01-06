@@ -4,7 +4,8 @@
   "description": "**A Gamified QA Portfolio inspired by Action RPGs (PoE, Diablo, Last Epoch).**",
   "main": "index.js",
   "scripts": {
-    "test": "jest --env=jsdom"
+    "test": "jest --env=jsdom",
+    "test:coverage": "jest --env=jsdom --coverage"
   },
   "keywords": [],
   "author": "",
