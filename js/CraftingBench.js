@@ -40,6 +40,7 @@ export class CraftingBench {
       slot.addEventListener("click", () => {
         const type = slot.getAttribute("data-currency");
         this.handleCraft(type);
+        slot.blur();
       });
 
       // Keyboard
