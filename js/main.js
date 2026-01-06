@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         myTree.closeTree();
       }
-    }); 
+    });
   }
 
   // C. Crafting Bench Button (Open)

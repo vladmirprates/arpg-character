@@ -400,16 +400,16 @@ export class CraftingBench {
 
     targetSlot.innerHTML = `
       <img src="${iconPath}" class="item-icon" style="${
-      item.corrupted ? "filter: sepia(1) hue-rotate(-50deg) saturate(3);" : ""
-    }">
+        item.corrupted ? "filter: sepia(1) hue-rotate(-50deg) saturate(3);" : ""
+      }">
       <div class="poe-tooltip" style="min-width: 300px;">
         <div class="item-header ${item.rarity}" style="${
-      item.corrupted ? "border-bottom-color: var(--corrupted-red);" : ""
-    }">
+          item.corrupted ? "border-bottom-color: var(--corrupted-red);" : ""
+        }">
           <span class="item-name" style="color: ${rarityColor}">${finalName}</span>
           <span class="item-base" style="color: ${rarityColor}">${
-      item.baseName
-    }</span>
+            item.baseName
+          }</span>
         </div>
         <div class="item-content" style="padding: 10px;">
           ${implicitHtml}

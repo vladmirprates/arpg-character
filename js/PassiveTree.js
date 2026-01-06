@@ -70,10 +70,10 @@ export class PassiveTree {
       let region = n.id.startsWith("gm_")
         ? "north"
         : n.id.startsWith("bug_")
-        ? "south"
-        : n.id.startsWith("tech_")
-        ? "east"
-        : "west";
+          ? "south"
+          : n.id.startsWith("tech_")
+            ? "east"
+            : "west";
       el.className = `node ${n.type || ""} ${region}`;
       el.id = n.id;
       el.style.left = n.x + "px";

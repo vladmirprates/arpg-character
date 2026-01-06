@@ -328,10 +328,14 @@ export const INITIAL_ITEMS = [
     stats: [
       { text: "Consumes 100% Sanity", color: "red" },
       { type: "separator" },
-      { text: "Consumes <span class='stat-blue'>1</span> Charge on <span class='stat-blue'>Critical Bug</span> discovery." },
-      { text: "Grants <span class='stat-blue'>Immunity to Sleep</span> for 4 hours." }
+      {
+        text: "Consumes <span class='stat-blue'>1</span> Charge on <span class='stat-blue'>Critical Bug</span> discovery.",
+      },
+      {
+        text: "Grants <span class='stat-blue'>Immunity to Sleep</span> for 4 hours.",
+      },
     ],
-    flavor: "Do not shake before use. Or do. I'm not a cop."
+    flavor: "Do not shake before use. Or do. I'm not a cop.",
   },
   {
     selector: "#slot-flask2",
@@ -342,8 +346,8 @@ export const INITIAL_ITEMS = [
     stats: [
       { text: "Immune to <span class='stat-blue'>Slack Notifications</span>" },
       { type: "separator" },
-      { text: "<span class='stat-white'>40%</span> Increased Coding Speed" }
-    ]
+      { text: "<span class='stat-white'>40%</span> Increased Coding Speed" },
+    ],
   },
   {
     selector: "#slot-flask3",
@@ -351,9 +355,7 @@ export const INITIAL_ITEMS = [
     base: "Unique Flask",
     rarity: "unique",
     icon: "icons/flask3.svg",
-    stats: [
-      { text: "Restores <span class='stat-blue'>Sanity</span> on use" }
-    ]
+    stats: [{ text: "Restores <span class='stat-blue'>Sanity</span> on use" }],
   },
   {
     selector: "#slot-flask4",
@@ -364,8 +366,8 @@ export const INITIAL_ITEMS = [
     stats: [
       { text: "Immune to <span class='stat-blue'>Flaky Tests</span>" },
       { type: "separator" },
-      { text: "Your tests become <span class='stat-white'>Lucky</span>" }
-    ]
+      { text: "Your tests become <span class='stat-white'>Lucky</span>" },
+    ],
   },
   {
     selector: "#slot-flask5",
@@ -376,8 +378,12 @@ export const INITIAL_ITEMS = [
     stats: [
       { text: "Immune to <span class='stat-blue'>Freeze</span>" },
       { type: "separator" },
-      { text: "<span class='stat-white'>50%</span> Increased Test Execution Speed" },
-      { text: "<span class='stat-white'>40%</span> Increased Movement Speed towards the Exit on Fridays" }
-    ]
-  }
+      {
+        text: "<span class='stat-white'>50%</span> Increased Test Execution Speed",
+      },
+      {
+        text: "<span class='stat-white'>40%</span> Increased Movement Speed towards the Exit on Fridays",
+      },
+    ],
+  },
 ];
