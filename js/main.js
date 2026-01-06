@@ -1,11 +1,13 @@
 import { PassiveTree } from "./PassiveTree.js";
 import { setupTooltips } from "./tooltips.js";
 import { CraftingBench } from "./CraftingBench.js";
+import { Inventory } from "./Inventory.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   // 1. Instance Modules
   const myTree = new PassiveTree();
   const myBench = new CraftingBench();
+  const myInventory = new Inventory();
 
   // 2. Config Tooltips (Tippy.js)
   setupTooltips();
