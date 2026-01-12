@@ -12,7 +12,7 @@ export const TOOLTIPS_DATA = {
       <div>Allows you to delete annoying overlays</div>
       <div><span class="stat-blue">50%</span> chance to feel like a hacker</div>
       <div class="flavor-text">"It's not a bug, it's a feature... until I delete the div."</div>
-    `
+    `,
   },
   "#skill-w": {
     name: "Capture Bug",
@@ -24,7 +24,7 @@ export const TOOLTIPS_DATA = {
       <div>Applying <span class="stat-blue">"Steps to Reproduce"</span> freezes the Developer</div>
       <div>Screenshots gain <span class="stat-blue">+20%</span> clarity</div>
       <div class="flavor-text">"Gotta catch 'em all."</div>
-    `
+    `,
   },
   "#skill-e": {
     name: "Automated Regression",
@@ -36,7 +36,7 @@ export const TOOLTIPS_DATA = {
       <div>Deals <span class="stat-blue">Mental Damage</span> to whoever broke the build</div>
       <div><span class="stat-red" style="color:#ff5555">WARNING:</span> May fail randomly (Flaky)</div>
       <div class="flavor-text">"If it happens once, it's an accident. If it happens twice, write a script."</div>
-    `
+    `,
   },
   "#skill-r": {
     name: "Break Production",
@@ -49,7 +49,7 @@ export const TOOLTIPS_DATA = {
       <div>Summons <span class="stat-white">The Manager</span> (Level 100 Boss)</div>
       <div>Cannot be evaded.</div>
       <div class="flavor-text">"I just wanted to see what this button does..."</div>
-    `
+    `,
   },
   "#skill-t": {
     name: "Teleport to Meeting",
@@ -61,6 +61,6 @@ export const TOOLTIPS_DATA = {
       <div>Reduces <span class="stat-blue">Productivity</span> by 75%</div>
       <div>Grants buff: <span class="stat-white">"Sorry, I was on mute."</span></div>
       <div class="flavor-text">"Could this have been an email?"</div>
-    `
-  }
+    `,
+  },
 };

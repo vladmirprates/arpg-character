@@ -17,7 +17,7 @@ The focus isn't just on showing code, but on how I apply the **QA Mindset** to s
 
 **Key Features:**
 * **Passive Skill Tree:** An interactive graph (with zoom/pan) visualizing my QA competencies in a playful way.
-* **Crafting Bench:** A fully functional simulator where you use "Orbs" to modify *Bug Reports* and *Test Cases*, applying real business logic (probabilities, prefixes/suffixes constraints). This is basically a replica of the basic currency crafting from Path of Exile.
+* **Crafting Bench:** A fully functional simulator where you use "Orbs" to modify *Bug Reports* and *Test Cases*, applying real business logic (probabilities, prefixes/suffixes constraints). This replicates the basic currency crafting mechanics from Path of Exile.
 * **Inventory System:** Equipment slots representing the tools I use daily (Jira, Playwright, etc.).
 
 ---
@@ -90,6 +90,12 @@ Option B: Using VS Code
 
 Install the Live Server extension.
 Right-click index.html and select "Open with Live Server".
+
+Option C: Using Node.js (via npx)
+
+```bash
+npx http-server -o
+```
 
 ## 📂 Project Structure
 ```

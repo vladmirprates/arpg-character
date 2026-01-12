@@ -127,7 +127,7 @@ export class CraftingBench {
     // Get all focusable elements inside the modal:
     // Close Button, Select, Save Button, Item Display (tabindex=0), Currency Slots (tabindex=0)
     const focusableElements = modal.querySelectorAll(
-      ".close-modal, select, button, [tabindex='0']"
+      ".close-modal, select, button, [tabindex='0']",
     );
 
     if (focusableElements.length === 0) return;
@@ -220,7 +220,7 @@ export class CraftingBench {
 
       if (uniques.length > 0) {
         uniques.forEach((mod) =>
-          modsContainer.appendChild(createLine(mod.data.effect, mod.shining))
+          modsContainer.appendChild(createLine(mod.data.effect, mod.shining)),
         );
       } else {
         const prefixes = item.mods.filter((m) => m.type === "prefix");
@@ -236,7 +236,7 @@ export class CraftingBench {
           prefixes,
           createLine,
           prefixes.length,
-          limit
+          limit,
         );
 
         const hasSuffix = suffixes.length > 0;
@@ -252,7 +252,7 @@ export class CraftingBench {
           suffixes,
           createLine,
           suffixes.length,
-          limit
+          limit,
         );
       }
       item.mods.forEach((m) => (m.shining = false));
@@ -277,7 +277,7 @@ export class CraftingBench {
     container.appendChild(header);
 
     list.forEach((item) =>
-      container.appendChild(createLineFn(item.data.effect, item.shining))
+      container.appendChild(createLineFn(item.data.effect, item.shining)),
     );
   }
 
@@ -343,7 +343,7 @@ export class CraftingBench {
     if (item.rarity === RARITY.UNIQUE) {
       item.mods.forEach((m) => {
         modsHtml += `<div style="margin:2px 0;">${createModLineHtml(
-          m.data.effect
+          m.data.effect,
         )}</div>`;
       });
     } else {

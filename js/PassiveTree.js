@@ -53,7 +53,7 @@ export class PassiveTree {
       const n2 = treeData.find((n) => n.id === l.to);
       const line = document.createElementNS(
         "http://www.w3.org/2000/svg",
-        "line"
+        "line",
       );
       line.setAttribute("x1", n1.x);
       line.setAttribute("y1", n1.y);
@@ -141,9 +141,9 @@ export class PassiveTree {
       () =>
         this.panzoomInstance.pan(
           -this.cx + window.innerWidth / 2,
-          -this.cy + window.innerHeight / 2
+          -this.cy + window.innerHeight / 2,
         ),
-      100
+      100,
     );
   }
 
@@ -302,7 +302,7 @@ export class PassiveTree {
 
     // Find all focusable elements inside modal (Close Button + Tree Nodes)
     const focusableElements = modal.querySelectorAll(
-      ".close-modal, .node[tabindex='0']"
+      ".close-modal, .node[tabindex='0']",
     );
 
     if (focusableElements.length === 0) return;

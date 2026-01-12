@@ -137,10 +137,10 @@ export class CraftingSystem {
   addRandomMod(rarityLimit) {
     const pool = this.pools[this.currentType];
     const currentPrefixes = this.item.mods.filter(
-      (m) => m.type === "prefix"
+      (m) => m.type === "prefix",
     ).length;
     const currentSuffixes = this.item.mods.filter(
-      (m) => m.type === "suffix"
+      (m) => m.type === "suffix",
     ).length;
 
     const existingNames = this.item.mods.map((m) => m.data.name);

@@ -13,7 +13,7 @@ export class Inventory {
         this.renderItem(slot, item);
       } else {
         console.warn(
-          `Inventory: Slot not found for selector "${item.selector}"`
+          `Inventory: Slot not found for selector "${item.selector}"`,
         );
       }
     });
@@ -25,7 +25,7 @@ export class Inventory {
       "magic",
       "rare",
       "unique",
-      "corrupted"
+      "corrupted",
     );
     slotContainer.classList.add(item.rarity);
     slotContainer.setAttribute("tabindex", "0");
