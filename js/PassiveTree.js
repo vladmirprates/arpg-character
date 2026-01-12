@@ -80,7 +80,7 @@ export class PassiveTree {
       el.style.top = n.y + "px";
       el.innerHTML = `<span class="icon">${n.icon}</span>`;
 
-      // --- ACCESSIBILITY ---
+      // --- Accessibility ---
       el.setAttribute("tabindex", "0"); // Allow Tab focus
       el.setAttribute("role", "button"); // Semantic button
 
