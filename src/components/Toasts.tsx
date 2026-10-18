@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from "react";
 import "./Toasts.css";
 
-export type ToastTone = "info" | "success" | "error" | "corrupt";
+export type ToastTone = "info" | "success" | "error" | "corrupt" | "achievement";
 
 interface Toast {
   id: number;
@@ -17,6 +17,8 @@ const ToastContext = createContext<Notify | null>(null);
 export const readingTime = (text: string) => Math.min(10_000, Math.max(3_500, 1_500 + text.length * 60));
 /** After the pointer leaves the toasts, how long the paused ones stay. */
 const RESUME_MS = 2_500;
+/** Announcements closer together than this are read as one. */
+const TOGETHER_MS = 1_000;
 
 /**
  * Visual toasts plus a visually-hidden live region, so every message —
@@ -28,6 +30,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   const nextId = useRef(0);
   const timers = useRef(new Map<number, number>());
   const hovered = useRef(false);
+  const lastAnnounced = useRef(0);
 
   const remove = useCallback((id: number) => {
     timers.current.delete(id);
@@ -48,10 +51,21 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     (text, tone = "info") => {
       const id = nextId.current++;
       setToasts((list) => [...list.slice(-2), { id, text, tone }]);
-      // Re-announce identical consecutive messages by toggling a zero-width suffix.
+      // Messages that arrive together (an action and the achievement it unlocked) are announced
+      // together; replacing the first would cut it off before a screen reader has read it.
+      const assertive = tone === "error";
+      const now = Date.now();
+      const together = now - lastAnnounced.current < TOGETHER_MS;
+      lastAnnounced.current = now;
       setAnnouncement((prev) => ({
-        text: prev.text === text ? `${text}​` : text,
-        assertive: tone === "error",
+        text:
+          together && prev.assertive === assertive && prev.text && !prev.text.includes(text)
+            ? `${prev.text} ${text}`
+            : // Re-announce identical consecutive messages by toggling a zero-width suffix.
+              prev.text === text
+              ? `${text}​`
+              : text,
+        assertive,
       }));
       // While the pointer rests on the toasts, new ones wait too (they're scheduled on leave).
       if (hovered.current) timers.current.set(id, 0);

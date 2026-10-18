@@ -28,3 +28,8 @@ e2e/**/*-darwin.png
 # Raw test outputs and the locally generated QA report (CI builds the published one)
 reports/
 public/qa-report.json
+.stryker-tmp/
+
+# Full tool reports copied next to the local QA report
+public/reports/
+playwright-report-perf/

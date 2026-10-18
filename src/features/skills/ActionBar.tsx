@@ -30,9 +30,10 @@ export function ActionBar() {
     if (!overdraft.planted && coffeeRef.current < 0) setCoffee(0);
   }, [overdraft.planted]);
 
-  // Coffee regenerates over time.
+  // Coffee regenerates over time — game time, so it stops while the tab is hidden (suspended).
   useEffect(() => {
     const id = window.setInterval(() => {
+      if (document.hidden) return;
       setCoffee((c) => Math.min(RESOURCES.coffee.max, c + RESOURCES.coffee.regenPerSecond / 4));
     }, 250);
     return () => window.clearInterval(id);

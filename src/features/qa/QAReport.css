@@ -1,4 +1,8 @@
 .qa {
+  /* Positioned, so its screen-reader-only text is placed inside this scroll area. Otherwise it is
+     placed against the <dialog>, stretches the dialog's own scroll area, and a second scrollbar
+     appears next to this one (e2e/smoke.spec.ts checks every dialog). */
+  position: relative;
   flex: 1;
   min-height: 0;
   padding: 18px clamp(16px, 3vw, 32px) 26px;
@@ -239,4 +243,40 @@
   .qa__tile--wide {
     grid-column: auto;
   }
+}
+
+/* Where the Lighthouse numbers were measured. */
+.qa__source {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  color: var(--ash-400);
+}
+
+.qa__source:last-child {
+  margin: 10px 0 0;
+}
+
+.qa__source a {
+  color: var(--ember-400);
+}
+
+.qa__fine {
+  margin-top: 6px;
+  font-size: 0.82rem;
+  color: var(--ash-400);
+}
+
+/* Links to the tools' own full reports. */
+.qa__full {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.88rem;
+  color: var(--ember-400);
+}
+
+.qa__reports {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  margin: 4px 0 0;
 }

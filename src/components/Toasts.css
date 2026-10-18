@@ -47,6 +47,16 @@
   background: linear-gradient(180deg, rgb(60 6 10 / 0.97), rgb(20 2 4 / 0.97));
 }
 
+/* Achievement unlocked: a gold challenge banner. */
+.toast--achievement {
+  color: var(--rarity-rare);
+  border-color: color-mix(in srgb, var(--rarity-rare) 60%, var(--bronze-500));
+  background: linear-gradient(180deg, rgb(48 38 10 / 0.97), rgb(14 11 4 / 0.97));
+  box-shadow:
+    0 8px 30px rgb(0 0 0 / 0.6),
+    0 0 22px rgb(244 226 96 / 0.25);
+}
+
 @keyframes toast-in {
   from {
     opacity: 0;

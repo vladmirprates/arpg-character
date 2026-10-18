@@ -54,7 +54,7 @@ test("stale save: keeping a craft stashes the previous version; inspecting it re
   const stashed = page.getByTestId("stash-0");
   await expect(stashed).toHaveAttribute("data-planted-bug", "stale-save");
   await inspect(page, stashed);
-  await expect(page.getByTestId("open-bounty")).toContainText("1/5");
+  await expect(page.getByTestId("open-bounty")).toContainText("1 of 5 found");
   await expect(planted(page, "stale-save")).toHaveCount(0);
 });
 
@@ -69,7 +69,7 @@ test("dupe: Ctrl+click copies instead of moving; finding it removes the copy", a
   await expect(copy).toHaveAttribute("data-planted-bug", "dupe");
 
   await inspect(page, copy);
-  await expect(page.getByTestId("open-bounty")).toContainText("1/5");
+  await expect(page.getByTestId("open-bounty")).toContainText("1 of 5 found");
   await expect(page.getByTestId("stash-0")).toHaveCount(0); // the duplicate is gone
   await expect(page.getByTestId("bag-0")).toHaveAttribute("aria-label", original!);
 });
@@ -86,7 +86,7 @@ test("overdraft: Coffee goes negative; finding it restores a legal value", async
   await expect(coffee).toHaveAttribute("aria-valuenow", "-5");
 
   await inspect(page, page.locator('ul.skills[data-planted-bug="overdraft"]'), false);
-  await expect(page.getByTestId("open-bounty")).toContainText("1/5");
+  await expect(page.getByTestId("open-bounty")).toContainText("1 of 5 found");
   await expect(coffee).toHaveAttribute("aria-valuenow", "0");
 });
 
@@ -106,7 +106,7 @@ test("all five found: the hunt ends with a clean page and every report filed", a
   await page.getByTestId("bag-1").click({ modifiers: ["Control"] });
   await inspect(page, planted(page, "dupe"), false);
   await advance();
-  await expect(page.getByTestId("open-bounty")).toContainText("4/5");
+  await expect(page.getByTestId("open-bounty")).toContainText("4 of 5 found");
 
   // Overdraft last: Coffee is around 90 (4 inspects spent 20, regen gave some back); 105 more overdraws it.
   for (const key of ["R", "E", "T"]) await page.getByTestId(`skill-${key}`).click();
@@ -136,7 +136,7 @@ test("inspecting an ordinary element finds nothing", async ({ page }) => {
   await page.goto("./");
   await startHunt(page);
   await inspect(page, page.locator(".frame__title").first());
-  await expect(page.getByTestId("open-bounty")).toContainText("0/5");
+  await expect(page.getByTestId("open-bounty")).toContainText("0 of 5 found");
 });
 
 test("keyboard: Q, Tab to the culprit, Enter", async ({ page, isMobile }) => {
@@ -154,5 +154,5 @@ test("keyboard: Q, Tab to the culprit, Enter", async ({ page, isMobile }) => {
     if (at && Math.abs(at.x - target.x) < 1 && Math.abs(at.y - target.y) < 1) break;
   }
   await page.keyboard.press("Enter");
-  await expect(page.getByTestId("open-bounty")).toContainText("1/5");
+  await expect(page.getByTestId("open-bounty")).toContainText("1 of 5 found");
 });

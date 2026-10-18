@@ -18,8 +18,13 @@ export interface RegionContent<D> {
   angle: number;
   label: L;
   minorIcon: string;
-  /** Named stat lines for small nodes. */
-  minorStats: Record<string, L>;
+  /**
+   * The attribute every small node, mastery and notable in the region grants — a fixed amount per
+   * node kind (see ATTRIBUTE_PER_NODE in layout.ts), so it measures how much of the region a build takes.
+   */
+  attribute: L;
+  /** Named extra stat lines for small nodes; null for a node that grants only the attribute. */
+  minorStats: Record<string, L | null>;
   /** Notables, in the order layouts place them. */
   notables: [string, D][];
   /** Masteries — one per cluster centre, in the order layouts place them. */
@@ -33,13 +38,14 @@ export const NORTH: RegionContent<Def> = {
   angle: -90,
   label: { en: "Game Testing", pt: "Testes de Jogos" },
   minorIcon: "cog",
+  attribute: { en: "Game Sense (Wis)", pt: "Senso de Jogo (Sab)" },
   minorStats: {
-    spine: { en: "+10 to Game Sense (Wis)", pt: "+10 em Senso de Jogo (Sab)" },
+    spine: null,
     spur: { en: "+4% Usability Awareness", pt: "+4% de Percepção de Usabilidade" },
     fortress: { en: "6% increased Boundary Coverage", pt: "6% de Cobertura de Limites aumentada" },
     wheel: { en: "+5% Gameplay Coverage", pt: "+5% de Cobertura de Gameplay" },
     star: { en: "8% increased System Insight", pt: "8% de Visão Sistêmica aumentada" },
-    path: { en: "+12 to Game Sense (Wis)", pt: "+12 em Senso de Jogo (Sab)" },
+    path: null,
     climb: { en: "+3% Simulation Fidelity", pt: "+3% de Fidelidade de Simulação" },
   },
   notables: [
@@ -172,6 +178,52 @@ export const NORTH: RegionContent<Def> = {
         },
       ),
     ],
+    // Added 2026-10-18. New notables go at the end of the list (and their places at the end of
+    // the region's shape), so every existing node keeps its id and position.
+    [
+      "gm_access",
+      d(
+        "sight-disabled",
+        { en: "Game Accessibility Testing", pt: "Testes de Acessibilidade em Jogos" },
+        {
+          en: "Colour-blind modes, input remapping, subtitle sizing and assist options.",
+          pt: "Modos para daltonismo, remapeamento de controles, tamanho de legendas e opções de assistência.",
+        },
+      ),
+    ],
+    [
+      "gm_achieve",
+      d(
+        "trophy-cup",
+        { en: "Achievements & Trophies", pt: "Conquistas e Troféus" },
+        {
+          en: "Unlock conditions, progress tracking and platform trophy integration.",
+          pt: "Condições de desbloqueio, acompanhamento de progresso e integração com troféus da plataforma.",
+        },
+      ),
+    ],
+    [
+      "gm_playtest",
+      d(
+        "team-idea",
+        { en: "Playtest Facilitation", pt: "Condução de Playtests" },
+        {
+          en: "Running playtests and turning player feedback into clear findings.",
+          pt: "Conduzir playtests e transformar o feedback dos jogadores em conclusões claras.",
+        },
+      ),
+    ],
+    [
+      "gm_quest",
+      d(
+        "scroll-unfurled",
+        { en: "Narrative & Quest Testing", pt: "Testes de Narrativa e Missões" },
+        {
+          en: "Quest logic, dialogue branches, triggers and story progression.",
+          pt: "Lógica de missões, ramificações de diálogo, gatilhos e progressão da história.",
+        },
+      ),
+    ],
   ],
   masteries: [
     [
@@ -196,6 +248,29 @@ export const NORTH: RegionContent<Def> = {
         },
       ),
     ],
+    // Added 2026-10-18 to balance the regions; appended so every existing node keeps its id.
+    [
+      "gm_m_platform",
+      d(
+        "tv",
+        { en: "Platform Mastery", pt: "Maestria em Plataformas" },
+        {
+          en: "Knows each platform's rules, quirks and hardware, from console to PC.",
+          pt: "Conhece as regras, as manias e o hardware de cada plataforma, do console ao PC.",
+        },
+      ),
+    ],
+    [
+      "gm_m_insight",
+      d(
+        "binoculars",
+        { en: "Player Insight Mastery", pt: "Maestria em Visão do Jogador" },
+        {
+          en: "Reads playtests and player behaviour to find what the bug list misses.",
+          pt: "Lê playtests e o comportamento dos jogadores para achar o que a lista de bugs não mostra.",
+        },
+      ),
+    ],
   ],
   keystones: [
     [
@@ -209,7 +284,7 @@ export const NORTH: RegionContent<Def> = {
         },
       ),
       [
-        { en: "+40 to Game Sense (Wis)", pt: "+40 em Senso de Jogo (Sab)" },
+        { en: "+10 to Game Sense (Wis)", pt: "+10 em Senso de Jogo (Sab)" },
         {
           en: "Every system is tested against every other system",
           pt: "Todo sistema é testado contra todos os outros",
@@ -255,14 +330,15 @@ export const SOUTH: RegionContent<Def> = {
   angle: 90,
   label: { en: "Manual Testing", pt: "Testes Manuais" },
   minorIcon: "spotted-bug",
+  attribute: { en: "Manual (Str)", pt: "Manual (For)" },
   minorStats: {
-    spine: { en: "+10 to Manual (Str)", pt: "+10 em Manual (For)" },
+    spine: null,
     spur: { en: "+4% Ticket Velocity", pt: "+4% de Velocidade de Tickets" },
     root: { en: "+5% Duplicate Detection", pt: "+5% de Detecção de Duplicados" },
     wheel: { en: "+10% Evidence Quality", pt: "+10% de Qualidade de Evidências" },
     star: { en: "6% increased Edge-Case Discovery", pt: "6% de Descoberta de Casos Extremos aumentada" },
     loop: { en: "+6% Severity Accuracy", pt: "+6% de Precisão de Severidade" },
-    path: { en: "+12 to Manual (Str)", pt: "+12 em Manual (For)" },
+    path: null,
   },
   notables: [
     [
@@ -364,6 +440,84 @@ export const SOUTH: RegionContent<Def> = {
         },
       ),
     ],
+    // Added 2026-10-18 to balance the regions; appended so every existing node keeps its id.
+    [
+      "man_repro",
+      d(
+        "footsteps",
+        { en: "Repro Steps & Isolation", pt: "Passos de Reprodução e Isolamento" },
+        {
+          en: "Narrowing an intermittent bug down to short, reliable reproduction steps.",
+          pt: "Reduzir um bug intermitente a passos de reprodução curtos e confiáveis.",
+        },
+      ),
+    ],
+    [
+      "man_boundary",
+      d(
+        "measure-tape",
+        { en: "Boundary & Equivalence", pt: "Valor Limite e Equivalência" },
+        {
+          en: "Boundary values, equivalence classes and decision tables: the most bugs per test.",
+          pt: "Valores limite, classes de equivalência e tabelas de decisão: o máximo de bugs por teste.",
+        },
+      ),
+    ],
+    [
+      "man_session",
+      d(
+        "hourglass",
+        { en: "Session-Based Testing", pt: "Testes Baseados em Sessão" },
+        {
+          en: "Time-boxed, chartered exploratory sessions with notes and a debrief.",
+          pt: "Sessões exploratórias com tempo e missão definidos, com anotações e debrief.",
+        },
+      ),
+    ],
+    [
+      "man_data",
+      d(
+        "archive-register",
+        { en: "Test Data & Environments", pt: "Dados e Ambientes de Teste" },
+        {
+          en: "Accounts, saves, seeds and environments ready before testing starts.",
+          pt: "Contas, saves, seeds e ambientes prontos antes de os testes começarem.",
+        },
+      ),
+    ],
+    [
+      "man_lqa",
+      d(
+        "globe",
+        { en: "Localization Testing (LQA)", pt: "Testes de Localização (LQA)" },
+        {
+          en: "Translated text, truncation, fonts, formats and region-specific content.",
+          pt: "Textos traduzidos, cortes, fontes, formatos e conteúdo específico de cada região.",
+        },
+      ),
+    ],
+    [
+      "man_usability",
+      d(
+        "click",
+        { en: "Usability Testing", pt: "Testes de Usabilidade" },
+        {
+          en: "Spotting confusing flows, friction and unclear UI the way a new player would.",
+          pt: "Achar fluxos confusos, atritos e UI pouco clara como um jogador novo acharia.",
+        },
+      ),
+    ],
+    [
+      "man_store",
+      d(
+        "coins",
+        { en: "Payments & Store Testing", pt: "Testes de Pagamentos e Loja" },
+        {
+          en: "In-game purchases, refunds, receipts and storefront flows.",
+          pt: "Compras no jogo, reembolsos, recibos e fluxos da loja.",
+        },
+      ),
+    ],
   ],
   masteries: [
     [
@@ -388,6 +542,29 @@ export const SOUTH: RegionContent<Def> = {
         },
       ),
     ],
+    // Added 2026-10-18 to balance the regions; appended so every existing node keeps its id.
+    [
+      "man_m_design",
+      d(
+        "pencil-ruler",
+        { en: "Test Design Mastery", pt: "Maestria em Design de Testes" },
+        {
+          en: "Chooses the few tests that find the most bugs, and the data to run them on.",
+          pt: "Escolhe os poucos testes que acham mais bugs, e os dados para rodá-los.",
+        },
+      ),
+    ],
+    [
+      "man_m_market",
+      d(
+        "shop",
+        { en: "Market Readiness Mastery", pt: "Maestria em Prontidão de Mercado" },
+        {
+          en: "Makes sure the game reads, plays and sells right in every market.",
+          pt: "Garante que o jogo se leia, se jogue e venda certo em todos os mercados.",
+        },
+      ),
+    ],
   ],
   keystones: [
     [
@@ -401,7 +578,7 @@ export const SOUTH: RegionContent<Def> = {
         },
       ),
       [
-        { en: "+40 to Manual (Str)", pt: "+40 em Manual (For)" },
+        { en: "+10 to Manual (Str)", pt: "+10 em Manual (For)" },
         {
           en: "Developers can no longer reply “cannot reproduce”",
           pt: "Devs não podem mais responder “não consigo reproduzir”",
@@ -447,12 +624,13 @@ export const EAST: RegionContent<Def> = {
   angle: 0,
   label: { en: "Test Automation", pt: "Automação de Testes" },
   minorIcon: "circuitry",
+  attribute: { en: "Automation (Int)", pt: "Automação (Int)" },
   minorStats: {
-    spine: { en: "+10 to Automation (Int)", pt: "+10 em Automação (Int)" },
+    spine: null,
     spur: { en: "+4% Platform Coverage", pt: "+4% de Cobertura de Plataformas" },
     grid: { en: "6% increased Suite Speed", pt: "6% de Velocidade da Suíte aumentada" },
     bus: { en: "+5% API Coverage", pt: "+5% de Cobertura de API" },
-    trace: { en: "+12 to Automation (Int)", pt: "+12 em Automação (Int)" },
+    trace: null,
   },
   notables: [
     [
@@ -705,7 +883,7 @@ export const EAST: RegionContent<Def> = {
         },
       ),
       [
-        { en: "+40 to Automation (Int)", pt: "+40 em Automação (Int)" },
+        { en: "+10 to Automation (Int)", pt: "+10 em Automação (Int)" },
         { en: "Regression suites run themselves", pt: "Suítes de regressão rodam sozinhas" },
         { en: "You maintain 2 more frameworks than necessary", pt: "Você mantém 2 frameworks a mais que o necessário" },
       ],
@@ -730,13 +908,14 @@ export const WEST: RegionContent<Def> = {
   angle: 180,
   label: { en: "Strategy & Leadership", pt: "Estratégia e Liderança" },
   minorIcon: "sprout",
+  attribute: { en: "Process (Dex)", pt: "Processo (Des)" },
   minorStats: {
-    spine: { en: "+10 to Process (Dex)", pt: "+10 em Processo (Des)" },
+    spine: null,
     spur: { en: "+4% Team Morale", pt: "+4% de Moral do Time" },
     cycle: { en: "6% increased Sprint Predictability", pt: "6% de Previsibilidade da Sprint aumentada" },
     sprint: { en: "+5% Documentation Quality", pt: "+5% de Qualidade da Documentação" },
     spoke: { en: "8% increased Risk Awareness", pt: "8% de Percepção de Risco aumentada" },
-    path: { en: "+12 to Process (Dex)", pt: "+12 em Processo (Des)" },
+    path: null,
   },
   notables: [
     [
@@ -838,6 +1017,73 @@ export const WEST: RegionContent<Def> = {
         },
       ),
     ],
+    // Added 2026-10-18 to balance the regions; appended so every existing node keeps its id.
+    [
+      "proc_release",
+      d(
+        "checkered-flag",
+        { en: "Release Go/No-Go", pt: "Decisão de Go/No-Go" },
+        {
+          en: "Release readiness, sign-off and making the go/no-go call.",
+          pt: "Prontidão para lançamento, aprovação e a decisão de go/no-go.",
+        },
+      ),
+    ],
+    [
+      "proc_estimate",
+      d(
+        "abacus",
+        { en: "Estimation & Capacity", pt: "Estimativa e Capacidade" },
+        {
+          en: "Estimating test effort and planning QA capacity per sprint and milestone.",
+          pt: "Estimar o esforço de teste e planejar a capacidade de QA por sprint e marco.",
+        },
+      ),
+    ],
+    [
+      "proc_stakeholders",
+      d(
+        "public-speaker",
+        { en: "Stakeholder Communication", pt: "Comunicação com Stakeholders" },
+        {
+          en: "Reporting quality to producers, PMs and leads in their own terms.",
+          pt: "Reportar a qualidade para produtores, PMs e líderes nos termos deles.",
+        },
+      ),
+    ],
+    [
+      "proc_reviews",
+      d(
+        "notebook",
+        { en: "Requirements & Design Reviews", pt: "Revisão de Requisitos e Design" },
+        {
+          en: "Reviewing specs and designs for testability before any code exists.",
+          pt: "Revisar especificações e designs pensando em testabilidade antes de existir código.",
+        },
+      ),
+    ],
+    [
+      "proc_rca",
+      d(
+        "tree-roots",
+        { en: "Root Cause Analysis", pt: "Análise de Causa Raiz" },
+        {
+          en: "Post-mortems that find why a bug escaped, and fix the process behind it.",
+          pt: "Post-mortems que descobrem por que um bug escapou e corrigem o processo por trás.",
+        },
+      ),
+    ],
+    [
+      "proc_improve",
+      d(
+        "stairs-goal",
+        { en: "Test Process Improvement", pt: "Melhoria do Processo de Testes" },
+        {
+          en: "Retros, process changes and raising the whole team's QA maturity.",
+          pt: "Retros, mudanças de processo e aumentar a maturidade de QA de todo o time.",
+        },
+      ),
+    ],
   ],
   masteries: [
     [
@@ -848,6 +1094,40 @@ export const WEST: RegionContent<Def> = {
         {
           en: "Keeps a release's testing planned, tracked and on schedule.",
           pt: "Mantém os testes da release planejados, acompanhados e no prazo.",
+        },
+      ),
+    ],
+    // Added 2026-10-18 to balance the regions; appended so every existing node keeps its id.
+    [
+      "proc_m_release",
+      d(
+        "rocket",
+        { en: "Release Mastery", pt: "Maestria em Releases" },
+        {
+          en: "Ships on the date that was promised, with the risks known and agreed.",
+          pt: "Entrega na data prometida, com os riscos conhecidos e aceitos.",
+        },
+      ),
+    ],
+    [
+      "proc_m_stakeholders",
+      d(
+        "discussion",
+        { en: "Stakeholder Mastery", pt: "Maestria em Stakeholders" },
+        {
+          en: "Gets quality onto the agenda early, and keeps it there.",
+          pt: "Coloca a qualidade na pauta cedo, e a mantém lá.",
+        },
+      ),
+    ],
+    [
+      "proc_m_improvement",
+      d(
+        "clockwork",
+        { en: "Continuous Improvement Mastery", pt: "Maestria em Melhoria Contínua" },
+        {
+          en: "Every escaped bug leaves the process a little stronger.",
+          pt: "Cada bug que escapa deixa o processo um pouco mais forte.",
         },
       ),
     ],
@@ -876,7 +1156,7 @@ export const WEST: RegionContent<Def> = {
         },
       ),
       [
-        { en: "+40 to Process (Dex)", pt: "+40 em Processo (Des)" },
+        { en: "+10 to Process (Dex)", pt: "+10 em Processo (Des)" },
         { en: "Sprint goals are always met", pt: "Metas da sprint são sempre cumpridas" },
         { en: "You attend 30% more meetings", pt: "Você participa de 30% mais reuniões" },
       ],
@@ -902,7 +1182,8 @@ export type BridgeContent = {
   /** Neighbouring regions: counter-clockwise (−v side) then clockwise (+v side). */
   neighbours: [Region, Region];
   label: L;
-  stat: L;
+  /** The two attributes every node of the bridge grants (half the main-region amount, to each). */
+  attributes: L;
   notables: [string, Def][];
   mastery: [string, Def];
   keystone: [string, Def, L[]];
@@ -914,7 +1195,7 @@ export const BRIDGES: BridgeContent[] = [
     angle: -45,
     neighbours: ["north", "east"],
     label: { en: "Performance", pt: "Performance" },
-    stat: { en: "+6 to Game Sense and Automation", pt: "+6 em Senso de Jogo e Automação" },
+    attributes: { en: "Game Sense and Automation", pt: "Senso de Jogo e Automação" },
     notables: [
       [
         "br_load",
@@ -935,6 +1216,28 @@ export const BRIDGES: BridgeContent[] = [
           {
             en: "FPS, frame times, CPU/GPU and memory — finding where it slows down.",
             pt: "FPS, tempo de quadro, CPU/GPU e memória — achar onde fica lento.",
+          },
+        ),
+      ],
+      [
+        "br_graphics",
+        d(
+          "prism",
+          { en: "Graphics & Rendering Testing", pt: "Testes de Gráficos e Renderização" },
+          {
+            en: "Shaders, LODs, texture streaming, clipping and graphics settings at every preset.",
+            pt: "Shaders, LODs, streaming de texturas, clipping e configurações gráficas em todos os presets.",
+          },
+        ),
+      ],
+      [
+        "br_netcode",
+        d(
+          "wifi-router",
+          { en: "Netcode & Matchmaking Testing", pt: "Testes de Netcode e Matchmaking" },
+          {
+            en: "Latency, packet loss and desync under simulated bad networks; lobbies and matchmaking rules.",
+            pt: "Latência, perda de pacotes e dessincronização em redes ruins simuladas; lobbies e regras de matchmaking.",
           },
         ),
       ],
@@ -961,7 +1264,7 @@ export const BRIDGES: BridgeContent[] = [
         },
       ),
       [
-        { en: "+20 to Game Sense and Automation", pt: "+20 em Senso de Jogo e Automação" },
+        { en: "+5 to Game Sense and Automation", pt: "+5 em Senso de Jogo e Automação" },
         { en: "Frame drops are caught in the pipeline", pt: "Quedas de FPS são pegas na pipeline" },
         { en: "You notice 1 ms of input lag everywhere", pt: "Você percebe 1 ms de input lag em todo lugar" },
       ],
@@ -972,7 +1275,7 @@ export const BRIDGES: BridgeContent[] = [
     angle: 45,
     neighbours: ["east", "south"],
     label: { en: "Mobile", pt: "Mobile" },
-    stat: { en: "+6 to Automation and Manual", pt: "+6 em Automação e Manual" },
+    attributes: { en: "Automation and Manual", pt: "Automação e Manual" },
     notables: [
       [
         "br_android",
@@ -993,6 +1296,28 @@ export const BRIDGES: BridgeContent[] = [
           {
             en: "Device testing with Xcode, TestFlight and the iOS console.",
             pt: "Testes em dispositivos com Xcode, TestFlight e o console do iOS.",
+          },
+        ),
+      ],
+      [
+        "br_controller",
+        d(
+          "gamepad-cross",
+          { en: "Controller & Input Testing", pt: "Testes de Controle e Entrada" },
+          {
+            en: "Gamepads, rebinding, dead zones, hot-plugging and on-screen button prompts.",
+            pt: "Controles, remapeamento, zonas mortas, conectar e desconectar e os ícones de botões na tela.",
+          },
+        ),
+      ],
+      [
+        "br_minspec",
+        d(
+          "processor",
+          { en: "Min-Spec & Handheld Testing", pt: "Testes em Min-Spec e Portáteis" },
+          {
+            en: "Minimum-spec PCs and handhelds like the Steam Deck: performance, battery and UI scaling.",
+            pt: "PCs de requisitos mínimos e portáteis como o Steam Deck: performance, bateria e escala da UI.",
           },
         ),
       ],
@@ -1019,7 +1344,7 @@ export const BRIDGES: BridgeContent[] = [
         },
       ),
       [
-        { en: "+20 to Automation and Manual", pt: "+20 em Automação e Manual" },
+        { en: "+5 to Automation and Manual", pt: "+5 em Automação e Manual" },
         { en: "No crash survives a phone call mid-level", pt: "Nenhum crash sobrevive a uma ligação no meio da fase" },
         { en: "Your desk drawer holds 14 phones", pt: "Sua gaveta guarda 14 celulares" },
       ],
@@ -1030,7 +1355,7 @@ export const BRIDGES: BridgeContent[] = [
     angle: 135,
     neighbours: ["south", "west"],
     label: { en: "Security & Accessibility", pt: "Segurança e Acessibilidade" },
-    stat: { en: "+6 to Manual and Process", pt: "+6 em Manual e Processo" },
+    attributes: { en: "Manual and Process", pt: "Manual e Processo" },
     notables: [
       [
         "br_security",
@@ -1051,6 +1376,28 @@ export const BRIDGES: BridgeContent[] = [
           {
             en: "WCAG audits with screen readers, keyboard-only play and axe.",
             pt: "Auditorias WCAG com leitores de tela, uso só com teclado e axe.",
+          },
+        ),
+      ],
+      [
+        "br_exploit",
+        d(
+          "lockpicks",
+          { en: "Exploit Hunting", pt: "Caça a Exploits" },
+          {
+            en: "Duplication glitches, out-of-bounds tricks and economy abuse, found before players do.",
+            pt: "Bugs de duplicação, truques para sair do mapa e abusos da economia, achados antes dos jogadores.",
+          },
+        ),
+      ],
+      [
+        "br_telemetry",
+        d(
+          "pie-chart",
+          { en: "Telemetry & Analytics Testing", pt: "Testes de Telemetria e Analytics" },
+          {
+            en: "Every analytics event fires once, with the right data, and respects player consent.",
+            pt: "Cada evento de analytics dispara uma vez, com os dados certos, e respeita o consentimento do jogador.",
           },
         ),
       ],
@@ -1077,7 +1424,7 @@ export const BRIDGES: BridgeContent[] = [
         },
       ),
       [
-        { en: "+20 to Manual and Process", pt: "+20 em Manual e Processo" },
+        { en: "+5 to Manual and Process", pt: "+5 em Manual e Processo" },
         { en: "Exploits are found in-house first", pt: "Exploits são encontrados internamente primeiro" },
         { en: "You no longer trust any input field", pt: "Você não confia mais em nenhum campo de texto" },
       ],
@@ -1088,7 +1435,7 @@ export const BRIDGES: BridgeContent[] = [
     angle: 225,
     neighbours: ["west", "north"],
     label: { en: "Live Service", pt: "Live Service" },
-    stat: { en: "+6 to Process and Game Sense", pt: "+6 em Processo e Senso de Jogo" },
+    attributes: { en: "Process and Game Sense", pt: "Processo e Senso de Jogo" },
     notables: [
       [
         "br_liveops",
@@ -1109,6 +1456,28 @@ export const BRIDGES: BridgeContent[] = [
           {
             en: "Turning forum posts and player reports into reproducible tickets.",
             pt: "Transformar posts de fórum e relatos de jogadores em tickets reproduzíveis.",
+          },
+        ),
+      ],
+      [
+        "br_bvt",
+        d(
+          "check-mark",
+          { en: "Build Verification Testing", pt: "Testes de Verificação de Build" },
+          {
+            en: "The daily BVT: a fast pass that decides whether a new build is fit to test at all.",
+            pt: "O BVT diário: uma checagem rápida que decide se uma build nova está apta para ser testada.",
+          },
+        ),
+      ],
+      [
+        "br_patch",
+        d(
+          "upgrade",
+          { en: "Patch & Content Update Testing", pt: "Testes de Patches e Atualizações" },
+          {
+            en: "Patch installs, save and progress migration, hotfixes and seasonal content drops.",
+            pt: "Instalação de patches, migração de saves e progresso, hotfixes e conteúdo sazonal.",
           },
         ),
       ],
@@ -1241,6 +1610,6 @@ export const START: Def = d(
 );
 
 export const RING_STATS: L[] = [
-  { en: "+8 to all Attributes", pt: "+8 em todos os Atributos" },
+  { en: "+2 to all Attributes", pt: "+2 em todos os Atributos" },
   { en: "+5% Coffee Regeneration", pt: "+5% de Regeneração de Café" },
 ];

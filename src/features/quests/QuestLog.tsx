@@ -1,8 +1,7 @@
 import { useState, type KeyboardEvent } from "react";
 import { ACTS, SIDE_QUESTS, TRIALS, monthsBetween, type Act } from "../../data/questLog";
 import { TREE_ICONS, iconViewBox } from "../../game/tree/icons.generated";
-import { useI18n } from "../../i18n/I18nProvider";
-import type { Locale } from "../../i18n/types";
+import { useI18n, type I18n } from "../../i18n/I18nProvider";
 import "./QuestLog.css";
 
 const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
@@ -22,17 +21,14 @@ function Glyph({ name, className }: { name: string; className?: string }) {
   );
 }
 
-const monthLabel = (month: string, locale: Locale) => {
+const monthLabel = (month: string, date: I18n["date"]) => {
   const [y, m] = month.split("-").map(Number) as [number, number];
-  return new Date(y, m - 1, 1).toLocaleDateString(locale === "pt" ? "pt-BR" : "en-GB", {
-    month: "short",
-    year: "numeric",
-  });
+  return date(new Date(y, m - 1, 1), { month: "short", year: "numeric" });
 };
 
 /** The career as a PoE quest log: Acts (jobs), Side Quests (projects) and Trials (courses). */
 export function QuestLog() {
-  const { t, l, locale } = useI18n();
+  const { t, l, date } = useI18n();
   // Open on the latest act, like the game opens on where you are.
   const [tab, setTab] = useState<Tab>(ACTS.at(-1)!.id);
 
@@ -62,7 +58,8 @@ export function QuestLog() {
   const gems = (list: string[]) => (
     <ul className="gems" aria-label={t("quests.gems")}>
       {list.map((g) => (
-        <li key={g} className="gem">
+        // Skill gems are tools and technologies: names, kept as they are in every language.
+        <li key={g} className="gem" translate="no">
           {g}
         </li>
       ))}
@@ -104,7 +101,9 @@ export function QuestLog() {
               {a ? (
                 <>
                   <span className="questlog__tab-act">{t("quests.act", { n: ROMAN[index]! })}</span>{" "}
-                  <span className="questlog__tab-sub">{a.company}</span>
+                  <span className="questlog__tab-sub" translate="no">
+                    {a.company}
+                  </span>
                 </>
               ) : (
                 <span className="questlog__tab-act">{t(id === "side" ? "quests.side" : "quests.trials")}</span>
@@ -126,16 +125,16 @@ export function QuestLog() {
             <header className="questlog__header">
               <h3>{l(act.role)}</h3>
               <p className="questlog__company">
-                {act.company}
+                <span translate="no">{act.company}</span>
                 {act.clients && (
                   <span>
                     {" "}
-                    · {t("quests.clients")}: {act.clients.join(", ")}
+                    · {t("quests.clients")}: <span translate="no">{act.clients.join(", ")}</span>
                   </span>
                 )}
               </p>
               <p className="questlog__meta">
-                {monthLabel(act.from, locale)} – {monthLabel(act.to, locale)} · {duration(act)} · {l(act.place)}
+                {monthLabel(act.from, date)} – {monthLabel(act.to, date)} · {duration(act)} · {l(act.place)}
               </p>
             </header>
             <h4>{t("quests.completed")}</h4>

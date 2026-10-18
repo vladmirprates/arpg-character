@@ -14,6 +14,27 @@ export function readStored<T>(key: string, validate: (v: unknown) => v is T): T 
   }
 }
 
+/** Keys whose saved value existed but couldn't be read (then reset to defaults). */
+const corrupted = new Set<string>();
+
+/** Returns, and clears, the keys found corrupted so far: the app tells the player once. */
+export function takeCorrupted(): string[] {
+  const keys = [...corrupted];
+  corrupted.clear();
+  return keys;
+}
+
+/** If an unreadable value is stored under `key`, drops it (the default is in use) and records it. */
+function discardCorrupted(key: string): void {
+  try {
+    if (localStorage.getItem(PREFIX + key) === null) return;
+    localStorage.removeItem(PREFIX + key);
+    corrupted.add(key);
+  } catch {
+    // Storage blocked: nothing was read, so nothing is corrupted.
+  }
+}
+
 export function writeStored(key: string, value: unknown): void {
   try {
     localStorage.setItem(PREFIX + key, JSON.stringify(value));
@@ -24,14 +45,18 @@ export function writeStored(key: string, value: unknown): void {
 
 /**
  * useState backed by localStorage. Stored data is untrusted: it is validated on read,
- * and anything invalid falls back to `initial`.
+ * and anything invalid falls back to `initial` (and is reported through takeCorrupted()).
  */
 export function usePersistentState<T>(
   key: string,
   initial: T,
   validate: (v: unknown) => v is T,
 ): [T, Dispatch<SetStateAction<T>>] {
-  const [value, setValue] = useState<T>(() => readStored(key, validate) ?? initial);
+  const [value, setValue] = useState<T>(() => {
+    const stored = readStored(key, validate);
+    if (stored === null) discardCorrupted(key);
+    return stored ?? initial;
+  });
 
   const set = useCallback<Dispatch<SetStateAction<T>>>(
     (action) => {

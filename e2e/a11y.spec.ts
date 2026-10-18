@@ -9,17 +9,17 @@ async function expectNoViolations(page: Page) {
   expect(violations.map((v) => `${v.id} (${v.nodes.length}): ${v.nodes[0]?.target.join(" ")}`)).toEqual([]);
 }
 
-test("main sheet has no WCAG A/AA violations", async ({ page }) => {
+test("[CERT-A11Y-01] main sheet has no WCAG A/AA violations", async ({ page }) => {
   await page.goto("./");
   await expectNoViolations(page);
 });
 
-test("passive tree dialog has no WCAG A/AA violations", async ({ page }) => {
+test("[CERT-A11Y-01] passive tree dialog has no WCAG A/AA violations", async ({ page }) => {
   await openTree(page);
   await expectNoViolations(page);
 });
 
-test("crafting bench dialog has no WCAG A/AA violations", async ({ page }) => {
+test("[CERT-A11Y-01] crafting bench dialog has no WCAG A/AA violations", async ({ page }) => {
   const bench = await openBench(page);
   await bench.getByTestId("orb-transmute").click();
   await bench.getByTestId("item-slot").click();
@@ -28,7 +28,7 @@ test("crafting bench dialog has no WCAG A/AA violations", async ({ page }) => {
   await expectNoViolations(page);
 });
 
-test("quest log dialog has no WCAG A/AA violations", async ({ page }) => {
+test("[CERT-A11Y-01] quest log dialog has no WCAG A/AA violations", async ({ page }) => {
   await page.goto("./");
   await page.getByTestId("open-quests").click();
   const log = page.getByRole("dialog", { name: "Quest Log" });
@@ -38,7 +38,7 @@ test("quest log dialog has no WCAG A/AA violations", async ({ page }) => {
   await expectNoViolations(page);
 });
 
-test("divination cards: no WCAG violations, and Esc closes only the zoomed card", async ({ page }) => {
+test("[CERT-A11Y-01] divination cards: no WCAG violations, and Esc closes only the zoomed card", async ({ page }) => {
   await page.goto("./");
   await page.getByTestId("open-cards").click();
   const gallery = page.getByRole("dialog", { name: "Divination Cards" });
@@ -53,7 +53,7 @@ test("divination cards: no WCAG violations, and Esc closes only the zoomed card"
   await expect(gallery).toBeVisible();
 });
 
-test("Find the Bugs and QA Report dialogs have no WCAG A/AA violations", async ({ page }) => {
+test("[CERT-A11Y-01] Find the Bugs and QA Report dialogs have no WCAG A/AA violations", async ({ page }) => {
   await page.goto("./");
   await page.getByTestId("open-bounty").click();
   await expectNoViolations(page); // the explanation and start button
@@ -65,5 +65,23 @@ test("Find the Bugs and QA Report dialogs have no WCAG A/AA violations", async (
   await page.keyboard.press("Escape");
   await page.getByTestId("open-qa").click();
   await expect(page.getByRole("dialog", { name: "QA Report" })).toBeVisible();
+  await expectNoViolations(page);
+});
+
+test("[CERT-A11Y-01] certification, achievements and the debug overlays have no WCAG A/AA violations", async ({
+  page,
+}) => {
+  await page.goto("./?perf");
+  await expect(page.getByTestId("perf-overlay")).toBeVisible();
+  await page.getByTestId("open-cert").click();
+  await expect(page.getByRole("dialog", { name: "Certification" })).not.toContainText("Loading");
+  await expectNoViolations(page);
+  await page.keyboard.press("Escape");
+  await page.getByTestId("open-achievements").click();
+  await expect(page.getByRole("dialog", { name: "Achievements" })).toBeVisible();
+  await expectNoViolations(page);
+  await page.keyboard.press("Escape");
+  // The sheet in pseudo-localization, the longest text it ever has to fit.
+  await page.getByTestId("toggle-pseudo").click();
   await expectNoViolations(page);
 });

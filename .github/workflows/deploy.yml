@@ -29,14 +29,24 @@ jobs:
       - run: npm run typecheck
       - run: npm run format:check
       - run: npm run test:report
+      # Mutation testing on the game logic; fails below the break threshold in stryker.config.mjs.
+      - run: npm run test:mutation
       # Playwright builds the site (dist/) and runs every end-to-end and accessibility test on it.
-      - run: npx playwright test --grep-invert @visual
+      - run: npm run e2e:functional
+      # The frame-rate test, alone on the runner so nothing competes with it for CPU.
+      - run: npm run e2e:perf
       - run: npm run lighthouse
       # The in-app QA Report reads this file, published next to the page.
       - run: node scripts/qa-report.mjs dist/qa-report.json
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
+      # The same build again, for the live-Lighthouse job to republish with the live scores added.
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: dist
+          retention-days: 1
 
   deploy:
     needs: build
@@ -51,19 +61,45 @@ jobs:
         uses: actions/deploy-pages@v4
 
   # After going live: Lighthouse against the real site (HTTPS, GitHub's CDN), with the same budgets.
+  # The scores are merged into the QA Report and the identical build is published again, so the
+  # report shows what visitors actually get rather than the pre-deploy run.
   lighthouse-live:
     name: Lighthouse on the live site
     needs: deploy
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ needs.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: npx --yes @lhci/cli@0.14.0 autorun --config=lighthouserc.live.json --collect.url=${{ needs.deploy.outputs.page_url }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: dist
+      # Measured and published even when a budget fails: the report should show the real numbers.
+      # The budget still fails the job, below.
+      - id: lighthouse
+        continue-on-error: true
+        run: npx --yes @lhci/cli@0.14.0 autorun --config=lighthouserc.live.json --collect.url=${{ needs.deploy.outputs.page_url }}
+      - run: node scripts/qa-report.mjs --merge-live dist/qa-report.json ${{ needs.deploy.outputs.page_url }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          name: github-pages-live
+          path: dist
+      - uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-live
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: lighthouse-live
           path: .lighthouseci/
           retention-days: 30
+      - name: Live Lighthouse budgets
+        if: steps.lighthouse.outcome == 'failure'
+        run: |
+          echo "::error::The live site missed a Lighthouse budget (see lighthouserc.live.json and the lighthouse-live artifact)."
+          exit 1

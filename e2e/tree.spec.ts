@@ -16,6 +16,9 @@ test("Make Your Own allocates a path, persists, and shares", async ({ page, cont
   const tree = await openTree(page);
   await tree.getByRole("tab", { name: "Make Your Own" }).click();
   await expect(tree.getByTestId("points")).toHaveText("0");
+  // On wide screens the summary lies over the tree's right edge, where this node is: close it.
+  const toggle = tree.getByTestId("toggle-summary");
+  if ((await toggle.getAttribute("aria-expanded")) === "true") await toggle.click();
   await tree.getByTestId("node-tech_master").click({ force: true });
   await expect(tree.getByTestId("points")).toHaveText(costFromStart("tech_master"));
 
@@ -60,6 +63,39 @@ test("node tooltips render above the modal dialog", async ({ page, isMobile }) =
   // A modal dialog sits in the top layer; a tooltip outside it would be painted underneath.
   await expect(page.locator("dialog[open] .tooltip-layer")).toContainText("Manual Testing Mastery");
   await expect(page.locator("body > .tooltip-layer")).toHaveCount(0);
+});
+
+test("on a wide screen the build summary is a side panel the toggle collapses and restores", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, "wide-screen layout (the phone sheet is tested below)");
+  const tree = await openTree(page);
+  const summary = tree.getByTestId("build-summary");
+  const toggle = tree.getByTestId("toggle-summary");
+  // A visible control must do something: this one once rendered on desktop wired to nothing
+  // (a later `.btn { display }` rule beat the one that was meant to hide it).
+  await expect(toggle).toBeVisible();
+  await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  await expect(summary).toBeVisible();
+  // Zoom in somewhere first, so a re-fit would show.
+  await tree.getByRole("button", { name: "Zoom in" }).click();
+  const stage = tree.locator(".tree__stage");
+  await expect.poll(() => stage.evaluate((el) => el.style.transform)).not.toBe("");
+  const view = await stage.evaluate((el) => el.style.transform);
+
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-expanded", "false");
+  await expect(summary).toBeHidden();
+  // Toggling the panel must not zoom or move the tree.
+  expect(await stage.evaluate((el) => el.style.transform), "view after closing the panel").toBe(view);
+
+  await toggle.click();
+  await expect(summary).toBeVisible();
+  expect(await stage.evaluate((el) => el.style.transform), "view after reopening the panel").toBe(view);
+  // Jumping to a node from the side panel keeps it open (only the phone sheet closes).
+  await summary.getByRole("button").first().click();
+  await expect(summary).toBeVisible();
 });
 
 test("on a phone the build summary is a sheet, closed until asked for", async ({ page, isMobile }) => {

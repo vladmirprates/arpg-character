@@ -1,21 +1,27 @@
-import { NODES, ROOT_ID, type TreeNode } from "./data";
+import { CODE_ORDER_ADDED, CODE_ORDER_V1 } from "./codeOrder";
+import { ROOT_ID } from "./data";
 import { MY_BUILD_CODE, MY_BUILD_NODES } from "../../data/myBuild";
 import { TREE_ADJACENCY, allocate, reachableFromRoot, type Adjacency } from "./graph";
 
 /**
- * Build codes are URL-safe: a bitmask over a layout's nodes (in data order) as base64url.
- * Each layout has its own node order, so a code belongs to the layout it was made in.
- * Defaults are the default layout.
+ * Build codes are URL-safe: a bitmask over the tree's nodes as base64url.
+ *
+ * The bit order is frozen (codeOrder.ts), not the order the layout happens to create nodes in:
+ * otherwise adding one node would shift every later bit and silently turn every shared link and
+ * saved build into a different build. New nodes are appended to the frozen list, so old codes
+ * keep their meaning and new codes simply grow.
  */
+export const CODE_ORDER: readonly string[] = [...CODE_ORDER_V1, ...CODE_ORDER_ADDED];
+
 /** The build shown on "My Build" — and the one the character sheet's attributes come from. */
 export function publishedBuild(): Set<string> {
   return (MY_BUILD_CODE ? decodeBuild(MY_BUILD_CODE) : null) ?? buildFromTargets(MY_BUILD_NODES);
 }
 
-export function encodeBuild(allocated: ReadonlySet<string>, nodes: readonly TreeNode[] = NODES): string {
-  const bytes = new Uint8Array(Math.ceil(nodes.length / 8));
-  nodes.forEach((node, i) => {
-    if (allocated.has(node.id)) bytes[i >> 3]! |= 1 << (i & 7);
+export function encodeBuild(allocated: ReadonlySet<string>, order: readonly string[] = CODE_ORDER): string {
+  const bytes = new Uint8Array(Math.ceil(order.length / 8));
+  order.forEach((id, i) => {
+    if (allocated.has(id)) bytes[i >> 3]! |= 1 << (i & 7);
   });
   return btoa(String.fromCharCode(...bytes))
     .replace(/\+/g, "-")
@@ -29,7 +35,7 @@ export function encodeBuild(allocated: ReadonlySet<string>, nodes: readonly Tree
  */
 export function decodeBuild(
   code: string,
-  nodes: readonly TreeNode[] = NODES,
+  order: readonly string[] = CODE_ORDER,
   adj: Adjacency = TREE_ADJACENCY,
 ): Set<string> | null {
   if (!/^[A-Za-z0-9_-]+$/.test(code)) return null;
@@ -40,9 +46,10 @@ export function decodeBuild(
     return null;
   }
   const ids = new Set<string>([ROOT_ID]);
-  nodes.forEach((node, i) => {
-    if ((raw.charCodeAt(i >> 3) >> (i & 7)) & 1) ids.add(node.id);
+  order.forEach((id, i) => {
+    if ((raw.charCodeAt(i >> 3) >> (i & 7)) & 1) ids.add(id);
   });
+  // Ids the tree no longer has (none today) are dropped here, with anything cut off by them.
   return reachableFromRoot(ids, adj);
 }
 

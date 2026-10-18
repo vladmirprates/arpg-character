@@ -12,16 +12,16 @@ describe("tree layout", () => {
   test("has the expected size and mix", () => {
     const count = (kind: string) => NODES.filter((n) => n.kind === kind).length;
     expect(NODES.length).toBeGreaterThanOrEqual(230);
-    expect(NODES.length).toBeLessThanOrEqual(300);
+    expect(NODES.length).toBeLessThanOrEqual(340);
     expect(count("start")).toBe(1);
     expect(count("keystone")).toBe(16);
-    expect(count("mastery")).toBe(13);
-    expect(count("notable")).toBe(62);
+    expect(count("mastery")).toBe(20);
+    expect(count("notable")).toBe(87);
   });
 
   test("every cluster centre is a mastery, and soft skills ring the start", () => {
     const masteriesIn = (region: string) => NODES.filter((n) => n.kind === "mastery" && n.region === region).length;
-    expect(MAIN.map(masteriesIn)).toEqual([2, 2, 4, 1]);
+    expect(MAIN.map(masteriesIn)).toEqual([4, 4, 4, 4]);
     for (const region of BRIDGE) expect(masteriesIn(region)).toBe(1);
     const soft = NODES.filter((n) => n.id.startsWith("soft_"));
     expect(soft).toHaveLength(8);
