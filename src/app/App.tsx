@@ -13,6 +13,14 @@ import { DivinationCards } from "../features/divination/DivinationCards";
 import { BountyProvider } from "../features/bounty/BountyProvider";
 import { BugBounty } from "../features/bounty/BugBounty";
 import { QAReport } from "../features/qa/QAReport";
+import { AchievementsProvider } from "../features/achievements/AchievementsProvider";
+import { AchievementsPanel } from "../features/achievements/AchievementsPanel";
+import { CertificationPanel } from "../features/certification/CertificationPanel";
+import { GamepadController } from "../features/gamepad/GamepadController";
+import { PerfOverlay } from "../features/perf/PerfOverlay";
+import { setAudioSuspended } from "../audio/sfx";
+import { track } from "../game/events";
+import { takeCorrupted } from "../hooks/usePersistentState";
 import { Backdrop } from "../fx/Backdrop";
 import { EmberField } from "../fx/EmberField";
 import { Modal } from "../components/Modal";
@@ -31,22 +39,24 @@ export function App({ initialLocale }: { initialLocale?: Locale }) {
     <SettingsProvider>
       <I18nProvider initialLocale={initialLocale}>
         <ToastProvider>
-          <TooltipProvider>
-            <BountyProvider>
-              <StashProvider>
-                <BugHuntProvider>
-                  <Shell />
-                </BugHuntProvider>
-              </StashProvider>
-            </BountyProvider>
-          </TooltipProvider>
+          <AchievementsProvider>
+            <TooltipProvider>
+              <BountyProvider>
+                <StashProvider>
+                  <BugHuntProvider>
+                    <Shell />
+                  </BugHuntProvider>
+                </StashProvider>
+              </BountyProvider>
+            </TooltipProvider>
+          </AchievementsProvider>
         </ToastProvider>
       </I18nProvider>
     </SettingsProvider>
   );
 }
 
-type Overlay = "tree" | "bench" | "quests" | "cards" | "bounty" | "qa" | null;
+type Overlay = "tree" | "bench" | "quests" | "cards" | "bounty" | "qa" | "achievements" | "cert" | null;
 
 /** Reads `#tree=<code>` / `#craft=<code>` share links. */
 function readHash(): { tree?: string; craft?: Recipe } {
@@ -59,7 +69,7 @@ function readHash(): { tree?: string; craft?: Recipe } {
 
 function Shell() {
   const { t } = useI18n();
-  const { reducedMotion } = useSettings();
+  const { reducedMotion, perfOverlay, setPerfOverlay } = useSettings();
   const notify = useToast();
   const [overlay, setOverlay] = useState<Overlay>(null);
   const [treeTab, setTreeTab] = useState<TreeTab>("mine");
@@ -97,11 +107,31 @@ function Shell() {
       const text = getCopyText();
       if (!text) return;
       e.preventDefault();
-      if (await copyToClipboard(text)) notify(t("item.copied"), "success");
+      if (await copyToClipboard(text)) {
+        notify(t("item.copied"), "success");
+        track({ type: "item.copied" });
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [notify, t]);
+
+  // Corrupted save data: the providers already fell back to defaults; say so once, like a console
+  // game does, instead of silently losing progress.
+  useEffect(() => {
+    if (takeCorrupted().length) notify(t("save.corrupted"), "error");
+  }, [notify, t]);
+
+  // Suspend / resume, the console way: a hidden tab pauses animation, audio and Coffee regen, and
+  // everything is exactly where it was when the player comes back.
+  useEffect(() => {
+    const onVisibility = () => {
+      document.documentElement.toggleAttribute("data-suspended", document.hidden);
+      setAudioSuspended(document.hidden);
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
 
   return (
     <>
@@ -125,11 +155,18 @@ function Shell() {
               onOpenCards={() => setOverlay("cards")}
               onOpenBounty={() => setOverlay("bounty")}
               onOpenQA={() => setOverlay("qa")}
+              onOpenAchievements={() => setOverlay("achievements")}
+              onOpenCert={() => {
+                setOverlay("cert");
+                track({ type: "cert.opened" });
+              }}
             />
           </div>
         </main>
         <ActionBar />
       </div>
+      {perfOverlay && <PerfOverlay onClose={() => setPerfOverlay(false)} />}
+      <GamepadController />
 
       <Modal
         open={overlay === "tree"}
@@ -189,6 +226,26 @@ function Shell() {
         className="modal--quests modal--qa"
       >
         <QAReport />
+      </Modal>
+
+      <Modal
+        open={overlay === "achievements"}
+        onClose={close}
+        title={t("nav.achievements")}
+        titleId="achievements-title"
+        className="modal--quests modal--qa"
+      >
+        <AchievementsPanel />
+      </Modal>
+
+      <Modal
+        open={overlay === "cert"}
+        onClose={close}
+        title={t("nav.cert")}
+        titleId="cert-title"
+        className="modal--quests modal--qa"
+      >
+        <CertificationPanel />
       </Modal>
     </>
   );

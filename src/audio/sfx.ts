@@ -12,6 +12,16 @@ export function setSfxEnabled(value: boolean) {
   enabled = value;
 }
 
+let suspended = false;
+
+/** Suspend / resume: a hidden tab stops all audio, and nothing new plays until it's back. */
+export function setAudioSuspended(value: boolean) {
+  suspended = value;
+  if (!ctx) return;
+  if (value && ctx.state === "running") void ctx.suspend();
+  else if (!value && ctx.state === "suspended") void ctx.resume();
+}
+
 function audio(): { ctx: AudioContext; out: GainNode } | null {
   if (typeof window === "undefined" || !("AudioContext" in window)) return null;
   if (!ctx) {
@@ -20,7 +30,7 @@ function audio(): { ctx: AudioContext; out: GainNode } | null {
     master.gain.value = 0.35;
     master.connect(ctx.destination);
   }
-  if (ctx.state === "suspended") void ctx.resume();
+  if (ctx.state === "suspended" && !suspended) void ctx.resume();
   return { ctx, out: master! };
 }
 

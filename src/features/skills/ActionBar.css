@@ -233,12 +233,69 @@
   color: var(--bronze-300);
 }
 
+/* Phones: no room for orbs beside the skills, so they become two compact bars above them. */
 @media (max-width: 560px) {
   .action-bar {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "sanity coffee"
+      "skills skills";
+    gap: 8px 10px;
+  }
+  .action-bar__center {
+    grid-area: skills;
   }
   .globe {
+    width: 100%;
+    display: block;
+  }
+  .globe--sanity {
+    grid-area: sanity;
+  }
+  .globe--coffee {
+    grid-area: coffee;
+  }
+  .globe__glass {
+    height: 22px;
+    aspect-ratio: auto;
+    border-width: 1px;
+    border-radius: 999px;
+    box-shadow:
+      0 0 0 2px #0b0909,
+      0 0 0 3px var(--bronze-700),
+      inset 0 0 8px #000;
+  }
+  /* Fill from the left instead of from the bottom; the wave layers aren't needed on a bar. */
+  .globe__liquid {
+    transform: translate3d(calc((var(--fill) - 1) * 100%), 0, 0);
+    background: linear-gradient(180deg, var(--liquid-hi), var(--liquid) 45%, var(--liquid-deep));
+  }
+  .globe__fluid {
     display: none;
+  }
+  .globe__shine {
+    inset: 2px 10px 55%;
+    border-radius: 999px;
+    background: linear-gradient(180deg, rgb(255 255 255 / 0.22), transparent);
+  }
+  .globe__value,
+  .globe__label {
+    position: absolute;
+    top: 0;
+    margin: 0;
+    line-height: 22px;
+    font-size: 0.75rem;
+    text-shadow:
+      0 0 3px #000,
+      0 0 2px #000;
+  }
+  .globe__value {
+    right: 10px;
+  }
+  .globe__label {
+    left: 10px;
+    letter-spacing: 0.08em;
+    color: var(--parch-100);
   }
 }
 

@@ -6,7 +6,7 @@
  * (Alternatively, list target nodes in MY_BUILD_NODES — used when the code is empty. Each target is
  * allocated together with the shortest path to it, so you only list the notables you want.)
  */
-export const MY_BUILD_CODE = "____z__8Pfn_7____z-_4v___3_-8x__-_7___x_AA";
+export const MY_BUILD_CODE = "____zP_nP_v_7____3_______38-8x_-d_7j__H___3A7___T88B";
 
 export const MY_BUILD_NODES: readonly string[] = [
   // Game Testing
@@ -18,8 +18,12 @@ export const MY_BUILD_NODES: readonly string[] = [
   "gm_economy",
   "gm_balance",
   "gm_tuto",
-  "gm_engine",
   "gm_pc",
+  "gm_access",
+  "gm_achieve",
+  "gm_playtest",
+  "gm_quest",
+  "gm_m_insight",
   "gm_master",
   "ks_deterministic",
   // Manual Testing
@@ -30,6 +34,15 @@ export const MY_BUILD_NODES: readonly string[] = [
   "man_compat",
   "man_triage",
   "man_logs",
+  "man_repro",
+  "man_boundary",
+  "man_session",
+  "man_data",
+  "man_lqa",
+  "man_usability",
+  "man_store",
+  "man_m_design",
+  "man_m_market",
   "man_master",
   "ks_zero_bug",
   "ks_pixel",
@@ -55,14 +68,30 @@ export const MY_BUILD_NODES: readonly string[] = [
   "proc_jira",
   "proc_mentor",
   "proc_docs",
+  "proc_release",
+  "proc_estimate",
+  "proc_stakeholders",
+  "proc_reviews",
+  "proc_rca",
+  "proc_improve",
+  "proc_m_release",
+  "proc_m_stakeholders",
+  "proc_m_improvement",
   "proc_master",
   "ks_dod",
   "ks_servant",
   // Bridges
   "br_profiling",
+  "br_graphics",
+  "br_controller",
+  "br_minspec",
   "br_security",
   "br_a11y",
+  "br_exploit",
+  "br_telemetry",
   "br_liveops",
   "br_community",
+  "br_bvt",
+  "br_patch",
   "ks_player",
 ];

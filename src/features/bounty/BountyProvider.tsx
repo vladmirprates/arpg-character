@@ -1,6 +1,7 @@
 import { createContext, useCallback, useContext, useMemo, type ReactNode } from "react";
 import { useToast } from "../../components/Toasts";
 import { usePersistentState } from "../../hooks/usePersistentState";
+import { track } from "../../game/events";
 import { useI18n } from "../../i18n/I18nProvider";
 import { PLANTED_BUGS, PLANTED_IDS } from "./plantedBugs";
 
@@ -95,6 +96,8 @@ export function BountyProvider({ children }: { children: ReactNode }) {
       const done = next.length === PLANTED_BUGS.length;
       // The last find ends the hunt; the page is clean again either way.
       setStored((s) => ({ ...s, active: !done, found: next }));
+      track({ type: "bug.found", id });
+      if (done) track({ type: "bounty.complete" });
       notify(
         done
           ? t("bounty.allFound")

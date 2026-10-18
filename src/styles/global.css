@@ -306,11 +306,14 @@ button {
 }
 
 /* While a dialog is open the page behind it is only a dimmed backdrop: freeze its animations so
-   the browser stops repainting (and re-compositing) everything under the popup every frame. */
-:root:has(dialog[open]) :is(.app, .backdrop, .ember-field, .hunt-layer),
-:root:has(dialog[open]) :is(.app, .backdrop, .ember-field, .hunt-layer) *,
-:root:has(dialog[open]) :is(.app, .backdrop, .ember-field, .hunt-layer) *::before,
-:root:has(dialog[open]) :is(.app, .backdrop, .ember-field, .hunt-layer) *::after {
+   the browser stops repainting (and re-compositing) everything under the popup every frame.
+   The flag is an attribute set by <Modal>, not `:root:has(dialog[open])`: with :has() on the
+   root, every DOM change inside a dialog re-checked styles for the whole page, which made each
+   craft cost 5× the style work (found by the main-thread budget in e2e/perf.spec.ts). */
+:root[data-dialog-open] :is(.app, .backdrop, .ember-field, .hunt-layer),
+:root[data-dialog-open] :is(.app, .backdrop, .ember-field, .hunt-layer) *,
+:root[data-dialog-open] :is(.app, .backdrop, .ember-field, .hunt-layer) *::before,
+:root[data-dialog-open] :is(.app, .backdrop, .ember-field, .hunt-layer) *::after {
   animation-play-state: paused !important;
 }
 
@@ -322,4 +325,11 @@ button {
   text-decoration: underline;
   background: none;
   border: 0;
+}
+
+/* Suspended (tab hidden): freeze every animation where it is, so resuming continues seamlessly. */
+:root[data-suspended] *,
+:root[data-suspended] *::before,
+:root[data-suspended] *::after {
+  animation-play-state: paused !important;
 }

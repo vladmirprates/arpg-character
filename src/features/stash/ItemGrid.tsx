@@ -50,7 +50,7 @@ function ItemPicture({ placed }: { placed: Placed }) {
  * Keyboard: Enter picks up / places, Ctrl+Enter sends across, Shift+Enter opens a craft, Esc cancels.
  */
 export function ItemGrid({ container, label, onOpenBench }: Props) {
-  const { t, l, locale } = useI18n();
+  const { t, l, locale, lang } = useI18n();
   const notify = useToast();
   const items = useItems();
   const { cells, held } = items;
@@ -70,7 +70,7 @@ export function ItemGrid({ container, label, onOpenBench }: Props) {
   const [ghost, setGhost] = useState<{ placed: Placed; x: number; y: number } | null>(null);
 
   const nameOf = (placed: Placed) =>
-    placed.kind === "craft" ? describeItem(placed.item, locale).name : l(placed.item.name);
+    placed.kind === "craft" ? describeItem(placed.item, lang).name : l(placed.item.name);
   const where = (c: ContainerId) => t(c === "bag" ? "items.bag" : "items.stash");
 
   const sendAcross = (cell: Cell, placed: Placed) => {
@@ -179,12 +179,12 @@ export function ItemGrid({ container, label, onOpenBench }: Props) {
           const slot =
             placed.kind === "craft"
               ? (() => {
-                  const view = describeItem(placed.item, locale);
+                  const view = describeItem(placed.item, lang);
                   return {
                     planted: affectedBy(cell, placed),
                     glyph: craftIcon(placed.item),
                     rarity: placed.item.corrupted ? ("corrupted" as const) : placed.item.rarity,
-                    description: `${itemSummary(view, locale)}. ${hint}`,
+                    description: `${itemSummary(view, lang)}. ${hint}`,
                     tooltip: <CraftedItemCard view={view} footer={hint} />,
                     copyText: () => itemToText(view, view.baseName, locale),
                   };
