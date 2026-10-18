@@ -1,0 +1,101 @@
+/* PoE item grid: cell lines drawn as a background, one item per cell. Panels set --cell. */
+.item-grid {
+  display: grid;
+  grid-auto-rows: var(--cell);
+  width: max-content;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  background-color: #070607;
+  background-image:
+    linear-gradient(to right, rgb(176 138 82 / 0.15) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(176 138 82 / 0.15) 1px, transparent 1px);
+  background-size: var(--cell) var(--cell);
+  border: 1px solid var(--bronze-600);
+  box-shadow: inset 0 0 22px rgb(0 0 0 / 0.8);
+}
+
+.item-grid__cell {
+  position: relative;
+  width: var(--cell);
+  height: var(--cell);
+  padding: 1px;
+  touch-action: none;
+}
+
+.item-grid .slot {
+  border-radius: 0;
+  box-shadow: none;
+  cursor: grab;
+}
+
+/* Picked up: the item fades in place until it's put somewhere. */
+.item-grid__cell.is-held .slot {
+  opacity: 0.35;
+  outline: 1px dashed var(--ember-400);
+  outline-offset: -2px;
+}
+
+/* While an item is held, every cell is a target. */
+.item-grid__drop {
+  position: absolute;
+  inset: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.item-grid.is-holding .item-grid__cell:hover,
+.item-grid__drop:focus-visible {
+  background: rgb(var(--ember-rgb) / 0.16);
+  outline: 1px solid var(--ember-400);
+  outline-offset: -1px;
+}
+
+.item-grid__remove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  color: var(--parch-50);
+  background: var(--blood-500);
+  border: 1px solid var(--blood-300);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.item-grid__cell:hover .item-grid__remove,
+.item-grid__cell:focus-within .item-grid__remove {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .item-grid__remove {
+    opacity: 1;
+  }
+}
+
+/* The item following the pointer during a drag. */
+.item-ghost {
+  position: fixed;
+  z-index: 1600;
+  width: 46px;
+  height: 46px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 0 10px rgb(var(--ember-rgb) / 0.6));
+}
+
+.item-ghost svg,
+.item-ghost img {
+  width: 100%;
+  height: 100%;
+  fill: var(--parch-50);
+}

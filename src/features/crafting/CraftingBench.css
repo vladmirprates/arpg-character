@@ -1,0 +1,509 @@
+.bench {
+  display: grid;
+  flex: 1;
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 16px;
+  width: 100%;
+  min-height: 0;
+  margin: 0 auto;
+  padding: clamp(12px, 3vw, 28px);
+  overflow-y: auto;
+}
+
+.bench__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bench__base {
+  display: grid;
+  gap: 4px;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ash-400);
+}
+
+.bench__base select {
+  min-height: 44px;
+  min-width: 220px;
+  padding: 0 12px;
+  font-family: var(--font-ui);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--parch-50);
+  background: #0b090a;
+  border: 1px solid var(--bronze-500);
+  border-radius: var(--radius);
+}
+
+.bench__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Currency tab and log on the left, the item (slot + card) on the right. */
+.bench__body {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  /* The log takes whatever height is left under the currency tab, and scrolls. */
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-areas:
+    "tab item"
+    "log item";
+  gap: 16px 20px;
+  min-height: 0;
+}
+
+.bench__item {
+  grid-area: item;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: safe center;
+  align-content: safe center;
+  justify-content: center;
+  gap: 18px;
+  padding: 22px;
+  background:
+    radial-gradient(ellipse at 30% 40%, rgb(239 154 69 / 0.07), transparent 60%),
+    repeating-radial-gradient(circle at 30% 40%, rgb(176 138 82 / 0.05) 0 1px, transparent 1px 28px), #070607;
+  border: 1px solid var(--bronze-700);
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 50px rgb(0 0 0 / 0.8);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+/* An orb is on the cursor: the item is the target. */
+.bench__item.is-target {
+  border-color: var(--ember-400);
+  box-shadow:
+    inset 0 0 50px rgb(0 0 0 / 0.8),
+    0 0 18px rgb(var(--ember-rgb) / 0.35);
+  cursor: pointer;
+}
+
+/* The item itself, sized like a 2 × 3 PoE inventory item. */
+.slot.bench__slot {
+  --cell: 56px;
+  --w: calc(var(--cell) * 2);
+  --h: calc(var(--cell) * 3);
+  flex: none;
+  background:
+    linear-gradient(rgb(255 255 255 / 0.04) 1px, transparent 1px) 0 0 / var(--cell) var(--cell),
+    linear-gradient(90deg, rgb(255 255 255 / 0.04) 1px, transparent 1px) 0 0 / var(--cell) var(--cell),
+    radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--rarity) 22%, transparent), transparent 70%),
+    linear-gradient(180deg, #0f0c0e, #050405);
+}
+
+.bench__slot .slot__icon {
+  inset: 18% 8%;
+  width: 84%;
+  height: 64%;
+}
+
+.is-target .bench__slot {
+  animation: slot-ready 1.2s ease-in-out infinite;
+}
+
+@keyframes slot-ready {
+  50% {
+    box-shadow:
+      inset 0 0 22px color-mix(in srgb, var(--rarity) 30%, transparent),
+      0 0 16px color-mix(in srgb, var(--rarity) 50%, transparent);
+  }
+}
+
+.bench__card .item-card {
+  min-width: min(320px, 78vw);
+}
+
+/* The held orb replaces the pointer, as in PoE. */
+.bench.is-holding,
+.bench.is-holding * {
+  cursor: none;
+}
+
+.bench__fx {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.anim-craft {
+  animation: craft-flash 0.35s ease-out;
+}
+
+.anim-error {
+  animation: craft-shake 0.32s ease-in-out;
+}
+
+.anim-error .item-card {
+  border-color: var(--blood-300);
+}
+
+.anim-corrupt {
+  animation:
+    craft-shake 0.45s ease-in-out,
+    corrupt-flash 0.8s ease-out;
+}
+
+@keyframes craft-flash {
+  40% {
+    filter: brightness(1.8) drop-shadow(0 0 20px rgb(255 255 255 / 0.5));
+  }
+}
+
+@keyframes corrupt-flash {
+  30% {
+    filter: brightness(1.4) saturate(2) drop-shadow(0 0 30px rgb(var(--blood-rgb) / 0.9));
+  }
+}
+
+@keyframes craft-shake {
+  20% {
+    transform: translateX(-7px) rotate(-0.5deg);
+  }
+  45% {
+    transform: translateX(6px) rotate(0.4deg);
+  }
+  70% {
+    transform: translateX(-4px);
+  }
+}
+
+/* ---- Craft log ---- */
+.bench__log {
+  grid-area: log;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 12px 14px;
+  background: #0a0809;
+  border: 1px solid var(--bronze-700);
+  border-radius: var(--radius);
+}
+
+.bench__log h3 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px;
+  margin: 0 0 8px;
+  font-family: var(--font-ui);
+  font-size: 1.05rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bronze-300);
+}
+
+.bench__seed {
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.8rem;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ash-500);
+}
+
+.bench__log ol {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+  counter-reset: step;
+  font-size: 0.9rem;
+}
+
+.bench__log li {
+  display: grid;
+  grid-template-columns: 2.2em 3.6em 1fr;
+  gap: 2px 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgb(255 255 255 / 0.04);
+  counter-increment: step;
+}
+
+.bench__log li::before {
+  content: counter(step) ".";
+  color: var(--ash-500);
+  text-align: right;
+}
+
+.bench__log small {
+  grid-column: 3;
+  color: var(--ash-500);
+}
+
+.bench__log-tag {
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--verdant-300);
+}
+
+.is-fail .bench__log-tag {
+  color: var(--blood-300);
+}
+
+.is-corrupt .bench__log-tag {
+  color: var(--rarity-corrupted);
+}
+
+.bench__log-empty {
+  margin: 0;
+  font-style: italic;
+  color: var(--ash-500);
+}
+
+/* ---- Currency tab: fixed slots on a stash-tab panel ---- */
+.currency-tab {
+  grid-area: tab;
+  align-self: start;
+  padding: 0 14px 12px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgb(176 138 82 / 0.12), transparent 60%),
+    linear-gradient(180deg, #17120f, #0a0809);
+  border: 1px solid var(--bronze-600);
+  border-radius: var(--radius);
+  box-shadow:
+    0 0 0 3px #0b0909,
+    0 0 0 4px var(--bronze-700);
+}
+
+.currency-tab__tab {
+  width: fit-content;
+  margin: 0 auto 12px;
+  padding: 4px 18px 5px;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--parch-50);
+  background: linear-gradient(180deg, #3a2a1a, #1a120c);
+  border: 1px solid var(--bronze-500);
+  border-top: 0;
+  border-radius: 0 0 4px 4px;
+}
+
+.currency-tab__grid {
+  display: grid;
+  gap: 10px;
+}
+
+.currency-tab__row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  background: rgb(0 0 0 / 0.35);
+  border: 1px solid rgb(176 138 82 / 0.18);
+  border-radius: 3px;
+}
+
+.bench__hint {
+  max-width: 230px;
+  margin: 12px auto 0;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--ash-400);
+}
+
+.orb {
+  --c: var(--rarity-normal);
+  display: grid;
+  place-items: center;
+  width: clamp(48px, 6vw, 58px);
+  aspect-ratio: 1;
+  padding: 0;
+  background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--c) 16%, #141012), #050405 72%);
+  border: 1px solid color-mix(in srgb, var(--c) 45%, #000);
+  border-radius: 2px;
+  box-shadow:
+    inset 0 0 12px color-mix(in srgb, var(--c) 18%, transparent),
+    0 4px 10px rgb(0 0 0 / 0.6);
+  touch-action: none;
+  transition:
+    transform 0.12s,
+    box-shadow 0.15s;
+}
+
+.orb--magic {
+  --c: var(--rarity-magic);
+}
+.orb--rare {
+  --c: var(--rarity-rare);
+}
+.orb--corrupt {
+  --c: var(--rarity-corrupted);
+}
+
+.orb:hover,
+.orb:focus-visible {
+  transform: translateY(-3px) scale(1.06);
+  box-shadow:
+    inset 0 0 14px color-mix(in srgb, var(--c) 30%, transparent),
+    0 0 16px color-mix(in srgb, var(--c) 50%, transparent);
+}
+
+.orb:focus-visible {
+  box-shadow:
+    inset 0 0 14px color-mix(in srgb, var(--c) 30%, transparent),
+    var(--focus-ring);
+}
+
+.orb:active {
+  transform: scale(0.94);
+}
+
+/* Picked up: the slot empties out while the orb is on the cursor. */
+.orb.is-held {
+  border-color: var(--c);
+  box-shadow:
+    inset 0 0 16px color-mix(in srgb, var(--c) 35%, transparent),
+    0 0 12px color-mix(in srgb, var(--c) 45%, transparent);
+}
+
+.orb.is-held img {
+  opacity: 0.3;
+}
+
+.orb img {
+  width: 66%;
+  height: 66%;
+  pointer-events: none;
+}
+
+/* Tint the monochrome orb icons by tier */
+.orb--magic img {
+  filter: invert(55%) sepia(60%) saturate(3000%) hue-rotate(215deg) brightness(105%);
+}
+.orb--rare img {
+  filter: sepia(100%) saturate(900%) hue-rotate(5deg) brightness(110%);
+}
+.orb--corrupt img {
+  filter: invert(25%) sepia(95%) saturate(7000%) hue-rotate(355deg) brightness(95%);
+}
+.orb--neutral img {
+  filter: brightness(1.15);
+}
+
+.orb-ghost {
+  position: fixed;
+  z-index: 1600;
+  width: 48px;
+  height: 48px;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(1.1);
+  filter: drop-shadow(0 0 12px rgb(255 255 255 / 0.6));
+}
+
+.orb-tip--magic strong {
+  color: var(--rarity-magic);
+}
+.orb-tip--rare strong {
+  color: var(--rarity-rare);
+}
+.orb-tip--corrupt strong {
+  color: var(--rarity-corrupted);
+}
+
+@media (max-width: 820px) {
+  .bench__body {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    grid-template-areas:
+      "item"
+      "tab"
+      "log";
+  }
+  .bench__log {
+    max-height: 220px;
+  }
+  .slot.bench__slot {
+    --cell: 44px;
+  }
+}
+
+/* Phones: a compact top, a smaller item, and the currency docked at the bottom of the screen so
+   the orbs stay in reach while the item (which grows as mods land) scrolls above them. */
+@media (max-width: 640px) {
+  .bench {
+    gap: 10px;
+    padding: 10px 10px 0;
+  }
+  .bench__top {
+    gap: 8px;
+  }
+  .bench__base {
+    flex: 1 1 100%;
+  }
+  .bench__base select {
+    width: 100%;
+    min-width: 0;
+    min-height: 40px;
+  }
+  .bench__actions .btn {
+    min-height: 36px;
+    padding: 0 10px;
+    font-size: 0.85rem;
+  }
+  .bench__body {
+    gap: 10px;
+  }
+  .bench__item {
+    gap: 10px;
+    padding: 12px 8px;
+  }
+  .slot.bench__slot {
+    --cell: 30px;
+  }
+  .currency-tab {
+    position: sticky;
+    bottom: 0;
+    z-index: 2;
+    padding: 0 8px 8px;
+    box-shadow:
+      0 0 0 3px #0b0909,
+      0 0 0 4px var(--bronze-700),
+      0 -14px 24px rgb(0 0 0 / 0.8);
+  }
+  .currency-tab__tab {
+    margin-bottom: 6px;
+    padding: 2px 14px 3px;
+    font-size: 0.75rem;
+  }
+  .currency-tab__grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px;
+  }
+  .currency-tab__row {
+    gap: 4px;
+    padding: 4px;
+  }
+  .orb {
+    width: 42px;
+  }
+  .bench__hint {
+    max-width: none;
+    margin-top: 6px;
+    font-size: 0.72rem;
+  }
+}

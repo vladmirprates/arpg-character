@@ -11,3 +11,20 @@ build/
 # Environment variables
 .env
 .DS_Store
+# Playwright
+playwright-report/
+test-results/
+
+# Local backup of the pre-rewrite site (also tagged legacy-vanilla-v1)
+backup/
+
+# Visual baselines are Linux-only (CI owns them); local Windows/macOS snapshots stay local.
+e2e/**/*-win32.png
+e2e/**/*-darwin.png
+
+# Lighthouse CI output
+.lighthouseci/
+
+# Raw test outputs and the locally generated QA report (CI builds the published one)
+reports/
+public/qa-report.json

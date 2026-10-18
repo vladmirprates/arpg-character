@@ -1,0 +1,292 @@
+.divination {
+  flex: 1;
+  min-height: 0;
+  padding: 16px clamp(14px, 3vw, 28px) 24px;
+  overflow-y: auto;
+}
+
+.divination__intro {
+  margin: 0 0 16px;
+  color: var(--ash-400);
+  text-align: center;
+}
+
+.divination__intro a {
+  color: var(--ember-400);
+}
+
+.divination__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.divination__pick {
+  display: block;
+  width: 100%;
+  padding: 0;
+  text-align: center;
+  color: inherit;
+  background: none;
+  border: 0;
+  transition: transform 0.15s;
+}
+
+.divination__pick:hover,
+.divination__pick:focus-visible {
+  transform: translateY(-4px);
+}
+
+.divination__pick:hover .divcard,
+.divination__pick:focus-visible .divcard {
+  border-color: var(--ember-200);
+  box-shadow:
+    0 0 0 1px #000,
+    0 0 18px rgb(var(--ember-rgb) / 0.4);
+}
+
+/* ---- The card: PoE divination card proportions — title, art with stack size, reward, flavour ---- */
+.divcard {
+  display: flex;
+  flex-direction: column;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  background: linear-gradient(180deg, #17120e, #0b0908);
+  border: 2px solid #7a6440;
+  border-radius: 6px;
+  box-shadow:
+    0 0 0 1px #000,
+    inset 0 0 0 1px rgb(255 220 160 / 0.08),
+    0 8px 18px rgb(0 0 0 / 0.6);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.divcard__title {
+  margin: 0;
+  padding: 7px 8px 6px;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  line-height: 1.15;
+  color: var(--parch-50);
+  background: linear-gradient(180deg, #2c2218, #16110c);
+  border-bottom: 1px solid #5b4a2f;
+}
+
+.divcard__art {
+  position: relative;
+  display: grid;
+  flex: 0 0 38%;
+  place-items: center;
+  background:
+    radial-gradient(circle at 50% 55%, rgb(var(--ember-rgb) / 0.28), transparent 65%),
+    linear-gradient(180deg, #1b1520, #0c0a10);
+  border-bottom: 1px solid #5b4a2f;
+}
+
+.divcard__art svg {
+  width: 46%;
+  height: 70%;
+  fill: var(--ember-200);
+  filter: drop-shadow(0 0 10px rgb(var(--ember-rgb) / 0.6));
+}
+
+.divcard__stack {
+  position: absolute;
+  bottom: 4px;
+  left: 6px;
+  font-size: 0.75rem;
+  color: var(--parch-50);
+  text-shadow: 0 0 3px #000;
+}
+
+.divcard__reward {
+  display: grid;
+  gap: 1px;
+  padding: 8px 8px 6px;
+}
+
+.divcard__reward strong {
+  font-size: 0.92rem;
+  color: var(--rarity-unique);
+}
+
+.divcard__reward span {
+  font-size: 0.75rem;
+  line-height: 1.2;
+  color: var(--ash-400);
+}
+
+.divcard__flavour {
+  display: -webkit-box;
+  margin: 0 8px 8px;
+  padding-top: 6px;
+  overflow: hidden;
+  font-size: 0.8rem;
+  font-style: italic;
+  line-height: 1.35;
+  color: #c79a5a;
+  white-space: pre-line;
+  border-top: 1px solid rgb(122 100 64 / 0.5);
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+}
+
+/* How we worked together: a colour-coded badge, so it reads at a glance. */
+.relation {
+  --rel: var(--ash-400);
+  justify-self: center;
+  margin-top: 5px;
+  padding: 2px 9px;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--rel);
+  background: color-mix(in srgb, var(--rel) 14%, #0b0908);
+  border: 1px solid color-mix(in srgb, var(--rel) 55%, transparent);
+  border-radius: 999px;
+}
+
+.relation--manager {
+  --rel: #f0b84e;
+}
+.relation--sameTeam {
+  --rel: #74d68f;
+}
+.relation--otherTeam {
+  --rel: #82adff;
+}
+.relation--otherCompany {
+  --rel: #bd96ff;
+}
+
+/* ---- Zoomed card: wide, upright, high-contrast text for reading ---- */
+.divination__zoom {
+  width: min(600px, 100vw - 24px);
+  max-width: none;
+  max-height: min(94dvh, 940px);
+  padding: 0;
+  overflow: visible;
+  color: inherit;
+  background: transparent;
+  border: 0;
+}
+
+.divination__zoom::backdrop {
+  background: rgb(0 0 0 / 0.75);
+}
+
+.divcard--full {
+  aspect-ratio: auto;
+  max-height: min(94dvh, 940px);
+}
+
+.divcard--full .divcard__title {
+  padding: 14px 18px;
+  font-size: 1.5rem;
+}
+
+.divcard--full .divcard__art {
+  flex: none;
+  height: 150px;
+}
+
+.divcard--full .divcard__reward {
+  padding: 14px 18px 4px;
+}
+
+.divcard--full .divcard__reward strong {
+  font-size: 1.3rem;
+}
+
+.divcard--full .divcard__reward span {
+  font-size: 0.95rem;
+}
+
+.divcard--full .relation {
+  margin-top: 10px;
+  padding: 4px 14px;
+  font-size: 0.95rem;
+}
+
+.divcard--full .divcard__flavour {
+  position: relative;
+  display: block;
+  flex: 1;
+  min-height: 0;
+  margin: 12px 18px 0;
+  padding: 16px 6px 16px 34px;
+  overflow-y: auto;
+  font-family: var(--font-body);
+  font-size: 1.08rem;
+  font-style: normal;
+  line-height: 1.65;
+  text-align: left;
+  color: var(--parch-100);
+  border-top: 1px solid rgb(122 100 64 / 0.5);
+}
+
+/* A large opening quote mark in the margin, in the card's flavour colour. */
+.divcard--full .divcard__flavour::before {
+  content: "“";
+  position: absolute;
+  top: 6px;
+  left: 0;
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 1;
+  color: #c79a5a;
+}
+
+.divcard__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  padding: 12px 18px 16px;
+  font-size: 0.88rem;
+  color: var(--ash-400);
+  border-top: 1px solid rgb(122 100 64 / 0.5);
+}
+
+.divcard__date {
+  color: var(--parch-300);
+}
+
+.divcard__close {
+  margin-left: auto;
+}
+
+/* Phones: two cards per row instead of one, so 37 cards aren't an endless scroll. The quote is
+   left for the zoomed card, which is where it's readable anyway. */
+@media (max-width: 640px) {
+  .divination__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .divination__pick,
+  .divcard {
+    height: 100%;
+  }
+  .divcard {
+    aspect-ratio: auto;
+  }
+  .divcard__art {
+    flex-basis: auto;
+    height: 96px;
+  }
+  .divcard__title {
+    font-size: 0.85rem;
+  }
+  .divcard__flavour {
+    display: none;
+  }
+  .divcard__reward {
+    padding-bottom: 10px;
+  }
+}

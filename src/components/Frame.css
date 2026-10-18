@@ -1,0 +1,99 @@
+.frame {
+  position: relative;
+  padding: 22px 20px 20px;
+  background:
+    radial-gradient(ellipse 100% 60% at 50% 0%, rgb(120 70 30 / 0.12), transparent 70%),
+    linear-gradient(180deg, rgb(24 20 22 / 0.94), rgb(10 8 10 / 0.96));
+  border: 1px solid var(--bronze-700);
+  border-radius: var(--radius);
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.85),
+    0 0 0 4px rgb(20 15 12 / 0.9),
+    0 0 0 5px var(--bronze-700),
+    0 20px 50px rgb(0 0 0 / 0.6),
+    inset 0 0 40px rgb(0 0 0 / 0.55);
+}
+
+/* Faint inner hairline */
+.frame::before {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgb(176 138 82 / 0.12);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+.frame__corner {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  color: var(--bronze-400);
+  pointer-events: none;
+  filter: drop-shadow(0 0 4px rgb(var(--ember-rgb) / 0.25));
+}
+
+.frame__corner--tl {
+  top: -6px;
+  left: -6px;
+}
+.frame__corner--tr {
+  top: -6px;
+  right: -6px;
+  transform: scaleX(-1);
+}
+.frame__corner--bl {
+  bottom: -6px;
+  left: -6px;
+  transform: scaleY(-1);
+}
+.frame__corner--br {
+  bottom: -6px;
+  right: -6px;
+  transform: scale(-1);
+}
+
+.frame__title,
+.frame__subtitle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 16px;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ember-200);
+  text-shadow: 0 0 14px rgb(var(--ember-rgb) / 0.35);
+}
+
+.frame__title {
+  font-size: 1.35rem;
+}
+
+.frame__subtitle {
+  margin-top: 22px;
+  font-size: 1.05rem;
+  color: var(--bronze-300);
+}
+
+/* Rule — ◆ — Title — ◆ — Rule */
+.frame__title::before,
+.frame__title::after,
+.frame__subtitle::before,
+.frame__subtitle::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--bronze-500));
+}
+
+.frame__title::after,
+.frame__subtitle::after {
+  background: linear-gradient(90deg, var(--bronze-500), transparent);
+}
+
+.frame__title span,
+.frame__subtitle span {
+  white-space: nowrap;
+}

@@ -1,0 +1,325 @@
+/* Fonts: Marcellus SC (name, titles, buttons, tabs), Alegreya Sans (text). */
+@import "@fontsource/marcellus-sc/400.css";
+@import "@fontsource/alegreya-sans/400.css";
+@import "@fontsource/alegreya-sans/500.css";
+@import "@fontsource/alegreya-sans/700.css";
+
+/* ===== Design tokens — "Ember & Ash" ===== */
+:root {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --ink-950: #070608;
+  --ink-900: #0d0b0e;
+  --ink-850: #121014;
+  --ink-800: #18151a;
+  --ink-700: #231e23;
+  --ink-600: #2f282c;
+
+  /* Text */
+  --parch-50: #fbf4e6;
+  --parch-100: #efe4cf;
+  --parch-300: #cbbd9f;
+  --ash-400: #968a7c;
+  --ash-500: #786e63;
+
+  /* Metal & fire */
+  --bronze-700: #4a3720;
+  --bronze-600: #66492a;
+  --bronze-500: #8a6a3c;
+  --bronze-400: #b08a52;
+  --bronze-300: #d4b07a;
+  --ember-500: #d9792b;
+  --ember-400: #ef9a45;
+  --ember-200: #f7d39a;
+  --ember-rgb: 239 154 69;
+
+  /* Feedback */
+  --verdant-500: #3f8f5a;
+  --verdant-300: #8fe0a6;
+  --blood-500: #a8262c;
+  --blood-300: #ff8a8a;
+  --blood-rgb: 210 42 42;
+
+  /* Rarity — genre convention, so players read them instantly */
+  --rarity-normal: #d2d0cc;
+  --rarity-magic: #8f93ff;
+  --rarity-rare: #f4e260;
+  --rarity-unique: #d9823b;
+  --rarity-corrupted: #e0343a;
+
+  /* Attributes & resistances */
+  --attr-int: #86a8ff;
+  --attr-str: #ff8a78;
+  --attr-dex: #8ee39c;
+  --attr-wis: #f0c35a;
+  --res-chaos: #c05bff;
+  --res-fire: #ff6a4a;
+  --res-lightning: #ffe04a;
+  --res-cold: #6fc8ff;
+  --res-physical: #c9a07a;
+
+  /* Tree regions */
+  --region-north: #6aa7ff;
+  --region-south: #ff6a6a;
+  --region-east: #c98bff;
+  --region-west: #4fe0b5;
+  --region-northeast: #a39cff;
+  --region-southeast: #f07fc4;
+  --region-southwest: #e8b25c;
+  --region-northwest: #5ccfe8;
+
+  /* Flared small caps in the spirit of PoE's Fontin: readable at button size, still fantasy. */
+  --font-display: "Marcellus SC", Georgia, serif;
+  /* Controls share the display face; kept as its own token so they can diverge later. */
+  --font-ui: var(--font-display);
+  --font-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --radius: 3px;
+  --focus-ring: 0 0 0 2px var(--ink-950), 0 0 0 4px var(--ember-400);
+
+  --slot: clamp(40px, 6.2vw, 72px);
+  /* Height reserved for the fixed action bar. */
+  --bar-h: 170px;
+}
+
+@media (max-width: 560px) {
+  :root {
+    --bar-h: 150px;
+  }
+}
+
+/* ===== Reset ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  /* Keep focused/scrolled-to elements clear of the sticky action bar (WCAG 2.4.11). */
+  scroll-padding-bottom: calc(var(--bar-h) + 16px);
+}
+
+body {
+  margin: 0;
+  min-width: 0;
+  min-height: 100dvh;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.45;
+  color: var(--parch-100);
+  background: var(--ink-950);
+  overflow-x: hidden;
+}
+
+/* Static vignette on its own fixed layer — painted once, never repainted on scroll. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 35%, rgb(64 38 22 / 0.35), transparent 70%),
+    radial-gradient(ellipse 120% 90% at 50% 120%, rgb(90 30 10 / 0.25), transparent 60%);
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+select,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+::selection {
+  background: rgb(var(--ember-rgb) / 0.35);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 8px;
+  left: 8px;
+  z-index: 2000;
+  padding: 8px 14px;
+  background: var(--ink-800);
+  border: 1px solid var(--ember-400);
+  color: var(--ember-200);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}
+
+/* ===== Shared text tones (item markup) ===== */
+.tone-aug {
+  color: var(--rarity-magic);
+}
+.tone-hi {
+  color: var(--parch-50);
+}
+.tone-warn {
+  color: var(--blood-300);
+}
+
+/* ===== Buttons ===== */
+.btn {
+  --btn-color: var(--ember-200);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  font-family: var(--font-ui);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--btn-color);
+  text-decoration: none;
+  background: linear-gradient(180deg, #2a1d14, #120c09);
+  border: 1px solid var(--bronze-500);
+  border-radius: var(--radius);
+  box-shadow:
+    inset 0 1px 0 rgb(255 220 170 / 0.08),
+    inset 0 -8px 16px rgb(0 0 0 / 0.4);
+  transition:
+    color 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s,
+    transform 0.1s;
+}
+
+.btn:hover {
+  color: var(--parch-50);
+  border-color: var(--ember-400);
+  box-shadow:
+    inset 0 1px 0 rgb(255 220 170 / 0.12),
+    0 0 14px rgb(var(--ember-rgb) / 0.3);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  --btn-color: var(--ink-950);
+  background: linear-gradient(180deg, var(--ember-200), var(--ember-500));
+  border-color: var(--ember-200);
+}
+
+.btn--primary:hover {
+  color: var(--ink-950);
+  filter: brightness(1.08);
+}
+
+.btn--ghost {
+  background: transparent;
+  box-shadow: none;
+  border-color: var(--bronze-600);
+}
+
+.btn--sm {
+  min-height: 36px;
+  padding: 0 12px;
+  font-size: 0.95rem;
+}
+
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--parch-300);
+  background: rgb(0 0 0 / 0.35);
+  border: 1px solid var(--bronze-600);
+  border-radius: var(--radius);
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+
+.icon-btn:hover {
+  color: var(--ember-200);
+  border-color: var(--ember-400);
+}
+
+.icon-btn[aria-pressed="true"] {
+  color: var(--ember-200);
+  border-color: var(--ember-500);
+}
+
+/* ===== Reduced motion ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+:root[data-reduced-motion] *,
+:root[data-reduced-motion] *::before,
+:root[data-reduced-motion] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+}
+
+/* While a dialog is open the page behind it is only a dimmed backdrop: freeze its animations so
+   the browser stops repainting (and re-compositing) everything under the popup every frame. */
+:root:has(dialog[open]) :is(.app, .backdrop, .ember-field, .hunt-layer),
+:root:has(dialog[open]) :is(.app, .backdrop, .ember-field, .hunt-layer) *,
+:root:has(dialog[open]) :is(.app, .backdrop, .ember-field, .hunt-layer) *::before,
+:root:has(dialog[open]) :is(.app, .backdrop, .ember-field, .hunt-layer) *::after {
+  animation-play-state: paused !important;
+}
+
+/* A button that looks like an inline link. */
+.link-btn {
+  padding: 0;
+  font: inherit;
+  color: var(--ember-400);
+  text-decoration: underline;
+  background: none;
+  border: 0;
+}

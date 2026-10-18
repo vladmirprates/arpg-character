@@ -1,0 +1,71 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Two huge soft blobs of colour, drifting in slow opposite loops. */
+.backdrop__fog {
+  position: absolute;
+  width: 90vmax;
+  height: 90vmax;
+  border-radius: 50%;
+  will-change: transform;
+}
+
+.backdrop__fog--warm {
+  top: -30vmax;
+  left: -20vmax;
+  background: radial-gradient(circle, rgb(150 70 25 / 0.22), transparent 65%);
+  animation: fog-a 70s ease-in-out infinite alternate;
+}
+
+.backdrop__fog--cold {
+  right: -30vmax;
+  bottom: -40vmax;
+  background: radial-gradient(circle, rgb(40 70 140 / 0.2), transparent 65%);
+  animation: fog-b 85s ease-in-out infinite alternate;
+}
+
+@keyframes fog-a {
+  to {
+    transform: translate3d(35vw, 25vh, 0) scale(1.15);
+  }
+}
+
+@keyframes fog-b {
+  to {
+    transform: translate3d(-30vw, -20vh, 0) scale(0.9);
+  }
+}
+
+/* The passive tree as a constellation, almost invisible, turning once every ~10 minutes. */
+.backdrop__stars {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 135vmax;
+  max-width: none;
+  height: 135vmax;
+  margin: -67.5vmax 0 0 -67.5vmax;
+  opacity: 0.1;
+  will-change: transform;
+  animation: stars-turn 600s linear infinite;
+}
+
+.backdrop__links line {
+  stroke: #d9a35a;
+  stroke-width: 3;
+}
+
+.backdrop__nodes circle {
+  fill: #ffd9a0;
+}
+
+@keyframes stars-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}

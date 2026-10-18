@@ -1,0 +1,40 @@
+.stash-panel {
+  container-type: inline-size;
+  --cell: clamp(34px, calc((100cqi - 8px) / 8.3), 46px);
+  display: flex;
+  flex-direction: column;
+}
+
+.stash-tabs {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  width: calc(var(--cell) * 8 + 2px);
+  margin: 0 auto;
+}
+
+.stash-tabs__tab {
+  padding: 5px 16px 4px;
+  font-family: var(--font-ui);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ember-200);
+  background: linear-gradient(180deg, #2a1d14, #120c09);
+  border: 1px solid var(--bronze-500);
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
+}
+
+.stash-tabs__count {
+  padding-bottom: 4px;
+  font-size: 0.85rem;
+  color: var(--ash-500);
+}
+
+.stash-empty {
+  margin: 10px 0 0;
+  font-size: 0.9rem;
+  font-style: italic;
+  text-align: center;
+  color: var(--ash-500);
+}

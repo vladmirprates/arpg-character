@@ -1,0 +1,210 @@
+/* PoE-style tooltip frame: opaque, outlined in the item's rarity colour, with a faint glow of it. */
+.item-card {
+  --rarity: var(--rarity-normal);
+  min-width: 260px;
+  max-width: 360px;
+  text-align: center;
+  background:
+    radial-gradient(ellipse 120% 50% at 50% 0%, color-mix(in srgb, var(--rarity) 7%, transparent), transparent 70%),
+    linear-gradient(180deg, #121012, #080709);
+  border: 1px solid color-mix(in srgb, var(--rarity) 60%, #000);
+  box-shadow:
+    0 0 0 1px #000,
+    inset 0 0 0 1px rgb(255 255 255 / 0.04),
+    0 16px 40px rgb(0 0 0 / 0.8),
+    0 0 20px color-mix(in srgb, var(--rarity) 16%, transparent);
+}
+
+.rarity-normal {
+  --rarity: var(--rarity-normal);
+}
+.rarity-magic {
+  --rarity: var(--rarity-magic);
+}
+.rarity-rare {
+  --rarity: var(--rarity-rare);
+}
+.rarity-unique {
+  --rarity: var(--rarity-unique);
+}
+.rarity-corrupted,
+.is-corrupted {
+  --rarity: var(--rarity-corrupted);
+}
+
+.item-card__header {
+  position: relative;
+  padding: 12px 22px 11px;
+  color: var(--rarity);
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--rarity) 18%, transparent) 50%, transparent),
+    linear-gradient(180deg, #1e191b, #0c0a0b);
+}
+
+/* The header's lower rail: a glowing line that fades at both ends, with a diamond in the middle. */
+.item-card__header::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--rarity) 20%, var(--rarity) 80%, transparent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--rarity) 70%, transparent);
+}
+
+.item-card__header::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  background: var(--rarity);
+  border: 1px solid #000;
+  transform: translateX(-50%) rotate(45deg);
+  box-shadow: 0 0 8px var(--rarity);
+}
+
+.item-card__name,
+.item-card__base {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.item-card__name {
+  font-size: 1.25rem;
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 12px color-mix(in srgb, var(--rarity) 35%, transparent);
+}
+
+.item-card__base {
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+.item-card__body {
+  padding: 14px 18px 12px;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--ash-400);
+}
+
+.item-card__body p {
+  margin: 2px 0;
+}
+
+.item-card__props {
+  color: var(--ash-400);
+}
+
+/* Requirements read like PoE's: grey label, white number. */
+.item-card__reqs {
+  color: var(--ash-400);
+}
+
+.item-card__mods {
+  color: var(--parch-300);
+}
+
+/* Crafted affixes read as "magic text", like explicit mods in ARPG tooltips. */
+.item-card__mods--crafted p:not(.affix-group__label) {
+  color: color-mix(in srgb, var(--rarity-magic) 80%, white);
+}
+
+.item-card__implicit {
+  color: var(--parch-50);
+}
+
+.item-card__empty {
+  font-style: italic;
+  color: var(--ash-500);
+}
+
+/* Section divider: a line that fades out, with a small diamond in the middle. */
+.item-card__sep {
+  position: relative;
+  height: 1px;
+  margin: 10px auto;
+  width: 86%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--rarity) 55%, var(--bronze-600)),
+    transparent
+  );
+}
+
+.item-card__sep::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: color-mix(in srgb, var(--rarity) 70%, var(--bronze-500));
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.item-card__flavor {
+  margin-top: 10px !important;
+  font-style: italic;
+  color: var(--ember-400);
+}
+
+.item-card__corrupted {
+  margin-top: 8px !important;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rarity-corrupted);
+  text-shadow: 0 0 8px rgb(var(--blood-rgb) / 0.6);
+}
+
+.item-card__footer {
+  padding: 7px 12px;
+  background: rgb(0 0 0 / 0.35);
+  border-top: 1px solid rgb(255 255 255 / 0.05);
+  font-size: 0.8rem;
+  color: var(--ash-500);
+}
+
+.affix-group {
+  text-align: left;
+}
+
+.affix-group + .affix-group {
+  margin-top: 8px;
+}
+
+.affix-group__label {
+  margin-bottom: 4px !important;
+  padding-bottom: 2px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ash-500);
+  border-bottom: 1px solid rgb(255 255 255 / 0.06);
+}
+
+.affix-group__label span {
+  float: right;
+}
+
+.mod-shine {
+  animation: mod-shine 0.9s var(--ease-out);
+}
+
+@keyframes mod-shine {
+  0% {
+    color: #fff;
+    text-shadow:
+      0 0 8px #fff,
+      0 0 16px var(--rarity);
+    transform: translateX(4px);
+  }
+}

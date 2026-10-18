@@ -1,0 +1,242 @@
+.qa {
+  flex: 1;
+  min-height: 0;
+  padding: 18px clamp(16px, 3vw, 32px) 26px;
+  overflow-y: auto;
+}
+
+.qa__note {
+  margin: 0;
+  padding: 28px clamp(16px, 3vw, 32px);
+  color: var(--ash-400);
+}
+
+.qa__status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  margin: 0 0 18px;
+  padding: 12px 16px;
+  color: var(--ash-400);
+  border-radius: var(--radius);
+}
+
+.qa__status strong {
+  font-size: 1.05rem;
+}
+
+.qa__status.is-pass {
+  background: rgb(116 214 143 / 0.08);
+  border: 1px solid rgb(116 214 143 / 0.45);
+}
+.qa__status.is-pass strong {
+  color: #74d68f;
+}
+
+.qa__status.is-fail {
+  background: rgb(229 72 77 / 0.08);
+  border: 1px solid rgb(229 72 77 / 0.5);
+}
+.qa__status.is-fail strong {
+  color: #ff7b7b;
+}
+
+.qa__status a {
+  color: var(--ember-400);
+}
+
+.qa__tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.qa__tile {
+  padding: 14px 16px;
+  background: rgb(0 0 0 / 0.35);
+  border: 1px solid var(--bronze-700);
+  border-radius: var(--radius);
+}
+
+.qa__tile--wide {
+  grid-column: span 3;
+}
+
+.qa__tile h3,
+.qa__how h3 {
+  margin: 0 0 6px;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bronze-300);
+}
+
+.qa__tile p {
+  margin: 0;
+  color: var(--ash-400);
+}
+
+.qa__big {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1.2;
+  color: var(--parch-50) !important;
+}
+
+.meter {
+  display: grid;
+  grid-template-columns: 90px 1fr 56px;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: var(--ash-400);
+}
+
+.meter strong {
+  text-align: right;
+  color: var(--parch-100);
+}
+
+.meter__bar {
+  height: 8px;
+  overflow: hidden;
+  background: #0a0809;
+  border-radius: 999px;
+}
+
+.meter__bar div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ember-500), var(--ember-200));
+}
+
+.qa__gauges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+/* Lighthouse colour bands: 90+ green, 50–89 orange, below red. */
+.gauge {
+  --g: #74d68f;
+  position: relative;
+  display: grid;
+  justify-items: center;
+  width: 96px;
+}
+.gauge--ok {
+  --g: #ffa94d;
+}
+.gauge--bad {
+  --g: #ff6b6b;
+}
+
+.gauge svg {
+  width: 72px;
+  height: 72px;
+}
+
+.gauge__track {
+  fill: color-mix(in srgb, var(--g) 10%, transparent);
+  stroke: color-mix(in srgb, var(--g) 20%, transparent);
+  stroke-width: 6;
+}
+
+.gauge__value {
+  fill: none;
+  stroke: var(--g);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.gauge__score {
+  position: absolute;
+  top: 22px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--g);
+}
+
+.gauge__label {
+  margin-top: 4px;
+  font-size: 0.85rem;
+  text-align: center;
+  color: var(--parch-100);
+}
+
+.qa__skipped,
+.qa__how {
+  margin-top: 18px;
+}
+
+.qa__skipped summary {
+  width: fit-content;
+  padding: 4px 0;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--bronze-300);
+  cursor: pointer;
+}
+
+.qa__skipped summary:hover {
+  color: var(--ember-200);
+}
+
+.qa__skipped[open] summary {
+  margin-bottom: 6px;
+}
+
+.qa__skipped p {
+  margin: 0 0 8px;
+  color: var(--ash-400);
+}
+
+.qa__skipped ul {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.qa__skipped li {
+  display: grid;
+  gap: 2px;
+  padding: 8px 12px;
+  background: rgb(0 0 0 / 0.3);
+  border: 1px solid var(--bronze-700);
+  border-radius: var(--radius);
+}
+
+.qa__skipped strong {
+  font-weight: 500;
+  color: var(--parch-100);
+}
+
+.qa__skipped span {
+  font-size: 0.88rem;
+  color: var(--ash-400);
+}
+
+.qa__how ul {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding-left: 20px;
+  color: var(--parch-100);
+}
+
+@media (max-width: 720px) {
+  .qa__tiles {
+    grid-template-columns: 1fr;
+  }
+  .qa__tile--wide {
+    grid-column: auto;
+  }
+}
