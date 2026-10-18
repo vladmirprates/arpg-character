@@ -20,8 +20,9 @@ jobs:
       - run: npm run e2e:visual -- --update-snapshots
       - name: Commit baselines
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Authored as whoever ran the workflow, so the repo's contributors stay its real authors.
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
           git add e2e/visual.spec.ts-snapshots
           git diff --cached --quiet || git commit -m "test: update visual regression baselines"
           git push

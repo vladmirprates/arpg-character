@@ -25,6 +25,9 @@ export default {
     "!src/game/crafting/types.ts",
   ],
   reporters: ["clear-text", "progress", "html", "json"],
+  // The console gets the score table only. Every surviving mutant with its diff (~3,400 lines in
+  // CI, easy to mistake for test failures) is in the HTML report.
+  clearTextReporter: { reportMutants: false, reportTests: false },
   htmlReporter: { fileName: "reports/mutation/mutation.html" },
   jsonReporter: { fileName: "reports/mutation/mutation.json" },
   // Below `break` the run fails: the score can rise, never quietly drop.
