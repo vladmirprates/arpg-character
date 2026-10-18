@@ -1,0 +1,120 @@
+.achievements {
+  flex: 1;
+  min-height: 0;
+  padding: 18px clamp(16px, 3vw, 32px) 26px;
+  overflow-y: auto;
+}
+
+.achievements__summary {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.achievements__summary p {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 1.05rem;
+  letter-spacing: 0.06em;
+  color: var(--bronze-300);
+}
+
+.achievements__bar {
+  height: 10px;
+  background: rgb(0 0 0 / 0.5);
+  border: 1px solid var(--bronze-700);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.achievements__bar > div {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ember-500), var(--rarity-rare));
+  transition: width 0.4s var(--ease-out);
+}
+
+.achievements__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.achievement {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  grid-template-areas:
+    "icon text"
+    "icon state";
+  column-gap: 12px;
+  row-gap: 4px;
+  align-items: center;
+  padding: 12px 14px;
+  background: rgb(0 0 0 / 0.35);
+  border: 1px solid var(--bronze-700);
+  border-radius: var(--radius);
+}
+
+.achievement__icon {
+  grid-area: icon;
+  width: 44px;
+  height: 44px;
+  fill: var(--ash-500);
+}
+
+.achievement__text {
+  grid-area: text;
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.achievement__text strong {
+  font-family: var(--font-ui);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--parch-300);
+  overflow-wrap: anywhere;
+}
+
+.achievement__text span {
+  font-size: 0.92rem;
+  color: var(--ash-400);
+}
+
+.achievement__state {
+  grid-area: state;
+  font-size: 0.85rem;
+  color: var(--ash-400);
+}
+
+.achievement.is-done {
+  border-color: color-mix(in srgb, var(--rarity-rare) 55%, var(--bronze-700));
+  background: linear-gradient(180deg, rgb(244 226 96 / 0.07), rgb(0 0 0 / 0.35));
+}
+
+.achievement.is-done .achievement__icon {
+  fill: var(--rarity-rare);
+  filter: drop-shadow(0 0 6px rgb(244 226 96 / 0.45));
+}
+
+.achievement.is-done .achievement__text strong {
+  color: var(--rarity-rare);
+}
+
+.achievement.is-done .achievement__state {
+  color: var(--verdant-300);
+}
+
+.achievements__footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 16px;
+  margin: 18px 0 0;
+  font-size: 0.92rem;
+  color: var(--ash-400);
+}

@@ -47,9 +47,66 @@ describe("<QAReport />", () => {
     expect(screen.getByRole("link", { name: "View the pipeline run" })).toHaveAttribute("href", REPORT.runUrl);
     // Skipped tests stay collapsed until the visitor opens them.
     const skipped = screen.getByText("Skipped by design (12)");
-    expect(screen.getByText("keyboard flow · skipped on mobile")).not.toBeVisible();
+    // The reason and project names are their own (untranslated) spans, so match the whole line.
+    const reason = () =>
+      screen.getByText((_, el) => el?.tagName === "SPAN" && el.textContent === "keyboard flow · skipped on mobile");
+    expect(reason()).not.toBeVisible();
     await userEvent.click(skipped);
-    expect(screen.getByText("keyboard flow · skipped on mobile")).toBeVisible();
+    expect(reason()).toBeVisible();
+  });
+
+  test("shows mutation, frame-rate and certification results, and prefers live Lighthouse scores", async () => {
+    serve({
+      json: () =>
+        Promise.resolve({
+          ...REPORT,
+          mutation: { score: 87.5, killed: 160, survived: 20, timeout: 15, noCoverage: 5, total: 200 },
+          performance: {
+            fps: 38.4,
+            low1Fps: 12,
+            p99Ms: 83,
+            frames: 300,
+            fpsFloor: 15,
+            lowFloor: 5,
+            mainThreadPct: 28.8,
+            mainThreadMsPerFrame: 4.8,
+            mainThreadBudgetPct: 40,
+          },
+          certification: { "CERT-SAVE-01": "passed", "CERT-SAVE-02": "passed", "CERT-ERR-01": "failed" },
+          links: { e2e: "reports/e2e/index.html", lighthouseLive: "reports/lighthouse-live.html" },
+          lighthouseLive: {
+            performance: 97,
+            accessibility: 100,
+            bestPractices: 96,
+            seo: 100,
+            url: "https://example.test/arpg-character/",
+            measuredAt: "2026-10-17T12:00:00Z",
+          },
+        }),
+    });
+    renderWithProviders(<QAReport />);
+    expect(await screen.findByText("87.5%")).toBeInTheDocument();
+    expect(screen.getByText("175 of 200 injected bugs caught (Stryker, game logic)")).toBeInTheDocument();
+    // The frame budget leads; CI's GPU-less frame rate is shown with that context.
+    expect(screen.getByText("4.8 ms")).toBeInTheDocument();
+    expect(screen.getByText(/28.8% busy, budget 40%/)).toBeInTheDocument();
+    expect(screen.getByText(/38 fps on the CI runner, which has no GPU/)).toBeInTheDocument();
+    expect(screen.getByText("2/3")).toBeInTheDocument();
+    expect(screen.getByText(/Measured on the live site/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "example.test/arpg-character/" })).toBeInTheDocument();
+    expect(screen.getByText("97")).toBeInTheDocument();
+    // Each tool's full report is a link away (only the ones the pipeline published).
+    expect(screen.getAllByRole("link", { name: /Open the full report/ })[0]).toHaveAttribute(
+      "href",
+      "reports/e2e/index.html",
+    );
+    expect(screen.getByRole("link", { name: /Live-site report/ })).toHaveAttribute(
+      "href",
+      "reports/lighthouse-live.html",
+    );
+    expect(screen.queryByRole("link", { name: /Pre-deploy report/ })).toBeNull();
+    // The pre-deploy scores are still there, for comparison.
+    expect(screen.getByText(/^Before deploy:/)).toBeInTheDocument();
   });
 
   test("a failing run is reported as failing", async () => {
@@ -62,5 +119,17 @@ describe("<QAReport />", () => {
     serve({ ok: false, status: 404 });
     renderWithProviders(<QAReport />);
     expect(await screen.findByText(/No report yet/)).toBeInTheDocument();
+  });
+
+  test("an older report without the main-thread measurement still shows its frame rate", async () => {
+    serve({
+      json: () =>
+        Promise.resolve({
+          ...REPORT,
+          performance: { fps: 18.3, low1Fps: 5.5, p99Ms: 183, frames: 180, fpsFloor: 15, lowFloor: 3 },
+        }),
+    });
+    renderWithProviders(<QAReport />);
+    expect(await screen.findByText("18 fps")).toBeInTheDocument();
   });
 });

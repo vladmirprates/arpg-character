@@ -54,7 +54,7 @@ describe("attributes from the passive tree", () => {
     const path = buildFromTargets(["tech_master"]);
     const withoutKeystone = new Set([...path].filter((id) => id !== "tech_master"));
     const gain = treeAttributes(path, NODES).automation - treeAttributes(withoutKeystone, NODES).automation;
-    expect(gain).toBe(40);
+    expect(gain).toBe(10);
   });
 });
 
@@ -96,5 +96,38 @@ describe("item requirements", () => {
       expect(item.requiredLevel, slot).toBeGreaterThan(0);
       expect(item.requiredLevel!, slot).toBeLessThanOrEqual(level);
     }
+  });
+});
+
+describe("every node in a region counts the same towards its attribute", () => {
+  // Found by hand: attributes used to come only from some small-node types, so a region laid out
+  // with more flavour nodes (Manual Testing) scored lower than one with fewer (Test Automation)
+  // even when the build took more of it.
+  const sum = (stats: { en: string }[]) =>
+    stats.reduce<Record<string, number>>((acc, s) => {
+      for (const [id, v] of Object.entries(parseAttributes(s.en))) acc[id] = (acc[id] ?? 0) + v!;
+      return acc;
+    }, {});
+
+  test("every node of a kind grants the same, everywhere: small nodes little, notables most", () => {
+    const main = { minor: 2, mastery: 4, notable: 6 };
+    for (const region of ["north", "south", "east", "west", "northeast", "southeast", "southwest", "northwest"]) {
+      const bridge = region.length > 5;
+      for (const [kind, amount] of Object.entries(main)) {
+        const grants = NODES.filter((n) => n.region === region && n.kind === kind).map((n) => sum(n.stats));
+        const values = new Set(grants.flatMap((g) => Object.values(g)));
+        expect([...values], `${region} ${kind}`).toEqual([bridge ? amount / 2 : amount]);
+        // A main region grants its one attribute; a bridge grants its two neighbours'.
+        for (const g of grants) expect(Object.keys(g), `${region} ${kind}`).toHaveLength(bridge ? 2 : 1);
+      }
+    }
+  });
+
+  test("so taking more of a region always raises its attribute more", () => {
+    const south = NODES.filter((n) => n.region === "south" && n.kind !== "keystone").map((n) => n.id);
+    const east = NODES.filter((n) => n.region === "east" && n.kind !== "keystone").map((n) => n.id);
+    const build = buildFromTargets([...south, ...east.slice(0, 10)]);
+    const t = treeAttributes(build, NODES);
+    expect(t.manual).toBeGreaterThan(t.automation);
   });
 });

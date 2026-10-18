@@ -13,7 +13,15 @@ type Content = { icon: string; name: L; stats: L[] };
 type Arc = NonNullable<TreeLink["arc"]>;
 
 /** A region's content plus the geometry a layout gives it. */
+/**
+ * Attribute points per node kind, the same in every main region (bridges grant half, to each of
+ * their two attributes). Small nodes give little; notables, the skills, give the most.
+ */
+export const ATTRIBUTE_PER_NODE = { minor: 2, mastery: 4, notable: 6 } as const;
+
 export interface RegionSpec<D> extends RegionContent<D> {
+  /** Multiplier on ATTRIBUTE_PER_NODE (bridges: 0.5). */
+  attributeScale?: number;
   /** Draws the region with the builder's primitives. */
   shape: (b: RegionBuilder) => void;
   /** Gap between the region's outermost node and its title, in world units; omit for no title. */
@@ -95,9 +103,10 @@ export interface RegionBuilder {
   minor(stat: string, p: Pt): string;
   /** Next notable in content order, or a specific one by id. */
   notable(p: Pt, id?: string): string;
-  /** Next mastery in content order (a cluster's centrepiece). */
-  mastery(p: Pt): string;
-  keystone(p: Pt): string;
+  /** Next mastery in content order (a cluster's centrepiece), or a specific one by id. */
+  mastery(p: Pt, id?: string): string;
+  /** Next keystone in content order, or a specific one by id. */
+  keystone(p: Pt, id?: string): string;
   link(a: string, b: string, arc?: Arc): void;
   pos(id: string): Pt;
   /** `n` minors evenly spaced between node `from` and point `to` (ends excluded), linked in a line. */
@@ -195,6 +204,16 @@ export function buildTree<D>({ start, startIcon, ringIcon, ringStats, ringNotabl
     const keystones = [...spec.keystones];
     const masteries = [...spec.masteries];
     let minorCount = 0;
+    const grant = (kind: keyof typeof ATTRIBUTE_PER_NODE): L => {
+      const n = ATTRIBUTE_PER_NODE[kind] * (spec.attributeScale ?? 1);
+      return { en: `+${n} to ${spec.attribute.en}`, pt: `+${n} em ${spec.attribute.pt}` };
+    };
+    /** Removes and returns the next unplaced entry, or the one with this id. */
+    function take<T extends [string, ...unknown[]]>(list: T[], id: string | undefined, kind: string) {
+      const index = id === undefined ? 0 : list.findIndex(([eid]) => eid === id);
+      if (index < 0) throw new Error(`Region ${spec.region} has no unplaced ${kind} "${id}"`);
+      return list.splice(index, 1)[0];
+    }
 
     const b: RegionBuilder = {
       at,
@@ -208,7 +227,8 @@ export function buildTree<D>({ start, startIcon, ringIcon, ringStats, ringNotabl
       },
       minor: (stat, p) => {
         const text = spec.minorStats[stat];
-        if (!text) throw new Error(`Region ${spec.region} has no minor stat "${stat}"`);
+        if (text === undefined) throw new Error(`Region ${spec.region} has no minor stat "${stat}"`);
+        const stats = text ? [grant("minor"), text] : [grant("minor")];
         return add(
           {
             id: `${spec.region}_m${minorCount++}`,
@@ -216,7 +236,7 @@ export function buildTree<D>({ start, startIcon, ringIcon, ringStats, ringNotabl
             region: spec.region,
             icon: spec.minorIcon,
             name: spec.label,
-            stats: [text],
+            stats,
           },
           p,
         );
@@ -228,21 +248,35 @@ export function buildTree<D>({ start, startIcon, ringIcon, ringStats, ringNotabl
         if (!next) throw new Error(`Region ${spec.region} ran out of notables`);
         const c = toNode(next[1]);
         return add(
-          { id: next[0], kind: "notable", region: spec.region, icon: c.icon, name: c.name, stats: c.stats },
+          {
+            id: next[0],
+            kind: "notable",
+            region: spec.region,
+            icon: c.icon,
+            name: c.name,
+            stats: [...c.stats, grant("notable")],
+          },
           p,
         );
       },
-      mastery: (p) => {
-        const next = masteries.shift();
+      mastery: (p, id) => {
+        const next = take(masteries, id, "mastery");
         if (!next) throw new Error(`Region ${spec.region} ran out of masteries`);
         const c = toNode(next[1]);
         return add(
-          { id: next[0], kind: "mastery", region: spec.region, icon: c.icon, name: c.name, stats: c.stats },
+          {
+            id: next[0],
+            kind: "mastery",
+            region: spec.region,
+            icon: c.icon,
+            name: c.name,
+            stats: [...c.stats, grant("mastery")],
+          },
           p,
         );
       },
-      keystone: (p) => {
-        const next = keystones.shift();
+      keystone: (p, id) => {
+        const next = take(keystones, id, "keystone");
         if (!next) throw new Error(`Region ${spec.region} ran out of keystones`);
         const c = toNode(next[1]);
         return add(

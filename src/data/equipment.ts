@@ -59,7 +59,7 @@ export const EQUIPMENT: Record<EquipSlot, DisplayItem> = {
     name: { en: "The Null Pointer", pt: "O Ponteiro Nulo" },
     base: { en: "Automation Blade", pt: "Lâmina de Automação" },
     rarity: "unique",
-    gameIcon: "pointy-sword",
+    gameIcon: "energy-sword",
     properties: [{ en: "Attacks per Second: {1.85}", pt: "Ataques por Segundo: {1,85}" }],
     mods: [
       { en: "Adds [10 to 20] Scripts per Commit", pt: "Adiciona [10 a 20] Scripts por Commit" },
@@ -79,10 +79,7 @@ export const EQUIPMENT: Record<EquipSlot, DisplayItem> = {
     base: { en: "QA Engineer Helmet", pt: "Elmo de Engenheiro de QA" },
     rarity: "unique",
     gameIcon: "crown",
-    properties: [
-      { en: "Experience Level: {Mid-Level}", pt: "Nível de Experiência: {Pleno}" },
-      { en: "Quality: {+20%}", pt: "Qualidade: {+20%}" },
-    ],
+    properties: [{ en: "Quality: {+20%}", pt: "Qualidade: {+20%}" }],
     mods: [
       {
         en: "Grants Level 20 [Playwright Automation] Skill",
@@ -123,7 +120,7 @@ export const EQUIPMENT: Record<EquipSlot, DisplayItem> = {
     name: { en: "Jira Ticket Board", pt: "Quadro de Tickets do Jira" },
     base: { en: "Kanban Shield", pt: "Escudo Kanban" },
     rarity: "rare",
-    gameIcon: "round-shield",
+    gameIcon: "templar-shield",
     properties: [{ en: "Chance to Block: {35%}", pt: "Chance de Bloqueio: {35%}" }],
     mods: [
       { en: "[+80] to Maximum Life (Work-Life Balance)", pt: "[+80] de Vida Máxima (Equilíbrio Vida-Trabalho)" },
@@ -185,7 +182,7 @@ export const EQUIPMENT: Record<EquipSlot, DisplayItem> = {
     name: { en: "Manual Testers", pt: "Testadores Manuais" },
     base: { en: "Silk Gloves", pt: "Luvas de Seda" },
     rarity: "magic",
-    gameIcon: "gauntlet",
+    gameIcon: "gloves",
     properties: [{ en: "Energy Shield: {45}", pt: "Escudo de Energia: {45}" }],
     mods: [
       { en: "{+50} to Accuracy Rating", pt: "{+50} de Precisão" },
@@ -215,7 +212,7 @@ export const EQUIPMENT: Record<EquipSlot, DisplayItem> = {
     name: { en: "Hotfix Striders", pt: "Passadas do Hotfix" },
     base: { en: "Titan Greaves", pt: "Grevas de Titã" },
     rarity: "rare",
-    gameIcon: "boots",
+    gameIcon: "leg-armor",
     properties: [{ en: "Armour: {220}", pt: "Armadura: {220}" }],
     mods: [
       { en: "[30%] Increased Movement Speed", pt: "[30%] de Velocidade de Movimento Aumentada" },

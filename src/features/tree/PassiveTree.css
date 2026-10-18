@@ -515,9 +515,28 @@
   color: var(--blood-300);
 }
 
-/* Only phones and narrow tablets need the summary toggle; wide screens show it beside the tree. */
-.tree__summary-toggle {
-  display: none;
+/* Wide screens: the summary is a side panel the toggle collapses (phones: a sheet, below). */
+.tree__summary-toggle[aria-expanded="true"] {
+  color: var(--ember-200);
+  border-color: var(--ember-400);
+}
+
+@media (min-width: 821px) {
+  /* The panel lies over the tree's right edge rather than taking width from it: the tree's
+     viewport never changes size when the panel opens or closes, so the view doesn't re-fit,
+     zoom or move. (Only resizing the window re-fits.) */
+  .tree__body {
+    position: relative;
+  }
+  .summary {
+    position: absolute;
+    inset: 0 0 0 auto;
+    z-index: 3;
+    box-shadow: -12px 0 28px rgb(0 0 0 / 0.55);
+  }
+  .tree:not(.tree--summary-open) .summary {
+    display: none;
+  }
 }
 
 @media (max-width: 640px) {
@@ -669,13 +688,6 @@
 @media (max-width: 820px) {
   .tree__body {
     position: relative;
-  }
-  .tree__summary-toggle {
-    display: inline-flex;
-  }
-  .tree__summary-toggle[aria-expanded="true"] {
-    color: var(--ember-200);
-    border-color: var(--ember-400);
   }
   /* A bottom sheet over the tree instead of a block that steals a third of it. */
   .summary {

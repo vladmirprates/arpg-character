@@ -85,16 +85,18 @@ const outermost = (b: RegionBuilder, ids: string[]) => {
   return ids.reduce((best, id) => (along(id) > along(best) ? id : best));
 };
 
-/** Road from `from` to whichever of `targets` is nearest, with minors every ~150 units. */
-function joinNearest(b: RegionBuilder, stat: string, from: string, targets: string[]) {
-  const a = b.pos(from);
-  const to = targets.reduce((best, id) => {
-    const p = b.pos(id);
-    const q = b.pos(best);
-    return Math.hypot(p.x - a.x, p.y - a.y) < Math.hypot(q.x - a.x, q.y - a.y) ? id : best;
+/** The node of `ids` closest to point `p`. */
+const closestTo = (b: RegionBuilder, ids: string[], p: Pt) =>
+  ids.reduce((best, id) => {
+    const a = b.pos(id);
+    const s = b.pos(best);
+    return Math.hypot(a.x - p.x, a.y - p.y) < Math.hypot(s.x - p.x, s.y - p.y) ? id : best;
   });
-  const q = b.pos(to);
-  b.connect(stat, from, to, Math.max(0, Math.round(Math.hypot(q.x - a.x, q.y - a.y) / 150) - 1));
+
+/** A wheel of minors round a mastery, with no notables: a small cluster off an existing node. */
+function masteryWheel(b: RegionBuilder, stat: string, centre: Pt, entry: string, toward: Pt) {
+  const wheel = b.wheel(stat, centre, 90, entry, toward, 5);
+  b.link(wheel.ids[2]!, b.mastery(centre));
 }
 
 // ---- North · Systems: two classic wheels feed a fortress ring with a keystone at its heart ----
@@ -121,32 +123,89 @@ const NORTH_SPEC: RegionSpec<Def> = {
 
     // The region's extra notable hangs outward off the left wheel, as in the classic tree.
     b.link(left.wheel.ids[3]!, b.notable(polar(b.at(480, -260), 200, left.wheel.angles[3]!)));
+
+    // Added later, and kept last so every node above keeps its id (minor ids count up in order).
+    // The right wheel gets the matching outward notable, and the outer hub two side branches.
+    b.link(right.wheel.ids[3]!, b.notable(polar(b.at(480, 260), 200, right.wheel.angles[3]!)));
+    const sides = ([-1, 1] as const).map((side) => reach(b, "path", hub, b.at(1240, 230 * side), 1, b.notable));
+    reach(b, "fortress", ring.ids[2]!, b.at(860, -330), 1, b.notable);
+
+    // Balance (2026-10-18): a mastery wheel past each side branch, so every main region has four.
+    sides.forEach((id, i) => {
+      const side = i === 0 ? -1 : 1;
+      masteryWheel(b, "path", b.at(1180, 480 * side), id, b.at(1180, 800 * side));
+    });
   },
 };
 
-// ---- South · Bug Report: roots — a wheel, a hub cluster and a long road to an outer wheel, cross-linked ----
+// ---- South · Bug Report: mirror-symmetric — side wheels to two keystones, a road to the capstone, and outer wheels meeting at a notable ----
 const SOUTH_SPEC: RegionSpec<Def> = {
   ...SOUTH,
   labelGap: 170,
   shape(b) {
-    const n0 = spine(b, [-1]);
-    const left = wheelCluster(b, "wheel", b.at(480, -260), 100, 6, n0, b.at(880, 0), { 4: "man_triage" });
+    // Redrawn symmetric on 2026-10-18. Build codes store minor ids, which count up as minors are
+    // made, so the minors are made in an order that gives every path its old ids (south_m0…m23);
+    // ids that were never part of a published build (m3, m4, m8–m12) go to the new outer wheels.
+    const at = (u: number, v: number, side: number) => b.at(u, v * side);
+    const s1 = b.minor("spine", b.at(90, 0));
+    b.link(b.ringEntry, s1);
+    const s2 = b.minor("spine", b.at(180, 0));
+    b.link(s1, s2);
+    const bugs = b.notable(b.at(280, 0), "man_bugs");
+    b.link(s2, bugs);
+    const spur = (side: number, id: string) => {
+      const m = b.minor("spur", at(220, 120, side));
+      b.link(s2, m);
+      b.link(m, b.notable(at(250, 215, side), id));
+    };
+    spur(-1, "man_testcase"); // m2
+    const roads = [-1, 1].map((side) => b.minor("root", at(840, 150, side))); // m3, m4
+    spur(1, "man_smoke"); // m5
+    const axis = [b.minor("root", b.at(430, 0)), b.minor("root", b.at(580, 0))]; // m6, m7
+    b.link(bugs, axis[0]!);
+    b.link(axis[0]!, axis[1]!);
 
-    const hub = reach(b, "root", n0, b.at(520, 240), 1, b.notable);
-    hubCluster(b, "star", hub, 85, [0, 60, 120], 1);
+    // Outer wheels round a mastery, each leaving towards the notable where they meet.
+    const meet = b.notable(b.at(1330, 0), "man_repro");
+    const outerWheel = (side: number, slots: [string, string, string], mastery: string) => {
+      const c = at(1000, 260, side);
+      const w = b.wheel("loop", c, 90, roads[side < 0 ? 0 : 1]!, b.pos(meet), 6, { 1: slots[0], 4: slots[1] });
+      b.link(w.ids[2]!, b.mastery(c, mastery));
+      const exit = b.notable(polar(c, 170, w.angles[5]!), slots[2]);
+      b.link(w.ids[5]!, exit);
+      return exit;
+    };
+    const left = outerWheel(-1, ["man_boundary", "man_session", "man_data"], "man_m_design"); // m8–m11
+    b.connect("root", left, meet, 1); // m12
 
-    const road = b.chain("root", n0, b.at(700, 0), 2);
-    const outer = wheelCluster(b, "loop", b.at(900, 0), 115, 6, road.at(-1)!, b.at(1250, 60), { 3: "man_uat" });
-    reach(b, "path", outer.exit, b.at(1290, 0), 1, b.keystone);
+    // Side wheels off the first notable, each leading on to a notable and a keystone.
+    const sideWheel = (side: number, slot: string, mastery: string, exit: string) => {
+      const c = at(480, 260, side);
+      const w = b.wheel("wheel", c, 100, bugs, at(700, 500, side), 5, { 2: slot });
+      b.link(w.ids[1]!, b.mastery(c, mastery));
+      const out = b.notable(polar(c, 180, w.angles[4]!), exit);
+      b.link(w.ids[4]!, out);
+      return out;
+    };
+    const explore = sideWheel(-1, "man_triage", "man_m_advocacy", "man_explore"); // m13–m16
+    const uat = sideWheel(1, "man_regression", "man_m_execution", "man_uat"); // m17–m20
+    const tips = [
+      [explore, "man_logs", "ks_zero_bug", -1],
+      [uat, "man_compat", "ks_pixel", 1],
+    ] as const;
+    for (const [from, id, keystone, side] of tips) {
+      const n = b.notable(at(770, 520, side), id);
+      b.link(from, n);
+      reach(b, "path", n, at(1020, 590, side), 1, (p) => b.keystone(p, keystone)); // m21, m22
+    }
 
-    // Roots cross-link into the outer wheel.
-    joinNearest(b, "root", left.exit, outer.wheel.ids);
-    joinNearest(b, "root", hub, outer.wheel.ids);
-
-    // Keystones off the side roots.
-    const mid = reach(b, "path", left.exit, b.at(850, -360), 1, b.notable);
-    reach(b, "path", mid, b.at(1080, -460), 1, b.keystone);
-    reach(b, "loop", hub, b.at(1000, 430), 2, b.keystone);
+    // The road down the middle to the capstone, and the outer wheels off its end.
+    const end = b.minor("root", b.at(730, 0)); // m23
+    b.link(axis[1]!, end);
+    b.link(end, b.keystone(b.at(880, 0), "man_master"));
+    for (const r of roads) b.link(end, r);
+    const right = outerWheel(1, ["man_lqa", "man_usability", "man_store"], "man_m_market");
+    b.connect("root", right, meet, 1);
   },
 };
 
@@ -211,9 +270,22 @@ const WEST_SPEC: RegionSpec<Def> = {
     hubCluster(b, "sprint", hubR, 85, [60, 130]);
 
     reach(b, "path", hubL, b.at(1210, -420), 1, b.keystone);
-    const outer = reach(b, "path", ring.ids[5]!, b.at(1120, 0), 2, b.notable);
-    reach(b, "path", outer, b.at(1300, 0), 1, b.keystone);
+    const outer = reach(b, "path", ring.ids[5]!, b.at(1060, 0), 2, b.notable);
+    reach(b, "path", outer, b.at(1200, 0), 1, b.keystone);
     reach(b, "path", hubR, b.at(1210, 420), 1, b.keystone);
+
+    // Balance (2026-10-18): a wheel each side of the capstone, both feeding a loop beyond it.
+    const tails = ([-1, 1] as const).map((side) => {
+      const entry = b.chain("sprint", outer, b.at(1150, 175 * side), 1)[0]!;
+      const c = b.at(1270, 250 * side);
+      const w = b.wheel("sprint", c, 90, entry, b.at(1400, 60 * side), 5, { 1: true, 3: true });
+      b.link(w.ids[2]!, b.mastery(c));
+      return w.ids[4]!;
+    });
+    const lc = b.at(1370, 0);
+    const loop = b.loop("sprint", lc, 85, 8, 180, { 3: true, 5: true });
+    b.link(loop.ids[4]!, b.mastery(lc));
+    for (const t of tails) b.link(t, closestTo(b, loop.ids, b.pos(t)));
   },
 };
 
@@ -224,7 +296,9 @@ function bridge(spec: BridgeContent): RegionSpec<Def> {
     angle: spec.angle,
     label: spec.label,
     minorIcon: "linked-rings",
-    minorStats: { bridge: spec.stat },
+    attribute: spec.attributes,
+    attributeScale: 0.5,
+    minorStats: { bridge: null },
     notables: spec.notables,
     masteries: [spec.mastery],
     keystones: [spec.keystone],
@@ -246,6 +320,17 @@ function bridge(spec: BridgeContent): RegionSpec<Def> {
         });
         const p = b.pos(from);
         b.connect("bridge", from, to, Math.max(1, Math.round(Math.hypot(q.x - p.x, q.y - p.y) / 150) - 1));
+      }
+      // Added later, and kept last so every node above keeps its id: a notable on each side of
+      // the keystone, branching off the wheel, so each bridge has four.
+      for (const side of [-1, 1]) {
+        const p = b.at(900, 200 * side);
+        const from = w.ids.reduce((best, id) => {
+          const a = b.pos(id);
+          const s = b.pos(best);
+          return Math.hypot(a.x - p.x, a.y - p.y) < Math.hypot(s.x - p.x, s.y - p.y) ? id : best;
+        });
+        reach(b, "bridge", from, p, 0, b.notable);
       }
     },
   };

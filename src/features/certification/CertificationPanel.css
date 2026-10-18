@@ -1,0 +1,132 @@
+.cert {
+  flex: 1;
+  min-height: 0;
+  padding: 18px clamp(16px, 3vw, 32px) 26px;
+  overflow-y: auto;
+}
+
+.cert__intro {
+  margin: 0 0 8px;
+  color: var(--parch-100);
+}
+
+.cert__disclaimer {
+  margin: 0 0 14px;
+  font-size: 0.88rem;
+  color: var(--ash-400);
+}
+
+.cert__summary {
+  margin: 0 0 18px;
+  padding: 10px 14px;
+  font-family: var(--font-ui);
+  letter-spacing: 0.04em;
+  color: var(--bronze-300);
+  background: rgb(0 0 0 / 0.35);
+  border: 1px solid var(--bronze-700);
+  border-radius: var(--radius);
+}
+
+.cert__summary.is-pass {
+  color: #74d68f;
+  background: rgb(116 214 143 / 0.08);
+  border-color: rgb(116 214 143 / 0.45);
+}
+
+.cert__area + .cert__area {
+  margin-top: 20px;
+}
+
+.cert__area h3 {
+  margin: 0 0 8px;
+  font-family: var(--font-ui);
+  font-size: 0.9rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bronze-300);
+}
+
+.cert__area ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cert__check {
+  padding: 12px 14px;
+  background: rgb(0 0 0 / 0.35);
+  border: 1px solid var(--bronze-700);
+  border-left: 3px solid var(--ash-500);
+  border-radius: var(--radius);
+}
+
+.cert__check[data-status="passed"] {
+  border-left-color: #74d68f;
+}
+.cert__check[data-status="failed"] {
+  border-left-color: #ff7b7b;
+}
+
+.cert__check-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.cert__check-head code {
+  font:
+    600 0.8rem ui-monospace,
+    Consolas,
+    monospace;
+  color: var(--ember-200);
+}
+
+.cert__status {
+  padding: 1px 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+}
+
+.cert__status--passed {
+  color: #74d68f;
+}
+.cert__status--failed {
+  color: #ff7b7b;
+}
+.cert__status--skipped,
+.cert__status--unknown {
+  color: var(--ash-400);
+}
+
+.cert__req {
+  margin: 0 0 8px;
+  color: var(--parch-100);
+}
+
+.cert__check dl {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 3px 10px;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.cert__check dt {
+  color: var(--ash-400);
+}
+
+.cert__check dd {
+  margin: 0;
+  color: var(--parch-300);
+}

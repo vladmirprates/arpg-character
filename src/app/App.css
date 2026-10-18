@@ -92,6 +92,7 @@
 
 .segmented button {
   min-width: 52px;
+  white-space: nowrap;
   min-height: 36px;
   padding: 0 10px;
   font-family: var(--font-ui);
@@ -107,6 +108,20 @@
 .segmented button[aria-pressed="true"] {
   color: var(--ink-950);
   background: linear-gradient(180deg, var(--ember-200), var(--ember-500));
+}
+
+/* The smallest phones: six settings controls have to share 320px. */
+@media (max-width: 380px) {
+  .topbar__settings {
+    gap: 5px;
+  }
+  .topbar__settings .icon-btn {
+    width: 36px;
+  }
+  .segmented button {
+    min-width: 40px;
+    padding: 0 7px;
+  }
 }
 
 /* ---- Layout: Character | Inventory | Stash ---- */

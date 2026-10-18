@@ -15,6 +15,8 @@
     "@axe-core/playwright": "^4.14.0",
     "@iconify-json/game-icons": "^1.2.4",
     "@playwright/test": "^1.64.1",
+    "@stryker-mutator/core": "^10.0.0",
+    "@stryker-mutator/vitest-runner": "^10.0.0",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.8",
@@ -23,6 +25,7 @@
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
     "@vitest/coverage-v8": "^4.1.12",
+    "cross-env": "^10.1.0",
     "fast-check": "^4.10.2",
     "jsdom": "^29.1.1",
     "prettier": "^3.9.10",
@@ -39,13 +42,20 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "e2e": "playwright test",
-    "e2e:visual": "playwright test --grep @visual",
+    "e2e": "playwright test --project=desktop --project=mobile && npm run e2e:perf",
+    "e2e:visual": "playwright test --project=desktop --project=mobile --grep @visual",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "icons": "node scripts/extract-tree-icons.mjs",
     "lighthouse": "npx --yes @lhci/cli@0.14.0 autorun",
     "test:report": "vitest run --coverage --reporter=default --reporter=json --outputFile=reports/vitest.json",
-    "qa:report": "npm run test:report && playwright test --grep-invert @visual && npm run lighthouse && node scripts/qa-report.mjs"
+    "qa:report": "npm run test:report && npm run test:mutation && npm run e2e:functional && npm run e2e:perf && npm run lighthouse && node scripts/qa-report.mjs",
+    "test:mutation": "stryker run",
+    "og-image": "vite build && node scripts/og-image.mjs",
+    "e2e:functional": "playwright test --project=desktop --project=mobile --grep-invert @visual",
+    "e2e:perf": "cross-env PLAYWRIGHT_JSON_FILE=reports/playwright-perf.json PLAYWRIGHT_HTML_DIR=playwright-report-perf playwright test --project=perf --workers=1"
+  },
+  "overrides": {
+    "qs": "^6.16.1"
   }
 }

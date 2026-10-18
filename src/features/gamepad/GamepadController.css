@@ -1,0 +1,62 @@
+.gamepad-hints {
+  position: fixed;
+  inset: auto 8px calc(var(--bar-h) + 8px) auto;
+  margin: 0;
+  max-width: 220px;
+  padding: 8px 10px;
+  font-size: 0.82rem;
+  color: var(--parch-300);
+  background: rgb(7 6 8 / 0.88);
+  border: 1px solid var(--bronze-600);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 18px rgb(0 0 0 / 0.6);
+  overflow: visible;
+  /* Prompts only: it sits in the top layer over the page, so it must never catch a click or tap. */
+  pointer-events: none;
+}
+
+@media (max-width: 560px) {
+  .gamepad-hints {
+    max-width: 160px;
+    padding: 6px 8px;
+    font-size: 0.75rem;
+    opacity: 0.92;
+  }
+}
+
+.gamepad-hints__name {
+  margin: 0 0 4px;
+  font-family: var(--font-ui);
+  letter-spacing: 0.06em;
+  color: var(--bronze-300);
+}
+
+.gamepad-hints ul {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gamepad-hints li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.gamepad-hints kbd {
+  min-width: 22px;
+  padding: 0 5px;
+  font: 700 0.75rem/1.5 var(--font-body);
+  text-align: center;
+  color: var(--ink-950);
+  background: var(--bronze-300);
+  border-radius: 999px;
+}
+
+/* Controller navigation: always show where focus is (programmatic focus isn't always :focus-visible). */
+:root[data-input="gamepad"] :focus {
+  outline: 2px solid var(--ember-400);
+  outline-offset: 2px;
+}

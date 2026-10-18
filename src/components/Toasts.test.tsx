@@ -53,4 +53,34 @@ describe("toasts", () => {
     act(() => vi.advanceTimersByTime(3_000));
     expect(shown("Bug found and fixed")).toBe(false);
   });
+
+  test("messages that arrive together are announced together, so the first isn't cut off", () => {
+    vi.useFakeTimers();
+    function Pair() {
+      const notify = useToast();
+      return (
+        <button
+          type="button"
+          onClick={() => {
+            notify("Item copied to clipboard", "success");
+            notify("Achievement unlocked: Price Check", "achievement");
+          }}
+        >
+          pair
+        </button>
+      );
+    }
+    render(
+      <ToastProvider>
+        <Pair />
+        <Trigger text="Later message" />
+      </ToastProvider>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "pair" }));
+    expect(screen.getByRole("status")).toHaveTextContent("Item copied to clipboard Achievement unlocked: Price Check");
+    // A message well after the others replaces them as usual.
+    act(() => vi.advanceTimersByTime(2_000));
+    fireEvent.click(screen.getByRole("button", { name: "notify" }));
+    expect(screen.getByRole("status")).toHaveTextContent(/^Later message$/);
+  });
 });

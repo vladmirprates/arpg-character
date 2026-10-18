@@ -13,6 +13,13 @@ interface Props {
   children: ReactNode;
 }
 
+/** Open modals; the root carries data-dialog-open while there is at least one (see global.css). */
+let openCount = 0;
+const markOpen = (delta: number) => {
+  openCount = Math.max(0, openCount + delta);
+  document.documentElement.toggleAttribute("data-dialog-open", openCount > 0);
+};
+
 /**
  * Native <dialog> in modal mode: the browser provides the focus trap, Esc to close,
  * an inert background and focus restoration — no hand-rolled trap needed.
@@ -30,7 +37,10 @@ export function Modal({ open, onClose, title, titleId, className = "", headerExt
     } else if (!open && dialog.open) {
       dialog.close();
     }
+    if (!open) return;
+    markOpen(1);
     return () => {
+      markOpen(-1);
       document.body.style.overflow = "";
     };
   }, [open]);

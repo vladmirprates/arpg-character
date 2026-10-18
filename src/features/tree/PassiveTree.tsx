@@ -53,6 +53,9 @@ interface Props {
   sharedCode?: string | null;
 }
 
+/** Where the build summary becomes a bottom sheet (matches PassiveTree.css). */
+const SHEET_LAYOUT = "(max-width: 820px)";
+
 export function PassiveTree({ tab, onTabChange, sharedCode }: Props) {
   const { t, locale } = useI18n();
   const notify = useToast();
@@ -63,8 +66,9 @@ export function PassiveTree({ tab, onTabChange, sharedCode }: Props) {
 
   // Emblems centre on the real rendered titles (whose width depends on font and language).
   const titleEls = useRef(new Map<string, SVGTextElement>());
-  // On phones the summary is a bottom sheet over the tree, closed until asked for.
-  const [summaryOpen, setSummaryOpen] = useState(false);
+  // Wide screens: a side panel, open by default, that the toggle collapses to give the tree the
+  // full width. Phones: a bottom sheet over the tree, closed until asked for.
+  const [summaryOpen, setSummaryOpen] = useState(() => !window.matchMedia(SHEET_LAYOUT).matches);
   const [titleCentres, setTitleCentres] = useState<Partial<Record<Region, number>>>({});
   useLayoutEffect(() => {
     const centres: Partial<Record<Region, number>> = {};
@@ -131,7 +135,12 @@ export function PassiveTree({ tab, onTabChange, sharedCode }: Props) {
   const recenter = useCallback(() => {
     const c = toPx(CENTER.x, CENTER.y);
     // Start close to the class start, like the game does; phones zoom in further for tappable nodes.
-    centerOn(c.x, c.y, size.w < 640 ? 4.5 : 3);
+    const k = size.w < 640 ? 4.5 : 3;
+    // The wide-screen summary lies over the tree's right edge: centre the start in the part left
+    // uncovered. Read at fit time only, so opening or closing the panel never moves the tree.
+    const panel = document.getElementById("build-summary");
+    const covered = panel && panel.offsetParent && !window.matchMedia(SHEET_LAYOUT).matches ? panel.offsetWidth : 0;
+    centerOn(c.x + covered / 2 / k, c.y, k);
   }, [toPx, centerOn, size.w]);
   // Re-fit whenever the viewport size changes.
   useLayoutEffect(recenter, [recenter]);
@@ -218,7 +227,8 @@ export function PassiveTree({ tab, onTabChange, sharedCode }: Props) {
       const p = toPx(n.x, n.y);
       centerOn(p.x, p.y, size.w < 640 ? 4.5 : 3.5);
       setFocusId(id);
-      setSummaryOpen(false);
+      // The bottom sheet covers the node it just jumped to; the side panel doesn't.
+      if (window.matchMedia(SHEET_LAYOUT).matches) setSummaryOpen(false);
       requestAnimationFrame(() => nodeRefs.current.get(id)?.focus({ preventScroll: true }));
     },
     [toPx, centerOn, size.w],
@@ -317,6 +327,8 @@ export function PassiveTree({ tab, onTabChange, sharedCode }: Props) {
           role="tabpanel"
           aria-labelledby={`tree-tab-${tab}`}
           className={`tree__viewport ${readOnly ? "is-readonly" : ""}`}
+          // A pan/zoom canvas: content beyond its edges is meant to be scrolled into view.
+          data-clip="intended"
           ref={viewport}
         >
           <div className="tree__stage" ref={stage}>
@@ -400,10 +412,10 @@ export function PassiveTree({ tab, onTabChange, sharedCode }: Props) {
         </span>
         <span className="tree__credit">
           {t("tree.iconCredit")}{" "}
-          <a href="https://game-icons.net" target="_blank" rel="noopener noreferrer">
+          <a href="https://game-icons.net" target="_blank" rel="noopener noreferrer" translate="no">
             game-icons.net
           </a>{" "}
-          (CC BY 3.0)
+          <span translate="no">(CC BY 3.0)</span>
         </span>
       </p>
     </div>

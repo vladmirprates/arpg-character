@@ -21,11 +21,12 @@ import type { Recipe } from "../../game/crafting/recipe";
 import { BASE_TYPES, type BaseType, type OrbId } from "../../game/crafting/types";
 import { TREE_ICONS, iconViewBox } from "../../game/tree/icons.generated";
 import { useParticles } from "../../fx/useParticles";
-import { CORRUPTION_KEYS, CRAFT_ERRORS } from "../../i18n/strings";
+import { CORRUPTION_KEYS, craftError } from "../../i18n/strings";
 import { useI18n } from "../../i18n/I18nProvider";
 import { useStash } from "../stash/StashProvider";
 import { bugReport, reproUrl } from "./report";
 import { useCraftSession } from "./useCraftSession";
+import { track } from "../../game/events";
 import "../../components/ItemSlot.css";
 import "./CraftingBench.css";
 
@@ -65,13 +66,13 @@ const baseUrl = () => `${location.origin}${location.pathname}`;
  * Dragging an orb onto the item uses it directly; on a touch screen a tap on an orb uses it.
  */
 export function CraftingBench({ incoming }: Props) {
-  const { t, l, locale } = useI18n();
+  const { t, l, locale, lang } = useI18n();
   const notify = useToast();
   const { reducedMotion } = useSettings();
   const stash = useStash();
   const session = useCraftSession();
   const { item, recipe, log } = session;
-  const view = describeItem(item, locale);
+  const view = describeItem(item, lang);
   const [shine, setShine] = useState<string[]>([]);
   const [anim, setAnim] = useState<{ kind: "craft" | "error" | "corrupt"; n: number } | null>(null);
   const [held, setHeld] = useState<OrbId | null>(null);
@@ -121,11 +122,12 @@ export function CraftingBench({ incoming }: Props) {
     if (!outcome.ok) {
       playSfx("error");
       setAnim({ kind: "error", n });
-      notify(CRAFT_ERRORS[locale][outcome.error!], "error");
+      notify(l(craftError(outcome.error!)), "error");
       return;
     }
 
     setShine(outcome.added);
+    track({ type: "craft", rarity: outcome.item.rarity, corruption: outcome.corruption });
     if (outcome.corruption) {
       playSfx(outcome.corruption === "brick" ? "brick" : "corrupt");
       setAnim({ kind: "corrupt", n });
@@ -214,7 +216,7 @@ export function CraftingBench({ incoming }: Props) {
           >
             {BASE_TYPES.map((b) => (
               <option key={b} value={b}>
-                {POOLS[b].baseName[locale]}
+                {l(POOLS[b].baseName)}
               </option>
             ))}
           </select>
@@ -271,7 +273,7 @@ export function CraftingBench({ incoming }: Props) {
           ref={dropRef}
           className={`bench__item ${held ? "is-target" : ""}`}
           role="region"
-          aria-label={itemSummary(view, locale)}
+          aria-label={itemSummary(view, lang)}
           aria-roledescription="item"
           data-testid="crafted-item"
           data-rarity={item.rarity}
@@ -311,7 +313,7 @@ export function CraftingBench({ incoming }: Props) {
           <h3 id="bench-log-title">
             {t("bench.log")}{" "}
             <span className="bench__seed">
-              {t("bench.seed")} 0x{recipe.seed.toString(16)}
+              {t("bench.seed")} <span translate="no">0x{recipe.seed.toString(16)}</span>
             </span>
           </h3>
           {log.length === 0 ? (
@@ -323,7 +325,7 @@ export function CraftingBench({ incoming }: Props) {
                 <li key={i} className={entry.error ? "is-fail" : entry.corruption ? "is-corrupt" : "is-ok"}>
                   <span className="bench__log-tag">{entry.error ? t("bench.fail") : t("bench.ok")}</span>
                   <span>{l(ORB_BY_ID[entry.orb].name)}</span>
-                  {entry.error && <small>{CRAFT_ERRORS[locale][entry.error]}</small>}
+                  {entry.error && <small>{l(craftError(entry.error))}</small>}
                   {entry.corruption && <small>{t(CORRUPTION_KEYS[entry.corruption])}</small>}
                 </li>
               ))}

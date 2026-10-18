@@ -9,6 +9,9 @@ interface Settings {
   reducedMotion: boolean;
   motionOverride: boolean;
   setMotionOverride: (on: boolean) => void;
+  /** The FPS / frame-time debug overlay. */
+  perfOverlay: boolean;
+  setPerfOverlay: (on: boolean) => void;
 }
 
 const SettingsContext = createContext<Settings | null>(null);
@@ -28,6 +31,7 @@ function useSystemReducedMotion() {
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [sound, setSound] = usePersistentState("sound", true, isBool);
   const [motionOverride, setMotionOverride] = usePersistentState("reduceMotion", false, isBool);
+  const [perfOverlay, setPerfOverlay] = usePersistentState("perfOverlay", false, isBool);
   const system = useSystemReducedMotion();
   const reducedMotion = system || motionOverride;
 
@@ -35,10 +39,14 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     document.documentElement.toggleAttribute("data-reduced-motion", reducedMotion);
   }, [reducedMotion]);
+  // `?perf` in the URL opens the overlay, e.g. for the performance test run.
+  useEffect(() => {
+    if (new URLSearchParams(location.search).has("perf")) setPerfOverlay(true);
+  }, [setPerfOverlay]);
 
   const value = useMemo(
-    () => ({ sound, setSound, reducedMotion, motionOverride, setMotionOverride }),
-    [sound, setSound, reducedMotion, motionOverride, setMotionOverride],
+    () => ({ sound, setSound, reducedMotion, motionOverride, setMotionOverride, perfOverlay, setPerfOverlay }),
+    [sound, setSound, reducedMotion, motionOverride, setMotionOverride, perfOverlay, setPerfOverlay],
   );
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>;
 }

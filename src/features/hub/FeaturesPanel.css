@@ -1,25 +1,69 @@
 .features {
+  /* Labels are sized to the panel's own width (cqi), so they fit wherever the panel lands. */
+  container-type: inline-size;
   display: grid;
-  /* Three per row: two tall rows fit beside the inventory; phones fall back to fewer columns. */
-  grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
-  gap: 12px;
+  /* Two compact columns beside the inventory (eight features in four short rows, so the side
+     column stays no taller than the inventory); four in a row where the panel is wide. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
   padding: 4px 0 6px;
 }
 
-/* Tall feature buttons: an icon over the label, lit in ember on hover.
-   (.btn.feature: outranks the generic .btn padding and height.) */
+/* Icon beside the label, lit in ember on hover.
+   (.btn.feature: outranks the generic .btn padding, height, centring and type.) */
 .btn.feature {
-  flex-direction: column;
-  gap: 10px;
-  min-height: 108px;
-  padding: 16px 8px;
-  text-align: center;
-  line-height: 1.15;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 7px;
+  min-height: 54px;
+  /* Never wider than its column: grid items otherwise refuse to shrink below their text. */
+  min-width: 0;
+  padding: 7px 8px;
+  text-align: left;
+  line-height: 1.12;
+  /* The same type as the other buttons (the socials: .btn--sm), shrinking only in panels too
+     narrow for it (cqi: in proportion to the panel), so no word ever has to split. */
+  letter-spacing: 0.06em;
+  font-size: min(0.95rem, 4.4cqi);
+}
+
+@container (min-width: 640px) {
+  .features {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .btn.feature {
+    font-size: min(0.95rem, 2.2cqi);
+  }
+}
+
+.feature__text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+/* Words break only where they must: with the real font every label fits on its line; only the
+   (wider) fallback font, before it loads, ever needs the emergency break. */
+.feature__label {
+  overflow-wrap: break-word;
+  /* Where a longer language does need two lines, split them evenly. */
+  text-wrap: balance;
+}
+
+/* Progress under the label (Find the Bugs, Achievements): readable, but quieter than the name. */
+.feature__progress {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--parch-300);
 }
 
 .feature__icon {
-  width: 34px;
-  height: 34px;
+  flex: none;
+  width: 22px;
+  height: 22px;
   fill: var(--ember-400);
   filter: drop-shadow(0 0 6px rgb(var(--ember-rgb) / 0.35));
   transition:
@@ -35,13 +79,4 @@
 
 .feature {
   position: relative;
-}
-
-/* Challenge progress on the Find the Bugs button. */
-.feature__badge {
-  position: absolute;
-  top: 6px;
-  right: 8px;
-  font-size: 0.75rem;
-  color: var(--ash-400);
 }

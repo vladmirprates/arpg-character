@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { RECOMMENDATIONS, RECOMMENDATIONS_SOURCE, type Recommendation } from "../../data/recommendations";
 import { TREE_ICONS, iconViewBox } from "../../game/tree/icons.generated";
+import { track } from "../../game/events";
 import { useI18n } from "../../i18n/I18nProvider";
-import type { Locale } from "../../i18n/types";
+import type { L } from "../../i18n/types";
 import "./DivinationCards.css";
 
 /** Short badge on the card; the full sentence when zoomed. */
@@ -13,9 +14,9 @@ const RELATION = {
   otherCompany: { short: "cards.relShort.otherCompany", full: "cards.rel.otherCompany" },
 } as const;
 
-/** The quote in the reader's language: the original when it matches, otherwise my translation. */
-const quoteFor = (rec: Recommendation, locale: Locale, showOriginal: boolean) =>
-  rec.lang === locale || showOriginal ? rec.original : rec.translation;
+/** The quote as content in both languages: the original in its own, my translation in the other. */
+const quoteText = (rec: Recommendation): L =>
+  rec.lang === "en" ? { en: rec.original, pt: rec.translation } : { en: rec.translation, pt: rec.original };
 
 function Card({
   rec,
@@ -30,9 +31,13 @@ function Card({
 }) {
   const { t, l, locale } = useI18n();
   const relation = RELATION[rec.relation];
+  // "Show original" is a deliberate request for the untranslated text, so it is exempt (translate="no").
+  const original = showOriginal && rec.lang !== locale;
   return (
     <div className={`divcard ${full ? "divcard--full" : ""}`}>
-      <p className="divcard__title">{l(rec.title)}</p>
+      <p className="divcard__title" id={full ? "divcard-zoom-title" : undefined}>
+        {l(rec.title)}
+      </p>
       <div className="divcard__art">
         <svg viewBox={iconViewBox(rec.artIcon)} aria-hidden="true">
           {TREE_ICONS[rec.artIcon]?.map((d, i) => (
@@ -44,17 +49,21 @@ function Card({
         </span>
       </div>
       <div className="divcard__reward">
-        <strong>{rec.name}</strong>
+        {/* A person's name is never translated. */}
+        <strong translate="no" id={full ? "divcard-zoom-name" : undefined}>
+          {rec.name}
+        </strong>
         <span>{l(rec.role)}</span>
         <span className={`relation relation--${rec.relation}`}>{t(full ? relation.full : relation.short)}</span>
       </div>
       <blockquote
         className="divcard__flavour"
-        lang={showOriginal || rec.lang === locale ? rec.lang : locale}
+        lang={original ? rec.lang : locale}
+        translate={original ? "no" : undefined}
         // The thumbnail's cut-off quote is hidden; the zoomed card reads it in full.
         aria-hidden={full ? undefined : true}
       >
-        {quoteFor(rec, locale, showOriginal)}
+        {original ? rec.original : l(quoteText(rec))}
       </blockquote>
       {footer}
     </div>
@@ -63,7 +72,7 @@ function Card({
 
 /** Recommendations from colleagues, collected as PoE divination cards. */
 export function DivinationCards() {
-  const { t, locale } = useI18n();
+  const { t, locale, date: formatDate } = useI18n();
   const [open, setOpen] = useState<Recommendation | null>(null);
   const [showOriginal, setShowOriginal] = useState(false);
   const zoom = useRef<HTMLDialogElement>(null);
@@ -84,11 +93,7 @@ export function DivinationCards() {
   };
 
   const date = (rec: Recommendation) =>
-    new Date(`${rec.date}T12:00:00`).toLocaleDateString(locale === "pt" ? "pt-BR" : "en-GB", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
+    formatDate(`${rec.date}T12:00:00`, { day: "numeric", month: "long", year: "numeric" });
 
   return (
     <div className="divination">
@@ -110,6 +115,7 @@ export function DivinationCards() {
               onClick={(e) => {
                 opener.current = e.currentTarget;
                 setOpen(rec);
+                track({ type: "card.read", id: rec.id });
               }}
             >
               <Card rec={rec} />
@@ -121,7 +127,8 @@ export function DivinationCards() {
       <dialog
         ref={zoom}
         className="divination__zoom"
-        aria-label={open ? `${open.title[locale]} — ${open.name}` : undefined}
+        // Named by the card's own title and person (both rendered inside it).
+        aria-labelledby={open ? "divcard-zoom-title divcard-zoom-name" : undefined}
         onCancel={(e) => {
           e.preventDefault();
           close();

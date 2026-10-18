@@ -42,7 +42,7 @@ export function CharacterPanel() {
         <div className="stat">
           <dt>{t("char.level")}</dt>
           <dd>
-            {l(CHARACTER.levelTitle)} <span className="stat__badge">{level}</span>
+            <span className="stat__badge">{level}</span>
           </dd>
         </div>
       </dl>
@@ -85,7 +85,8 @@ export function CharacterPanel() {
               <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true">
                 {ICONS[s.id]}
               </svg>
-              {s.label}
+              {/* Brand names. */}
+              <span translate="no">{s.label}</span>
               <span className="visually-hidden"> {t("a11y.newTab")}</span>
             </a>
           </li>

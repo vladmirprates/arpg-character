@@ -5,7 +5,6 @@ export const CHARACTER = {
   className: { en: "QA Engineer", pt: "Engenheiro de QA" } satisfies L,
   /** Level and experience come from my age: see game/age.ts. */
   birthday: { year: 2000, month: 5, day: 23 },
-  levelTitle: { en: "Mid-Level", pt: "Pleno" } satisfies L,
 };
 
 /**
