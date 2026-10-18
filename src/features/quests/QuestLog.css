@@ -1,0 +1,240 @@
+/* PoE quest log: acts down the left, the selected act's quests on the right. */
+.questlog {
+  display: grid;
+  grid-template-columns: 200px minmax(0, 1fr);
+  min-height: 0;
+  overflow: hidden;
+}
+
+.questlog__tabs {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 12px;
+  overflow-y: auto;
+  background: rgb(0 0 0 / 0.35);
+  border-right: 1px solid var(--bronze-700);
+}
+
+.questlog__tab {
+  display: grid;
+  gap: 2px;
+  padding: 10px 12px;
+  text-align: left;
+  color: var(--ash-400);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+}
+
+.questlog__tab:hover {
+  color: var(--parch-100);
+  background: rgb(255 255 255 / 0.03);
+}
+
+.questlog__tab[aria-selected="true"] {
+  color: var(--ember-200);
+  background: linear-gradient(90deg, rgb(var(--ember-rgb) / 0.16), transparent);
+  border-color: var(--bronze-600);
+}
+
+.questlog__tab-act {
+  font-family: var(--font-ui);
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+}
+
+.questlog__tab-sub {
+  font-size: 0.8rem;
+  color: var(--ash-500);
+}
+
+.questlog__panel {
+  padding: 22px clamp(16px, 3vw, 32px) 28px;
+  overflow-y: auto;
+}
+
+.questlog__header h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+  color: var(--ember-200);
+}
+
+.questlog__company {
+  margin: 4px 0 0;
+  font-size: 1.05rem;
+  color: var(--parch-100);
+}
+
+.questlog__company span,
+.questlog__meta {
+  color: var(--ash-400);
+}
+
+.questlog__meta {
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+}
+
+.questlog__panel h4 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 22px 0 10px;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bronze-300);
+}
+
+.questlog__panel h4::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--bronze-700), transparent);
+}
+
+.quests-list {
+  display: grid;
+  gap: 10px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.quests-list li {
+  display: flex;
+  gap: 10px;
+  line-height: 1.45;
+  color: var(--parch-100);
+}
+
+.quests-list__check {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  fill: var(--verdant-300);
+}
+
+/* Tools as socketed gems: a coloured bead before each name. */
+.gems {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 14px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.gem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px 3px 6px;
+  font-size: 0.85rem;
+  color: var(--parch-100);
+  background: rgb(0 0 0 / 0.4);
+  border: 1px solid rgb(110 140 255 / 0.35);
+  border-radius: 999px;
+}
+
+.gem::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #d9e2ff, #5b7cff 55%, #1d2a73);
+  box-shadow: 0 0 6px rgb(110 140 255 / 0.7);
+}
+
+.questlog__side + .questlog__side {
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--bronze-700);
+}
+
+.questlog__side .questlog__header h3 {
+  font-size: 1.25rem;
+}
+
+.questlog__links {
+  display: flex;
+  gap: 12px;
+  margin: 6px 0 0;
+}
+
+.questlog__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--ember-400);
+}
+
+.questlog__link-icon {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.trials {
+  display: grid;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trials li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: rgb(0 0 0 / 0.3);
+  border: 1px solid var(--bronze-700);
+  border-radius: 3px;
+}
+
+.trials__icon {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  fill: var(--ember-400);
+}
+
+.trials li span {
+  display: grid;
+  flex: 1;
+}
+
+.trials small {
+  color: var(--ash-400);
+}
+
+.trials a {
+  color: var(--ember-400);
+}
+
+@media (max-width: 720px) {
+  .questlog {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  .questlog__tabs {
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 10px;
+    border-right: 0;
+    border-bottom: 1px solid var(--bronze-700);
+  }
+  .questlog__tab {
+    flex: none;
+  }
+}

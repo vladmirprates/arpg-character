@@ -1,0 +1,34 @@
+/* Cell size comes from the panel's own width, so the whole window scales from phones to desktop. */
+.inv-panel {
+  container-type: inline-size;
+  --cell: clamp(22px, calc((100cqi - 8px) / 12.4), 40px);
+}
+
+/* The bag: the 12 × 5 item grid under the equipment. */
+.bag {
+  margin: 6px auto 0;
+}
+
+/* Mirror of Replication shimmers, as befits a mirror-tier item (transform/opacity only). */
+.slot--mirror::after {
+  content: "";
+  position: absolute;
+  inset: 4%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(217 130 59 / 0.5), transparent 70%);
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: mirror-shimmer 2.6s ease-in-out infinite;
+}
+
+@keyframes mirror-shimmer {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05);
+  }
+}

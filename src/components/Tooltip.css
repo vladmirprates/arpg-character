@@ -1,0 +1,62 @@
+.tooltip-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1500;
+  max-width: min(360px, calc(100vw - 16px));
+  pointer-events: none;
+  opacity: 0;
+}
+
+.tooltip-layer[data-ready="true"] {
+  opacity: 1;
+  animation: tooltip-in 0.14s var(--ease-out);
+}
+
+@keyframes tooltip-in {
+  from {
+    opacity: 0;
+    filter: blur(2px);
+  }
+}
+
+/* Simple text tooltip (buttons, orbs) */
+.tip-simple {
+  padding: 9px 14px;
+  font-size: 0.92rem;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--parch-300);
+  background: linear-gradient(180deg, #141113, #09080a);
+  border: 1px solid var(--bronze-600);
+  box-shadow:
+    0 0 0 1px #000,
+    inset 0 0 0 1px rgb(255 255 255 / 0.04),
+    0 12px 30px rgb(0 0 0 / 0.75);
+}
+
+.tip-simple strong {
+  display: block;
+  margin-bottom: 4px;
+  padding-bottom: 5px;
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  color: var(--parch-50);
+  border-bottom: 1px solid;
+  border-image: linear-gradient(90deg, transparent, var(--bronze-500), transparent) 1;
+}
+
+/* Resistance explainer: name, what it means, where the number comes from. */
+.tip-resist {
+  max-width: 280px;
+}
+
+.tip-resist span {
+  display: block;
+}
+
+.tip-resist small {
+  display: block;
+  margin-top: 6px;
+  color: var(--ash-400);
+}

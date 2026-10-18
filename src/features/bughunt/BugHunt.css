@@ -1,0 +1,535 @@
+/* ---- Bugs: live in the page background, behind the panels ---- */
+.hunt-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hunt-bug {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  transition-property: transform;
+  transition-timing-function: linear;
+  will-change: transform;
+}
+
+.hunt-bug__body {
+  position: absolute;
+  inset: 0;
+  transition: rotate 0.3s ease-out;
+}
+
+.hunt-bug__icon,
+.hunt-bug__glitch {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Unrevealed: a flickering, chromatically split glitch you can barely make out. */
+.hunt-bug__icon {
+  fill: #cfd6dc;
+  opacity: 0.55;
+  animation: bug-flicker 2.6s steps(1) infinite;
+}
+
+.hunt-bug__glitch--r {
+  fill: #ff2a6a;
+  opacity: 0.5;
+  animation: glitch-r 1.7s steps(1) infinite;
+}
+
+.hunt-bug__glitch--c {
+  fill: #2af0ff;
+  opacity: 0.5;
+  animation: glitch-c 1.9s steps(1) infinite;
+}
+
+@keyframes bug-flicker {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  37% {
+    opacity: 0.15;
+  }
+  39% {
+    opacity: 0.6;
+  }
+  71% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes glitch-r {
+  0%,
+  100% {
+    transform: translate(-2px, 0);
+  }
+  30% {
+    transform: translate(2px, -1px);
+  }
+  60% {
+    transform: translate(-1px, 1px);
+  }
+}
+
+@keyframes glitch-c {
+  0%,
+  100% {
+    transform: translate(2px, 0);
+  }
+  40% {
+    transform: translate(-2px, 1px);
+  }
+  75% {
+    transform: translate(1px, -1px);
+  }
+}
+
+/* Revealed: solid, outlined, and labelled like a DevTools element. */
+.hunt-bug.is-revealed .hunt-bug__glitch {
+  display: none;
+}
+
+.hunt-bug.is-revealed .hunt-bug__icon {
+  fill: var(--rarity-rare);
+  opacity: 1;
+  animation: none;
+}
+
+.hunt-bug.is-revealed::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+  border: 1px dashed rgb(116 180 255 / 0.9);
+  background: rgb(116 180 255 / 0.12);
+}
+
+.hunt-bug__tag {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  translate: -50% 0;
+  padding: 2px 6px;
+  font:
+    600 11px/1.4 ui-monospace,
+    "Cascadia Code",
+    Consolas,
+    monospace;
+  white-space: nowrap;
+  color: #e8f1ff;
+  background: #1a2a44;
+  border-radius: 2px;
+}
+
+.hunt-bug__tag b {
+  color: #9fd0ff;
+}
+
+/* Captured: the net drops, the bug shrinks into it. */
+.hunt-bug.is-captured .hunt-bug__body {
+  animation: bug-caught 0.9s ease-in forwards;
+}
+
+.hunt-bug__net {
+  position: absolute;
+  inset: -14px;
+  fill: var(--ember-200);
+  animation: net-drop 0.45s cubic-bezier(0.3, 1.4, 0.6, 1) both;
+}
+
+@keyframes net-drop {
+  from {
+    opacity: 0;
+    transform: translateY(-60px) rotate(-20deg) scale(1.4);
+  }
+}
+
+@keyframes bug-caught {
+  60% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.1);
+    opacity: 0;
+  }
+}
+
+/* ---- Inspect Element: DevTools-style picker ---- */
+.inspect-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  cursor: crosshair;
+  background: rgb(10 30 60 / 0.08);
+}
+
+.inspect-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgb(111 168 220 / 0.35);
+  outline: 1px solid rgb(116 180 255 / 0.9);
+  pointer-events: none;
+}
+
+.inspect-box.is-bug {
+  background: rgb(255 210 80 / 0.3);
+  outline-color: var(--rarity-rare);
+}
+
+.inspect-box__label {
+  position: absolute;
+  bottom: calc(100% + 4px);
+  left: 0;
+  padding: 2px 6px;
+  font:
+    600 11px/1.4 ui-monospace,
+    "Cascadia Code",
+    Consolas,
+    monospace;
+  white-space: nowrap;
+  color: #e8f1ff;
+  background: #1a2a44;
+  border-radius: 2px;
+}
+
+.inspect-box__label small {
+  color: #8fa7c6;
+}
+
+/* ---- Automated Regression: a scan beam sweeps the screen ---- */
+.hunt-scan {
+  position: fixed;
+  inset: 0 auto 0 0;
+  z-index: 1200;
+  width: 160px;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgb(120 255 190 / 0.18) 70%,
+    rgb(160 255 210 / 0.75) 96%,
+    transparent
+  );
+  animation: scan-sweep 1.3s cubic-bezier(0.5, 0, 0.5, 1) forwards;
+}
+
+@keyframes scan-sweep {
+  from {
+    transform: translateX(-200px);
+  }
+  to {
+    transform: translateX(100vw);
+  }
+}
+
+/* ---- Break Production: red alarm ---- */
+.hunt-alarm {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 40%, rgb(220 20 30 / 0.45));
+  animation: alarm-pulse 0.6s ease-in-out 3 alternate;
+  opacity: 0;
+}
+
+@keyframes alarm-pulse {
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---- Teleport to Meeting ---- */
+.meeting {
+  position: fixed;
+  inset: 0;
+  z-index: 1250;
+  display: grid;
+  place-items: center;
+  background: rgb(5 6 10 / 0.82);
+  animation: meeting-in 0.35s ease-out;
+}
+
+@keyframes meeting-in {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+}
+
+.meeting__window {
+  position: relative;
+  width: min(560px, 92vw);
+  padding: 14px;
+  background: #15181f;
+  border: 1px solid #2c3240;
+  border-radius: 10px;
+  box-shadow: 0 20px 60px rgb(0 0 0 / 0.7);
+}
+
+.meeting__title {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  color: #c9d1de;
+}
+
+.meeting__title::before {
+  content: "● ";
+  color: #e5484d;
+}
+
+.meeting__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.meeting__tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 10;
+  background: hsl(var(--hue) 25% 16%);
+  border-radius: 6px;
+}
+
+.meeting__tile.is-you {
+  outline: 2px solid #3b82f6;
+}
+
+.meeting__avatar {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  font-weight: 700;
+  color: #fff;
+  background: hsl(var(--hue) 45% 40%);
+  border-radius: 50%;
+}
+
+.meeting__name {
+  position: absolute;
+  bottom: 6px;
+  left: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  color: #e6e9ef;
+}
+
+.meeting__mute {
+  width: 14px;
+  height: 14px;
+  fill: #e5484d;
+}
+
+.meeting__muted {
+  position: absolute;
+  top: 8px;
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  color: #fff;
+  background: rgb(229 72 77 / 0.85);
+  border-radius: 99px;
+}
+
+.meeting__leave {
+  display: flex;
+  margin: 12px auto 0;
+  --btn-color: #fff;
+  background: #c4373b;
+  border-color: #e5484d;
+}
+
+/* ---- Bug ticket ---- */
+.ticket {
+  position: fixed;
+  right: 16px;
+  bottom: calc(var(--bar-h) + 12px);
+  z-index: 900;
+  width: min(380px, calc(100vw - 32px));
+  max-height: calc(100dvh - var(--bar-h) - 40px);
+  overflow-y: auto;
+  padding: 14px 16px 12px;
+  font-size: 0.9rem;
+  color: #dfe6f0;
+  background: #121722;
+  border: 1px solid #2b3550;
+  border-left: 4px solid #e5484d;
+  border-radius: 6px;
+  box-shadow: 0 18px 50px rgb(0 0 0 / 0.65);
+  animation: ticket-in 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+@keyframes ticket-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.97);
+  }
+}
+
+.ticket__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.8rem;
+}
+
+.ticket__type {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 6px;
+  font-weight: 700;
+  color: #fff;
+  background: #c4373b;
+  border-radius: 3px;
+}
+
+.ticket__type-icon {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.ticket__key {
+  font:
+    600 0.8rem ui-monospace,
+    "Cascadia Code",
+    Consolas,
+    monospace;
+  color: #8fb4ff;
+}
+
+.ticket__close {
+  margin-left: auto;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  font-size: 1.2rem;
+  line-height: 1;
+  color: #9aa6b8;
+  background: transparent;
+  border: 0;
+}
+
+.ticket__close:hover {
+  color: #fff;
+}
+
+.ticket__title {
+  margin: 8px 0 10px;
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #fff;
+}
+
+.ticket h3 {
+  margin: 10px 0 4px;
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8a96aa;
+}
+
+.ticket__fields {
+  display: flex;
+  gap: 16px;
+  margin: 0 0 8px;
+}
+
+.ticket__fields dt {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: #8a96aa;
+}
+
+.ticket__fields dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.prio--highest,
+.prio--high {
+  color: #ff7b7b;
+}
+.prio--medium {
+  color: #ffc46b;
+}
+.prio--low {
+  color: #7fd3a0;
+}
+
+.ticket__status {
+  color: #8fb4ff;
+}
+
+.ticket__env {
+  margin: 0;
+  color: #b9c3d3;
+}
+
+.ticket ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.ticket p {
+  margin: 6px 0 0;
+}
+
+.ticket code {
+  font-size: 0.82rem;
+  color: #ffb4b4;
+}
+
+.ticket__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+/* The meeting and the ticket parody real software (a video call, Jira), so they use a plain
+   app UI font instead of the game's fantasy face — the contrast is part of the joke. */
+.meeting,
+.ticket,
+.meeting .btn,
+.ticket .btn {
+  font-family:
+    "Segoe UI",
+    system-ui,
+    -apple-system,
+    sans-serif;
+  letter-spacing: normal;
+}
+
+.meeting .meeting__leave {
+  min-height: 36px;
+  padding: 0 16px;
+  font-weight: 600;
+  color: #fff;
+  background: #c4373b;
+  border: 1px solid #e5484d;
+  border-radius: 6px;
+  box-shadow: none;
+}
+
+.meeting .meeting__leave:hover,
+.meeting .meeting__leave:focus-visible {
+  color: #fff;
+  background: #d9474b;
+}

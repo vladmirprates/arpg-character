@@ -1,0 +1,191 @@
+.bounty {
+  flex: 1;
+  min-height: 0;
+  padding: 18px clamp(16px, 3vw, 32px) 26px;
+  overflow-y: auto;
+}
+
+.bounty__intro {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--parch-100);
+}
+
+.bounty__how {
+  margin: 6px 0 0;
+  color: var(--ash-400);
+}
+
+.bounty__progress {
+  display: grid;
+  gap: 6px;
+  margin: 18px 0;
+  font-family: var(--font-ui);
+  color: var(--ember-200);
+}
+
+.bounty__bar {
+  height: 10px;
+  overflow: hidden;
+  background: #0a0809;
+  border: 1px solid var(--bronze-700);
+  border-radius: 999px;
+}
+
+.bounty__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--ember-500), var(--ember-200));
+  transition: width 0.4s ease;
+}
+
+.bounty__win {
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  color: var(--parch-100);
+  background: linear-gradient(90deg, rgb(var(--ember-rgb) / 0.18), transparent);
+  border: 1px solid var(--ember-400);
+  border-radius: var(--radius);
+}
+
+.bounty__win strong {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: var(--ember-200);
+}
+
+.bounty__win p {
+  margin: 6px 0 0;
+}
+
+.bounty__win a {
+  color: var(--ember-400);
+}
+
+.bounty__list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each find reads like a ticket; undiscovered ones are greyed out. */
+.bounty__bug {
+  padding: 12px 14px;
+  background: rgb(0 0 0 / 0.3);
+  border: 1px dashed var(--bronze-700);
+  border-radius: var(--radius);
+}
+
+.bounty__bug.is-found {
+  background: #121722;
+  border: 1px solid #2b3550;
+  border-left: 4px solid #e5484d;
+}
+
+.bounty__bug header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.bounty__key {
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.82rem;
+  color: #8fb4ff;
+}
+
+.bounty__bug strong {
+  margin-right: auto;
+  color: var(--parch-50);
+}
+
+.bounty__unknown {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ash-500) !important;
+}
+
+.bounty__bug .link-btn {
+  margin-left: auto;
+}
+
+.bounty__sev {
+  padding: 1px 8px;
+  font-size: 0.78rem;
+  border-radius: 999px;
+}
+
+.bounty__sev--low {
+  color: #7fd3a0;
+  border: 1px solid rgb(127 211 160 / 0.5);
+}
+
+.bounty__sev--medium {
+  color: #ffc46b;
+  border: 1px solid rgb(255 196 107 / 0.5);
+}
+
+.bounty__bug dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 4px 12px;
+  margin: 10px 0 0;
+  font-size: 0.92rem;
+}
+
+.bounty__bug dt {
+  color: #8a96aa;
+}
+
+.bounty__bug dd {
+  margin: 0;
+  color: #dfe6f0;
+}
+
+.bounty__hint {
+  margin: 8px 0 0;
+  font-size: 0.92rem;
+  color: var(--ember-200);
+}
+
+.bounty__steps {
+  display: grid;
+  gap: 8px;
+  margin: 16px 0 0;
+  padding-left: 22px;
+  color: var(--parch-100);
+}
+
+.bounty__start {
+  margin-top: 22px;
+}
+
+.bounty__actions {
+  margin-top: 16px;
+}
+
+/* A found bug is fixed on the page: say so on its ticket. */
+.bounty__fixed {
+  padding: 1px 8px;
+  font-size: 0.78rem;
+  color: #8fb4ff;
+  border: 1px solid rgb(143 180 255 / 0.5);
+  border-radius: 999px;
+}
+
+.bounty__steps-list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.bounty__sev--high {
+  color: #ff9b6b;
+  border: 1px solid rgb(255 155 107 / 0.5);
+}
+
+.bounty__sev--critical {
+  color: #ff6b6b;
+  border: 1px solid rgb(255 107 107 / 0.6);
+}

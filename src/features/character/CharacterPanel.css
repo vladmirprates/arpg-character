@@ -1,0 +1,188 @@
+.stat-list {
+  margin: 0;
+}
+
+.stat {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 4px 2px;
+  border-bottom: 1px solid rgb(255 255 255 / 0.05);
+}
+
+.stat dt {
+  color: var(--ash-400);
+}
+
+.stat dd {
+  margin: 0;
+  font-weight: 700;
+  color: var(--parch-50);
+}
+
+.stat__badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 28px;
+  height: 24px;
+  margin-left: 6px;
+  padding: 0 6px;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--ink-950);
+  background: linear-gradient(180deg, var(--ember-200), var(--ember-500));
+  clip-path: polygon(12% 0, 88% 0, 100% 50%, 88% 100%, 12% 100%, 0 50%);
+}
+
+.xp {
+  margin: 10px 0 12px;
+}
+
+.xp__label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ash-500);
+}
+
+.xp__bar {
+  height: 8px;
+  margin-top: 4px;
+  background: #050405;
+  border: 1px solid var(--bronze-700);
+}
+
+.xp__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--bronze-500), var(--ember-400), var(--ember-200));
+  box-shadow: 0 0 10px rgb(var(--ember-rgb) / 0.5);
+}
+
+.attr-list,
+.resist-list,
+.socials {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.attr {
+  --tone: var(--attr-int);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 2px;
+  cursor: help;
+  border-bottom: 1px solid rgb(255 255 255 / 0.05);
+}
+
+.attr--str {
+  --tone: var(--attr-str);
+}
+.attr--dex {
+  --tone: var(--attr-dex);
+}
+.attr--wis {
+  --tone: var(--attr-wis);
+}
+
+.attr:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.attr__gem {
+  width: 10px;
+  height: 10px;
+  background: var(--tone);
+  transform: rotate(45deg);
+  box-shadow: 0 0 8px var(--tone);
+}
+
+.attr__label {
+  color: var(--parch-300);
+}
+
+.attr__label abbr {
+  color: var(--ash-500);
+  text-decoration: none;
+}
+
+.attr__value {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--tone);
+}
+
+.resist {
+  --tone: var(--res-fire);
+  cursor: help;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 10px;
+  padding: 3px 2px;
+}
+
+.resist--chaos {
+  --tone: var(--res-chaos);
+}
+.resist--lightning {
+  --tone: var(--res-lightning);
+}
+.resist--cold {
+  --tone: var(--res-cold);
+}
+.resist--physical {
+  --tone: var(--res-physical);
+}
+
+.resist__label {
+  color: var(--parch-300);
+}
+
+.resist__value {
+  font-weight: 700;
+  color: var(--tone);
+}
+
+.resist__value small {
+  font-weight: 400;
+  color: var(--ash-500);
+}
+
+.resist__meter {
+  grid-column: 1 / -1;
+  height: 3px;
+  background: rgb(255 255 255 / 0.05);
+}
+
+.resist__meter span {
+  display: block;
+  height: 100%;
+  background: var(--tone);
+  box-shadow: 0 0 6px var(--tone);
+}
+
+.socials {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.socials .btn {
+  width: 100%;
+}
+
+/* The sheet holds a lot: tighter section headings keep it above the action bar. */
+.char-panel .frame__subtitle {
+  margin: 14px 0 8px;
+}
+
+.resist:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}

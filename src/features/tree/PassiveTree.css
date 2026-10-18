@@ -1,0 +1,750 @@
+.tree {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.tree__toolbar {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+  padding: 10px clamp(12px, 3vw, 28px);
+  background: rgb(10 8 9 / 0.85);
+  border-bottom: 1px solid var(--bronze-700);
+}
+
+.tabs {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  background: #060506;
+  border: 1px solid var(--bronze-700);
+  border-radius: var(--radius);
+}
+
+.tab {
+  min-height: 38px;
+  padding: 0 16px;
+  font-family: var(--font-ui);
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ash-400);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 2px;
+}
+
+.tab:hover {
+  color: var(--parch-100);
+}
+
+.tab[aria-selected="true"] {
+  color: var(--ink-950);
+  background: linear-gradient(180deg, var(--ember-200), var(--ember-500));
+  border-color: var(--ember-200);
+}
+
+.tree__points {
+  margin: 0;
+  color: var(--parch-300);
+}
+
+.tree__points strong {
+  font-family: var(--font-ui);
+  font-size: 1.35rem;
+  color: var(--ember-200);
+}
+
+.tree__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.tree__zoom {
+  display: flex;
+  gap: 4px;
+}
+
+.tree__zoom .icon-btn {
+  font-size: 1.2rem;
+}
+
+/* The tree and its build summary side by side; the summary drops below on narrow screens. */
+.tree__body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.tree__viewport {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  background:
+    radial-gradient(ellipse at 50% 50%, rgb(20 40 70 / 0.35), transparent 65%),
+    radial-gradient(circle at 50% 50%, #0c0d14, #040406);
+}
+
+.tree__viewport:active {
+  cursor: grabbing;
+}
+
+.tree__stage {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 0;
+}
+
+.tree__sigil-wrap {
+  position: absolute;
+  pointer-events: none;
+}
+
+.tree__sigil {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: #6fb4ff;
+  opacity: 0.45;
+  transform: none;
+}
+
+.tree__svg {
+  position: relative;
+  overflow: visible;
+}
+
+.region-label {
+  font-family: var(--font-display);
+  font-size: 200px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  fill: currentColor;
+  opacity: 0.38;
+  paint-order: stroke;
+  stroke: #05060a;
+  stroke-width: 18px;
+  pointer-events: none;
+}
+
+.region-label--north {
+  color: var(--region-north);
+}
+.region-label--south {
+  color: var(--region-south);
+}
+.region-label--east {
+  color: var(--region-east);
+}
+.region-label--west {
+  color: var(--region-west);
+}
+
+/* ---- Links ---- */
+.link {
+  --c: var(--ember-200);
+  fill: none;
+  stroke: #2b2527;
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.link--north {
+  --c: var(--region-north);
+}
+.link--south {
+  --c: var(--region-south);
+}
+.link--east {
+  --c: var(--region-east);
+}
+.link--west {
+  --c: var(--region-west);
+}
+.link--northeast {
+  --c: var(--region-northeast);
+}
+.link--southeast {
+  --c: var(--region-southeast);
+}
+.link--southwest {
+  --c: var(--region-southwest);
+}
+.link--northwest {
+  --c: var(--region-northwest);
+}
+
+.link.is-on {
+  stroke: var(--c);
+  stroke-width: 7;
+}
+
+.link.is-adding {
+  stroke: var(--c);
+  stroke-dasharray: 12 10;
+  opacity: 0.75;
+}
+
+.link.is-removing {
+  stroke: var(--blood-300);
+  stroke-dasharray: 12 10;
+}
+
+/* ---- Nodes: PoE-style frames ---- */
+.tree-node {
+  --c: var(--ember-200);
+  cursor: pointer;
+  outline: none;
+}
+
+.tree-node--north {
+  --c: var(--region-north);
+}
+.tree-node--south {
+  --c: var(--region-south);
+}
+.tree-node--east {
+  --c: var(--region-east);
+}
+.tree-node--west {
+  --c: var(--region-west);
+}
+.tree-node--northeast {
+  --c: var(--region-northeast);
+}
+.tree-node--southeast {
+  --c: var(--region-southeast);
+}
+.tree-node--southwest {
+  --c: var(--region-southwest);
+}
+.tree-node--northwest {
+  --c: var(--region-northwest);
+}
+
+.is-readonly .tree-node {
+  cursor: help;
+}
+
+.tree-node__hit {
+  fill: transparent;
+}
+
+.tree-node__core {
+  fill: url(#node-core);
+}
+
+/* Region-coloured wash inside allocated nodes. */
+.tree-node__tint {
+  fill: var(--c);
+  opacity: 0;
+}
+
+.tree-node.is-on .tree-node__tint {
+  opacity: 0.28;
+}
+
+.tree-node__frame {
+  fill: none;
+  stroke: url(#frame-bronze);
+  stroke-width: 3;
+}
+
+.tree-node--notable .tree-node__frame {
+  stroke-width: 5;
+}
+.tree-node--keystone .tree-node__frame {
+  stroke-width: 7;
+}
+.tree-node--start .tree-node__frame {
+  stroke-width: 8;
+}
+.tree-node--mastery .tree-node__frame {
+  stroke-width: 3;
+}
+
+/* Soft skills on the inner ring take the hearth colour. */
+.tree-node--core {
+  --c: var(--ember-400);
+}
+
+/* Mastery medallion: a dotted orbit in the region colour that lights up when allocated. */
+.tree-node__orbit {
+  fill: none;
+  stroke: var(--c);
+  stroke-width: 2;
+  stroke-dasharray: 1 7;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+
+.tree-node--mastery .tree-node__icon {
+  fill: #9a8f7f;
+}
+
+.tree-node--mastery.is-on .tree-node__orbit {
+  stroke: #f7d39a;
+  opacity: 1;
+}
+
+.tree-node__inner {
+  fill: none;
+  stroke: #3a2c19;
+  stroke-width: 1.5;
+}
+
+.tree-node__studs rect {
+  fill: url(#frame-bronze);
+}
+
+.tree-node.is-on .tree-node__frame,
+.tree-node.is-on .tree-node__studs rect,
+.tree-node--start .tree-node__frame,
+.tree-node--start .tree-node__studs rect {
+  stroke: url(#frame-gold);
+  fill: none;
+}
+
+.tree-node.is-on .tree-node__studs rect,
+.tree-node--start .tree-node__studs rect {
+  fill: url(#frame-gold);
+}
+
+.tree-node.is-on .tree-node__inner {
+  stroke: #f7d39a;
+  opacity: 0.6;
+}
+
+/* Icons are dim until allocated, like the game. */
+.tree-node__icon {
+  fill: #7d7366;
+  overflow: visible;
+}
+
+.tree-node.is-on .tree-node__icon,
+.tree-node--start .tree-node__icon {
+  fill: #fff4d8;
+}
+
+.tree-node--minor.is-on .tree-node__icon {
+  fill: color-mix(in srgb, var(--c) 55%, white);
+}
+
+/* Hover / focus halo */
+.tree-node__halo {
+  fill: none;
+  stroke: var(--ember-200);
+  stroke-width: 3;
+  opacity: 0;
+}
+
+.tree-node:hover .tree-node__halo,
+.tree-node:focus-visible .tree-node__halo {
+  opacity: 0.9;
+}
+
+.tree-node:focus-visible .tree-node__halo {
+  stroke-width: 5;
+}
+
+.tree-node.is-adding .tree-node__frame {
+  stroke: var(--c);
+  stroke-dasharray: 6 5;
+}
+
+.tree-node.is-removing .tree-node__frame {
+  stroke: var(--blood-300);
+}
+
+.tree__credit {
+  margin-left: 12px;
+  color: var(--ash-500);
+}
+
+.tree__credit a {
+  color: var(--bronze-300);
+}
+
+.tree__hint {
+  margin: 0;
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  text-align: center;
+  color: var(--ash-400);
+  background: rgb(10 8 9 / 0.85);
+  border-top: 1px solid var(--bronze-700);
+}
+
+/* ---- Node tooltip (PoE-style: name header, magic-blue stat lines) ---- */
+.node-tip {
+  --c: var(--ember-200);
+  min-width: 240px;
+  max-width: 320px;
+  text-align: center;
+  background:
+    radial-gradient(ellipse 120% 50% at 50% 0%, color-mix(in srgb, var(--c) 8%, transparent), transparent 70%),
+    linear-gradient(180deg, #111014, #08080a);
+  border: 1px solid color-mix(in srgb, var(--c) 60%, #000);
+  box-shadow:
+    0 0 0 1px #000,
+    inset 0 0 0 1px rgb(255 255 255 / 0.04),
+    0 16px 40px rgb(0 0 0 / 0.8),
+    0 0 20px color-mix(in srgb, var(--c) 16%, transparent);
+}
+
+.node-tip--north {
+  --c: var(--region-north);
+}
+.node-tip--south {
+  --c: var(--region-south);
+}
+.node-tip--east {
+  --c: var(--region-east);
+}
+.node-tip--west {
+  --c: var(--region-west);
+}
+.node-tip--northeast {
+  --c: var(--region-northeast);
+}
+.node-tip--southeast {
+  --c: var(--region-southeast);
+}
+.node-tip--southwest {
+  --c: var(--region-southwest);
+}
+.node-tip--northwest {
+  --c: var(--region-northwest);
+}
+
+.node-tip strong {
+  position: relative;
+  display: block;
+  padding: 11px 18px 10px;
+  font-family: var(--font-display);
+  font-size: 1.18rem;
+  letter-spacing: 0.04em;
+  color: var(--parch-50);
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--c) 20%, transparent) 50%, transparent),
+    linear-gradient(180deg, #1c191e, #0c0b0d);
+}
+
+/* Same rail as item headers: a fading line in the region colour with a centre diamond. */
+.node-tip strong::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--c) 20%, var(--c) 80%, transparent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--c) 70%, transparent);
+}
+
+.node-tip strong::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  background: var(--c);
+  border: 1px solid #000;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.node-tip--keystone strong,
+.node-tip--mastery strong,
+.node-tip--notable strong {
+  color: var(--ember-200);
+}
+
+.node-tip__kind {
+  display: block;
+  margin-top: 10px;
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ember-400);
+}
+
+.node-tip__stats {
+  padding: 6px 18px 8px;
+  line-height: 1.45;
+}
+
+.node-tip__stats p {
+  margin: 3px 0;
+  color: color-mix(in srgb, var(--rarity-magic) 80%, white);
+}
+
+.node-tip__status {
+  display: block;
+  padding-bottom: 4px;
+  font-size: 0.8rem;
+  color: var(--ash-500);
+}
+
+.node-tip__status.is-on {
+  color: var(--verdant-300);
+}
+
+.node-tip__cost {
+  display: block;
+  padding-bottom: 8px;
+  font-weight: 700;
+  color: var(--ember-200);
+}
+
+.node-tip__cost.is-refund {
+  color: var(--blood-300);
+}
+
+/* Only phones and narrow tablets need the summary toggle; wide screens show it beside the tree. */
+.tree__summary-toggle {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  /* One compact row: tabs and points left, actions right; the tree gets the rest of the screen. */
+  .tree__toolbar {
+    gap: 6px 10px;
+    padding: 6px 10px;
+  }
+  .tab {
+    min-height: 34px;
+    padding: 0 10px;
+    font-size: 0.9rem;
+  }
+  .tree__points {
+    font-size: 0.85rem;
+  }
+  .tree__points strong {
+    font-size: 1.1rem;
+  }
+  .tree__actions {
+    gap: 6px;
+  }
+  .tree__zoom .icon-btn {
+    width: 34px;
+    height: 34px;
+  }
+  /* The controls are self-explanatory on touch (drag, pinch, tap); keep only the icon credit. */
+  .tree__hint {
+    padding: 3px 10px;
+    font-size: 0.7rem;
+  }
+  .tree__hint-text {
+    display: none;
+  }
+}
+
+/* ---- Build summary: the build at a glance, PoE character-panel style ---- */
+.summary {
+  flex: none;
+  width: clamp(250px, 24vw, 320px);
+  padding: 14px 16px 18px;
+  overflow-y: auto;
+  background: linear-gradient(180deg, rgb(14 11 12 / 0.97), rgb(8 7 9 / 0.97));
+  border-left: 1px solid var(--bronze-700);
+  box-shadow: inset 8px 0 18px -12px #000;
+  overscroll-behavior: contain;
+}
+
+.summary__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.14em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--ember-200);
+}
+
+.summary__counts,
+.summary__empty {
+  margin: 6px 0 4px;
+  font-size: 0.82rem;
+  text-align: center;
+  color: var(--ash-400);
+}
+
+.summary__empty {
+  margin-top: 18px;
+  font-style: italic;
+}
+
+.summary section {
+  margin-top: 14px;
+}
+
+.summary h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 6px;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bronze-300);
+}
+
+.summary h4::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--bronze-700), transparent);
+}
+
+.summary ul {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.summary__node {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 30px;
+  padding: 3px 6px;
+  font-size: 0.9rem;
+  text-align: left;
+  color: var(--parch-100);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 3px;
+}
+
+.summary__node:hover,
+.summary__node:focus-visible {
+  background: rgb(255 255 255 / 0.04);
+  border-color: color-mix(in srgb, var(--c, var(--ember-400)) 45%, transparent);
+}
+
+.summary__node svg {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  fill: var(--c, var(--ember-400));
+}
+
+.summary__node--keystone,
+.summary__node--mastery {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--ember-200);
+}
+
+.summary__node--keystone svg {
+  width: 22px;
+  height: 22px;
+}
+
+.summary__totals li {
+  padding: 2px 6px;
+  font-size: 0.86rem;
+  color: var(--rarity-magic);
+}
+
+@media (max-width: 820px) {
+  .tree__body {
+    position: relative;
+  }
+  .tree__summary-toggle {
+    display: inline-flex;
+  }
+  .tree__summary-toggle[aria-expanded="true"] {
+    color: var(--ember-200);
+    border-color: var(--ember-400);
+  }
+  /* A bottom sheet over the tree instead of a block that steals a third of it. */
+  .summary {
+    position: absolute;
+    inset: auto 0 0;
+    z-index: 3;
+    display: none;
+    width: auto;
+    max-height: 62%;
+    border-top: 1px solid var(--bronze-500);
+    border-left: 0;
+    box-shadow: 0 -12px 28px rgb(0 0 0 / 0.7);
+  }
+  .tree--summary-open .summary {
+    display: block;
+  }
+}
+
+/* ---- Backdrop: region glows and emblems (RegionBackdrop) ---- */
+.glow-stop--north,
+.region-emblem--north {
+  --c: var(--region-north);
+}
+.glow-stop--south,
+.region-emblem--south {
+  --c: var(--region-south);
+}
+.glow-stop--east,
+.region-emblem--east {
+  --c: var(--region-east);
+}
+.glow-stop--west,
+.region-emblem--west {
+  --c: var(--region-west);
+}
+.glow-stop--northeast,
+.region-emblem--northeast {
+  --c: var(--region-northeast);
+}
+.glow-stop--southeast,
+.region-emblem--southeast {
+  --c: var(--region-southeast);
+}
+.glow-stop--southwest,
+.region-emblem--southwest {
+  --c: var(--region-southwest);
+}
+.glow-stop--northwest,
+.region-emblem--northwest {
+  --c: var(--region-northwest);
+}
+
+.glow-stop {
+  stop-color: var(--c);
+}
+
+.region-emblem {
+  fill: var(--c);
+  opacity: 0.16;
+  pointer-events: none;
+}
+
+/* Toggle buttons in the toolbar read as on/off. */
+.tree__toolbar .btn[aria-pressed="true"] {
+  color: var(--ember-200);
+  border-color: var(--ember-400);
+  box-shadow: inset 0 0 10px rgb(var(--ember-rgb) / 0.25);
+}
+
+.tree__toolbar .btn[aria-pressed="false"] {
+  color: var(--ash-400);
+}

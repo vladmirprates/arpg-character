@@ -1,0 +1,36 @@
+.ember-field {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ember {
+  position: absolute;
+  bottom: -10px;
+  border-radius: 50%;
+  /* The glow is baked into a static gradient — never animated, so it's painted once. */
+  background: radial-gradient(circle, hsl(var(--hue) 100% 70%) 0%, hsl(var(--hue) 95% 55% / 0.6) 40%, transparent 70%);
+  box-shadow: 0 0 6px 1px hsl(var(--hue) 100% 55% / 0.6);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: ember-rise linear infinite;
+}
+
+@keyframes ember-rise {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0);
+  }
+  10% {
+    opacity: 0.85;
+  }
+  70% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--drift), -105vh, 0);
+  }
+}

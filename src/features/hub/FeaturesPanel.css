@@ -1,0 +1,47 @@
+.features {
+  display: grid;
+  /* Three per row: two tall rows fit beside the inventory; phones fall back to fewer columns. */
+  grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+  gap: 12px;
+  padding: 4px 0 6px;
+}
+
+/* Tall feature buttons: an icon over the label, lit in ember on hover.
+   (.btn.feature: outranks the generic .btn padding and height.) */
+.btn.feature {
+  flex-direction: column;
+  gap: 10px;
+  min-height: 108px;
+  padding: 16px 8px;
+  text-align: center;
+  line-height: 1.15;
+}
+
+.feature__icon {
+  width: 34px;
+  height: 34px;
+  fill: var(--ember-400);
+  filter: drop-shadow(0 0 6px rgb(var(--ember-rgb) / 0.35));
+  transition:
+    fill 0.15s,
+    transform 0.15s;
+}
+
+.feature:hover .feature__icon,
+.feature:focus-visible .feature__icon {
+  fill: var(--ember-200);
+  transform: translateY(-2px);
+}
+
+.feature {
+  position: relative;
+}
+
+/* Challenge progress on the Find the Bugs button. */
+.feature__badge {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 0.75rem;
+  color: var(--ash-400);
+}

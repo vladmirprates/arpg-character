@@ -1,0 +1,69 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      # Quality gate: any failing check stops the deploy.
+      - run: npm run typecheck
+      - run: npm run format:check
+      - run: npm run test:report
+      # Playwright builds the site (dist/) and runs every end-to-end and accessibility test on it.
+      - run: npx playwright test --grep-invert @visual
+      - run: npm run lighthouse
+      # The in-app QA Report reads this file, published next to the page.
+      - run: node scripts/qa-report.mjs dist/qa-report.json
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  # After going live: Lighthouse against the real site (HTTPS, GitHub's CDN), with the same budgets.
+  lighthouse-live:
+    name: Lighthouse on the live site
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npx --yes @lhci/cli@0.14.0 autorun --config=lighthouserc.live.json --collect.url=${{ needs.deploy.outputs.page_url }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-live
+          path: .lighthouseci/
+          retention-days: 30

@@ -1,0 +1,104 @@
+/* Equipment unit = 1.15 inventory cells: the 8-unit equipment block sits neatly over the 12-cell bag. */
+.equip {
+  --eq: calc(var(--cell) * 1.15);
+  position: relative;
+  display: grid;
+  justify-content: center;
+  gap: calc(var(--eq) * 0.25);
+  padding: 0 0 6px;
+  isolation: isolate;
+}
+
+.equip__grid {
+  display: grid;
+  grid-template-columns: repeat(8, var(--eq));
+  grid-template-rows: repeat(6, var(--eq));
+  gap: 4px;
+}
+
+.equip__flasks {
+  display: grid;
+  grid-template-columns: repeat(5, var(--eq));
+  grid-template-rows: calc(var(--eq) * 1.6);
+  justify-content: center;
+  gap: 4px;
+}
+
+.equip__sigil {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  z-index: -1;
+  /* Wider than the gear block, so the rune ring runs through the gaps around the gear instead of
+     hiding behind it. */
+  width: calc(var(--eq) * 9.6);
+  aspect-ratio: 1;
+  color: var(--ember-400);
+  transform: translate(-50%, calc(var(--eq) * -0.75));
+  pointer-events: none;
+}
+
+/* Brighter, larger runes with a soft glow (CSS beats the SVG presentation attributes). */
+.equip__sigil text {
+  font-size: 17px;
+  opacity: 0.95;
+}
+
+.equip__sigil .sigil__outer {
+  filter: drop-shadow(0 0 3px rgb(var(--ember-rgb) / 0.7));
+}
+
+.equip__sigil .sigil__outer circle,
+.equip__sigil .sigil__inner * {
+  opacity: 0.7;
+}
+
+.sigil__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.sigil__outer,
+.sigil__inner {
+  will-change: transform;
+  animation: sigil-spin 120s linear infinite;
+}
+
+.sigil__inner {
+  animation-duration: 80s;
+  animation-direction: reverse;
+}
+
+@keyframes sigil-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Living aura (the original "aura shine" — which never actually ran before).
+   Only transform/opacity animate, so it stays on the compositor. */
+.equip__aura::after {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(244 226 96 / 0.45), transparent 70%);
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: aura-pulse 3.2s ease-in-out infinite;
+}
+
+@keyframes aura-pulse {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
