@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom/vitest";
 import { cleanup } from "@testing-library/react";
-import { afterEach } from "vitest";
+import { afterEach, beforeEach } from "vitest";
 
 // Node 25 ships a native (file-backed) localStorage that shadows jsdom's; use an in-memory one.
 class MemoryStorage implements Storage {
@@ -28,9 +28,27 @@ for (const name of ["localStorage", "sessionStorage"] as const) {
   Object.defineProperty(globalThis, name, { value: new MemoryStorage(), configurable: true });
 }
 
+// React's "not wrapped in act(...)" warning means a test let a state update happen behind its
+// back. Fail the test instead of logging it: 374 of them once filled the CI log unnoticed,
+// because Vitest's default reporter hides console output from passing tests.
+let actWarnings: string[] = [];
+const consoleError = console.error.bind(console);
+beforeEach(() => {
+  actWarnings = [];
+  console.error = (...args: unknown[]) => {
+    const message = String(args[0]);
+    // React passes the component name separately: "An update to %s inside a test…".
+    if (message.includes("not wrapped in act"))
+      actWarnings.push(message.split("\n")[0]!.replace("%s", String(args[1])));
+    else consoleError(...args);
+  };
+});
+
 afterEach(() => {
   cleanup();
   localStorage.clear();
+  console.error = consoleError;
+  if (actWarnings.length) throw new Error(`React act() warnings:\n${[...new Set(actWarnings)].join("\n")}`);
 });
 
 // jsdom lacks the modal dialog API; emulate just enough of it.

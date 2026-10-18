@@ -1,4 +1,4 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { act, fireEvent, screen } from "@testing-library/react";
 import { vi } from "vitest";
 import { BACKPACK } from "../../data/equipment";
 import { encodeRecipe } from "../../game/crafting/recipe";
@@ -50,14 +50,14 @@ describe("moving items between the bag and the stash", () => {
 
   test("keyboard: Enter picks up, Enter on a cell places, Esc cancels", async () => {
     const { user } = setup();
-    screen.getByTestId("bag-1").focus();
+    act(() => screen.getByTestId("bag-1").focus());
     await user.keyboard("{Enter}");
     await user.keyboard("{Escape}");
     expect(screen.queryByRole("button", { name: /^Place in/ })).not.toBeInTheDocument();
 
-    screen.getByTestId("bag-1").focus();
+    act(() => screen.getByTestId("bag-1").focus());
     await user.keyboard("{Enter}");
-    screen.getByRole("button", { name: "Place in the bag, cell 60" }).focus();
+    act(() => screen.getByRole("button", { name: "Place in the bag, cell 60" }).focus());
     await user.keyboard("{Enter}");
     expect(screen.getByTestId("bag-59")).toBeInTheDocument();
     expect(screen.queryByTestId("bag-1")).not.toBeInTheDocument();
@@ -71,7 +71,7 @@ describe("moving items between the bag and the stash", () => {
 
     await user.click(screen.getByTestId("stash-0"));
     await user.click(screen.getByRole("button", { name: "Place in the bag, cell 10" }));
-    screen.getByTestId("bag-9").focus();
+    act(() => screen.getByTestId("bag-9").focus());
     fireEvent.keyDown(screen.getByTestId("bag-9"), { key: "Enter", shiftKey: true });
     expect(onOpenBench).toHaveBeenCalledTimes(2);
   });

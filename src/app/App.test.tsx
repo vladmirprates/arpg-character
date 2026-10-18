@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { act, render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { App } from "./App";
 import { STRINGS } from "../i18n/strings";
@@ -65,7 +65,8 @@ describe("<App />", () => {
     const meeting = screen.getByRole("dialog", { name: /Sprint Sync/ });
     const leave = within(meeting).getByRole("button", { name: "Leave meeting" });
     expect(leave).toHaveFocus();
-    vi.advanceTimersByTime(30_000);
+    // Inside act(): 30 s of cooldown and Coffee ticks re-render the action bar.
+    act(() => vi.advanceTimersByTime(30_000));
     expect(screen.getByRole("dialog", { name: /Sprint Sync/ })).toBeInTheDocument();
     await user.click(leave);
     expect(screen.queryByRole("dialog", { name: /Sprint Sync/ })).not.toBeInTheDocument();
@@ -136,7 +137,7 @@ describe("<App />", () => {
   test("Ctrl+C on a focused item copies it in ARPG item-text format", async () => {
     const user = userEvent.setup();
     render(<App initialLocale="en" />);
-    screen.getByTestId("equip-helmet").focus();
+    act(() => screen.getByTestId("equip-helmet").focus());
     await user.keyboard("{Control>}c{/Control}");
     expect(await navigator.clipboard.readText()).toMatch(/Crown of the Automator/);
     expect(await screen.findByRole("status")).toHaveTextContent("Item copied to clipboard");

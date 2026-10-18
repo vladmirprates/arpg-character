@@ -1,4 +1,4 @@
-import { fireEvent, screen, within } from "@testing-library/react";
+import { act, fireEvent, screen, within } from "@testing-library/react";
 import { renderWithProviders } from "../../test/render";
 import { encodeRecipe } from "../../game/crafting/recipe";
 import { StashPanel } from "../stash/StashPanel";
@@ -45,7 +45,7 @@ describe("<CraftingBench />", () => {
 
   test("keyboard users can craft with Enter: the orb is picked up and focus moves to the item", async () => {
     const { user } = renderWithProviders(<CraftingBench incoming={null} />);
-    orb("transmute").focus();
+    act(() => orb("transmute").focus());
     await user.keyboard("{Enter}");
     expect(slot()).toHaveFocus();
     expect(slot()).toHaveAccessibleName("Use Orb of Triage on the item");
