@@ -158,3 +158,20 @@ test("no dialog scrolls as a whole: only its content scrolls, so there's one scr
     await expect(dialog).toHaveCount(0);
   }
 });
+
+// Found by hand: on phones the quest log's tabs are a horizontal strip, and the act it opens on
+// (the latest) sat off-screen, so nothing showed which act was selected.
+test("the quest log opens with its selected act tab in view", async ({ page }) => {
+  await page.goto("./");
+  await page.getByTestId("open-quests").click();
+  const log = page.getByRole("dialog", { name: "Quest Log" });
+  const selected = log.locator('[role="tab"][aria-selected="true"]');
+  await expect(selected).toBeVisible();
+  const strip = (await log.getByRole("tablist").boundingBox())!;
+  await expect
+    .poll(async () => {
+      const box = (await selected.boundingBox())!;
+      return box.x >= strip.x - 1 && box.x + box.width <= strip.x + strip.width + 1;
+    })
+    .toBe(true);
+});

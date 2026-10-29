@@ -15,6 +15,8 @@ export interface Act {
   company: string;
   /** Client projects worked on, if any. */
   clients?: string[];
+  /** A game the job shipped work on: highlighted in the log like a unique item. */
+  game?: { name: string; genre: L; icon: string };
   place: L;
   from: Month;
   to: Month;
@@ -151,6 +153,49 @@ export const ACTS: Act[] = [
       },
     ],
     gems: ["Playwright", "Selenium", "Java", "Salesforce", "Mobile"],
+  },
+  {
+    id: "rogue-snail",
+    role: {
+      en: "Game Quality Assurance Engineer (Freelance)",
+      pt: "Engenheiro de Quality Assurance de Jogos (Freelance)",
+    },
+    company: "Rogue Snail",
+    game: {
+      name: "Hell Clock",
+      genre: { en: "Brazilian Action RPG & Roguelite", pt: "Action RPG e Roguelite brasileiro" },
+      icon: "pocket-watch",
+    },
+    place: REMOTE,
+    from: "2026-02",
+    to: "2026-11",
+    quests: [
+      {
+        en: "Mapped, triaged and documented 200+ bugs and crash reports in Jira, managing their lifecycle and owning the PC build's quality",
+        pt: "Mapeei, fiz a triagem e documentei mais de 200 bugs e relatórios de falhas no Jira, gerenciando o ciclo de vida e garantindo a qualidade da versão de PC",
+      },
+      {
+        en: "Took over PC validation so the team could split its effort across consoles and mobile, widening multiplatform coverage",
+        pt: "Assumi a validação no PC para o time dividir esforços entre consoles e mobile, ampliando a cobertura multiplataforma",
+      },
+      {
+        en: "Analyzed complex mechanics, skill synergies, itemization and theorycrafting, drawing on 4,000+ hours of Action RPGs",
+        pt: "Analisei mecânicas complexas, sinergias de habilidades, itemização e theorycrafting, com mais de 4.000 horas de Action RPGs na bagagem",
+      },
+      {
+        en: "Proposed design and balance changes to skills and items that the team adopted, improving the player experience",
+        pt: "Propus ajustes de design e balanceamento em skills e itens que o time adotou, melhorando a experiência do jogador",
+      },
+      {
+        en: "Supported players directly: technical help, answering questions and investigating community-reported bugs",
+        pt: "Dei suporte direto aos jogadores: ajuda técnica, esclarecimento de dúvidas e investigação de falhas reportadas pela comunidade",
+      },
+      {
+        en: "Ran tests with the community's beta testers through public betas and PTRs",
+        pt: "Conduzi testes com a comunidade de beta testers durante Betas públicas e PTRs",
+      },
+    ],
+    gems: ["Jira", "Bug Triage", "PC Testing", "Balancing", "Live Ops", "Beta / PTR"],
   },
 ];
 

@@ -1,4 +1,4 @@
-import { useState, type KeyboardEvent } from "react";
+import { useEffect, useState, type KeyboardEvent } from "react";
 import { ACTS, SIDE_QUESTS, TRIALS, monthsBetween, type Act } from "../../data/questLog";
 import { TREE_ICONS, iconViewBox } from "../../game/tree/icons.generated";
 import { useI18n, type I18n } from "../../i18n/I18nProvider";
@@ -31,6 +31,16 @@ export function QuestLog() {
   const { t, l, date } = useI18n();
   // Open on the latest act, like the game opens on where you are.
   const [tab, setTab] = useState<Tab>(ACTS.at(-1)!.id);
+  // On phones the tabs are a horizontal strip: keep the selected one in view (the latest act,
+  // which it opens on, starts off-screen). A frame later, because this effect runs before the
+  // parent <Modal>'s, which is what opens the dialog: before that there's nothing to scroll.
+  // jsdom has no scrollIntoView.
+  useEffect(() => {
+    const frame = requestAnimationFrame(() =>
+      document.getElementById(`quest-tab-${tab}`)?.scrollIntoView?.({ block: "nearest", inline: "nearest" }),
+    );
+    return () => cancelAnimationFrame(frame);
+  }, [tab]);
 
   const select = (next: Tab) => {
     setTab(next);
@@ -104,6 +114,11 @@ export function QuestLog() {
                   <span className="questlog__tab-sub" translate="no">
                     {a.company}
                   </span>
+                  {a.game && (
+                    <span className="questlog__tab-game" translate="no">
+                      {a.game.name}
+                    </span>
+                  )}
                 </>
               ) : (
                 <span className="questlog__tab-act">{t(id === "side" ? "quests.side" : "quests.trials")}</span>
@@ -137,6 +152,18 @@ export function QuestLog() {
                 {monthLabel(act.from, date)} – {monthLabel(act.to, date)} · {duration(act)} · {l(act.place)}
               </p>
             </header>
+            {act.game && (
+              <div className="questlog__game" data-testid="quest-game">
+                <Glyph name={act.game.icon} className="questlog__game-icon" />
+                <div>
+                  <span className="questlog__game-kicker">{t("quests.game")}</span>
+                  <span className="questlog__game-name" translate="no">
+                    {act.game.name}
+                  </span>
+                  <span className="questlog__game-genre">{l(act.game.genre)}</span>
+                </div>
+              </div>
+            )}
             <h4>{t("quests.completed")}</h4>
             {quests(act.quests)}
             <h4>{t("quests.gems")}</h4>

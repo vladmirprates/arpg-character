@@ -96,6 +96,7 @@ A versão antiga era JS puro. Reconstruí-la com testes revelou defeitos reais �
 - O Relatório de QA tinha **duas barras de rolagem**: textos só para leitores de tela, posicionados em relação ao `<dialog>`, o esticavam além da tela. Um teste agora abre todo diálogo e falha se algum rolar inteiro (verificado contra o bug).
 - **Manual pontuava menos que Automação** mesmo com mais da árvore alocada: os atributos vinham só de alguns tipos de nó pequeno, então seguiam o layout e não a build. Agora todo nó do mesmo tipo dá o mesmo valor, garantido por um teste unitário.
 - **O CI tinha parado de rodar sem avisar**: um `hashFiles()` num `if` de job fazia o GitHub rejeitar o arquivo de workflow inteiro, então toda execução "falhava" com zero jobs, o que parecia falha de teste. Descoberto ao investigar por que uma execução não tinha resultados.
+- No celular, o diário de missões **abria numa aba de ato fora da tela**, sem mostrar qual ato estava selecionado. Rolar a aba até ela não funcionou de primeira: o React roda o efeito do diário antes do efeito do diálogo, que é quem o abre. Agora ele espera um frame (E2E no desktop e no celular).
 - A primeira versão rodava a **4 FPS**. Um trace mostrou que ~95% de cada frame ia para rasterizar um canvas de tela cheia com brasas desfocadas; refeito com CSS que roda só no compositor, chegou a 60 FPS (e mover a árvore parou de re-renderizar o React a cada movimento do mouse).
 
 ## Por dentro

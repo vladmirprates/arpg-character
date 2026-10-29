@@ -32,7 +32,7 @@ test("[CERT-A11Y-01] quest log dialog has no WCAG A/AA violations", async ({ pag
   await page.goto("./");
   await page.getByTestId("open-quests").click();
   const log = page.getByRole("dialog", { name: "Quest Log" });
-  await expect(log.getByRole("tab", { name: /Act IV/ })).toHaveAttribute("aria-selected", "true");
+  await expect(log.getByRole("tab", { name: /Act V/ })).toHaveAttribute("aria-selected", "true");
   await expectNoViolations(page);
   await log.getByRole("tab", { name: "Side Quests" }).click();
   await expectNoViolations(page);
