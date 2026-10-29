@@ -96,6 +96,7 @@ The old version was vanilla JS. Rebuilding it with tests in place found real def
 - The QA Report had **two scrollbars**: screen-reader-only text, positioned against the `<dialog>`, stretched it past the screen. A test now opens every dialog and fails if one scrolls as a whole (checked against the bug).
 - **Manual scored lower than Automation** with more of the tree taken: attributes came only from some small-node types, so they followed the layout rather than the build. Now every node of a kind grants the same, enforced by a unit test.
 - **CI had silently stopped running**: a `hashFiles()` check in a job-level `if` made GitHub reject the whole workflow file, so every run "failed" with zero jobs, which looked like a test failure. Found while checking why a run had no results.
+- On phones the quest log **opened on an act tab scrolled out of sight**, so nothing showed which act was selected. Scrolling it into view first did nothing: React runs the log's effect before the dialog's own, which is what opens it. Now it waits a frame (E2E on desktop and mobile).
 - The first cut ran at **4 FPS**. A trace showed ~95% of every frame went to rasterizing a full-screen canvas of blurred embers; rebuilt as compositor-only CSS it runs at 60 FPS (and tree panning stopped re-rendering React on every mouse move).
 
 ## Under the hood

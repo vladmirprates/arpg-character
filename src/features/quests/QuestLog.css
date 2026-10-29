@@ -49,6 +49,13 @@
   color: var(--ash-500);
 }
 
+/* A game the job worked on, under the studio's name in its tab. */
+.questlog__tab-game {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--rarity-unique);
+}
+
 .questlog__panel {
   padding: 22px clamp(16px, 3vw, 32px) 28px;
   overflow-y: auto;
@@ -237,4 +244,52 @@
   .questlog__tab {
     flex: none;
   }
+}
+
+/* The game an act worked on, styled like a unique item: it's the headline of the job. */
+.questlog__game {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 16px 0 4px;
+  padding: 12px 16px;
+  border: 1px solid rgb(217 130 59 / 0.55);
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, rgb(217 130 59 / 0.16), rgb(217 130 59 / 0.03));
+  box-shadow: inset 0 0 18px rgb(217 130 59 / 0.12);
+}
+
+.questlog__game-icon {
+  flex: none;
+  width: 42px;
+  height: 42px;
+  fill: var(--rarity-unique);
+  filter: drop-shadow(0 0 6px rgb(217 130 59 / 0.5));
+}
+
+.questlog__game > div {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.questlog__game-kicker {
+  font-family: var(--font-ui);
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ash-400);
+}
+
+.questlog__game-name {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  letter-spacing: 0.06em;
+  color: var(--rarity-unique);
+  text-shadow: 0 0 12px rgb(217 130 59 / 0.35);
+}
+
+.questlog__game-genre {
+  font-size: 0.9rem;
+  color: var(--parch-300);
 }

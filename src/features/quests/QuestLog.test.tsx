@@ -14,16 +14,25 @@ describe("<QuestLog />", () => {
   test("opens on the latest act, with its quests and gems", () => {
     renderWithProviders(<QuestLog />);
     const latest = ACTS.at(-1)!;
-    expect(screen.getByRole("tab", { name: /Act IV/ })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("tab", { name: /Act V/ })).toHaveAttribute("aria-selected", "true");
     const panel = screen.getByRole("tabpanel");
     expect(within(panel).getByRole("heading", { name: latest.role.en })).toBeInTheDocument();
-    expect(within(panel).getByText(/1 yr 11 mo/)).toBeInTheDocument();
+    expect(within(panel).getByText(/10 mo/)).toBeInTheDocument();
     expect(within(panel).getAllByRole("listitem").length).toBeGreaterThanOrEqual(latest.quests.length);
+  });
+
+  test("a job's game is highlighted, apart from the studio it was made at", () => {
+    renderWithProviders(<QuestLog />);
+    const panel = screen.getByRole("tabpanel");
+    expect(within(panel).getByTestId("quest-game")).toHaveTextContent(/Game\s*Hell Clock\s*Brazilian Action RPG/);
+    expect(within(panel).getByText("Rogue Snail")).toBeInTheDocument();
+    expect(panel).not.toHaveTextContent("Clients");
+    expect(screen.getByRole("tab", { name: /Act V/ })).toHaveTextContent("Hell Clock");
   });
 
   test("arrow keys move between acts, side quests and trials", async () => {
     const { user } = renderWithProviders(<QuestLog />);
-    screen.getByRole("tab", { name: /Act IV/ }).focus();
+    screen.getByRole("tab", { name: /Act V/ }).focus();
     await user.keyboard("{ArrowDown}");
     expect(screen.getByRole("tab", { name: "Side Quests" })).toHaveFocus();
     expect(screen.getAllByRole("article")).toHaveLength(SIDE_QUESTS.length);
