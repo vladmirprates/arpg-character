@@ -1,7 +1,7 @@
 import { Fragment, type ReactNode } from "react";
 import { resistLines } from "../game/stats";
 import type { DisplayItem, ItemRarity } from "../data/equipment";
-import { requirementLine } from "../data/equipment";
+import { requirementLine, setLines } from "../data/equipment";
 import type { ItemView } from "../game/crafting/describe";
 import { useI18n } from "../i18n/I18nProvider";
 import { Markup, plainText } from "./Markup";
@@ -44,7 +44,7 @@ export function ItemCard({ rarity, name, base, blocks, flavor, corrupted, footer
 }
 
 /** Card for a static, hand-written item (equipment, backpack). */
-export function DisplayItemCard({ item }: { item: DisplayItem }) {
+export function DisplayItemCard({ item, note, hint }: { item: DisplayItem; note?: string; hint?: string }) {
   const { l, t } = useI18n();
   const lines = (list?: DisplayItem["mods"], cls = "") =>
     list?.length ? (
@@ -66,14 +66,21 @@ export function DisplayItemCard({ item }: { item: DisplayItem }) {
         lines(item.properties, "item-card__props"),
         lines(item.requiredLevel ? [requirementLine(item.requiredLevel)] : [], "item-card__reqs"),
         lines([...(item.mods ?? []), ...resistLines(item)], "item-card__mods"),
+        note ? <p className="item-card__props">{note}</p> : null,
+        setLines(item).length ? lines(setLines(item), "item-card__set") : null,
       ]}
       flavor={item.flavor && l(item.flavor)}
-      footer={<span className="item-card__hint">{t("item.copyHint")}</span>}
+      footer={
+        <span className="item-card__hint">
+          {hint ? `${hint} · ` : ""}
+          {t("item.copyHint")}
+        </span>
+      }
     />
   );
 }
 
-/** Card for a crafted item (bench, stash). */
+/** Card for a crafted item (bench, bag). */
 export function CraftedItemCard({
   view,
   footer,
@@ -131,6 +138,7 @@ export function displayItemText(item: DisplayItem, l: (x: DisplayItem["name"]) =
     ...(item.requiredLevel ? [plainText(l(requirementLine(item.requiredLevel)))] : []),
     ...(item.mods ?? []).map((m) => plainText(l(m))),
     ...resistLines(item).map((m) => plainText(l(m))),
+    ...setLines(item).map((m) => plainText(l(m))),
     item.flavor ? `“${l(item.flavor)}”` : "",
   ]
     .filter(Boolean)
@@ -145,6 +153,7 @@ export function displayItemClipboard(item: DisplayItem, l: (x: DisplayItem["name
     (item.properties ?? []).map((p) => plainText(l(p))),
     item.requiredLevel ? [plainText(l(requirementLine(item.requiredLevel)))] : [],
     [...(item.mods ?? []), ...resistLines(item)].map((m) => plainText(l(m))),
+    setLines(item).map((m) => plainText(l(m))),
     item.flavor ? [l(item.flavor)] : [],
   ].filter((b) => b.length > 0);
   return blocks.map((b) => b.join("\n")).join("\n--------\n");

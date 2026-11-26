@@ -50,8 +50,9 @@ describe("achievements", () => {
   test("unlocking everything else unlocks Completionist", () => {
     renderWithProviders(<AchievementsPanel />);
     act(() => {
-      track({ type: "bug.found", id: "x" });
+      for (const id of ["x", "y", "z"]) track({ type: "bug.found", id });
       track({ type: "bounty.complete" });
+      track({ type: "cube.recipe", id: "x" });
       track({ type: "craft", rarity: "rare" });
       track({ type: "craft", rarity: "unique", corruption: "brick" });
       for (const rec of RECOMMENDATIONS) track({ type: "card.read", id: rec.id });

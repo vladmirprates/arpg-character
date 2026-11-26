@@ -33,3 +33,6 @@ public/qa-report.json
 # Full tool reports copied next to the local QA report
 public/reports/
 playwright-report-perf/
+
+# TypeScript incremental build cache
+*.tsbuildinfo

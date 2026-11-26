@@ -10,6 +10,18 @@ describe("monthsBetween", () => {
   });
 });
 
+describe("SIDE_QUESTS", () => {
+  test("lists the game-related quests first, then the mobile and API testing challenges", () => {
+    expect(SIDE_QUESTS.map((q) => q.id)).toEqual([
+      "portfolio",
+      "community",
+      "discord",
+      "mobile-challenge",
+      "api-challenge",
+    ]);
+  });
+});
+
 describe("<QuestLog />", () => {
   test("opens on the latest act, with its quests and gems", () => {
     renderWithProviders(<QuestLog />);

@@ -189,3 +189,15 @@
   color: #ff6b6b;
   border: 1px solid rgb(255 107 107 / 0.6);
 }
+
+.bounty__closed {
+  margin-top: 18px;
+  opacity: 0.8;
+}
+
+.bounty__cow {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  fill: var(--parch-50);
+}

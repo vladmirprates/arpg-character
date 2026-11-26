@@ -30,6 +30,34 @@ const same = (s: string): L => ({ en: s, pt: s });
 /** Newest first. */
 export const RECOMMENDATIONS: Recommendation[] = [
   {
+    id: "ramon-amorim",
+    title: { en: "One Step Ahead", pt: "Um Passo à Frente" },
+    name: "Ramon Amorim",
+    role: { en: "Software Engineer at Rogue Snail", pt: "Engenheiro de Software na Rogue Snail" },
+    date: "2026-11-12",
+    relation: "sameTeam",
+    lang: "pt",
+    original:
+      "O Vlad é uma das pessoas mais talentosas com quem já tive a oportunidade de trabalhar. Desde o início, demonstrou uma paixão genuína pelo nosso projeto e um envolvimento que ia muito além das responsabilidades do cargo. Uma das coisas que mais admiro nele é sua proatividade. Ele não se limitava a identificar problemas, mas fazia questão de pensar criticamente sobre eles e, muitas vezes, já chegava com possíveis soluções. É alguém que realmente se importa com a qualidade do trabalho que entrega e com o sucesso do projeto como um todo. Além de tudo isso, Vlad se adaptou muito rapidamente ao nosso time. Sempre teve uma comunicação excelente, conseguindo expressar suas ideias com clareza e contribuindo muito para o trabalho em equipe. Trabalharia com ele novamente sem pensar duas vezes e recomendo fortemente seu trabalho a qualquer um que tenha a oportunidade de contar com ele.",
+    translation:
+      "Vlad is one of the most talented people I have ever had the opportunity to work with. From the very start, he showed a genuine passion for our project and an involvement that went far beyond the responsibilities of his role. One of the things I admire most about him is his proactivity. He didn't stop at identifying problems: he made a point of thinking critically about them and, more often than not, already came with possible solutions. He is someone who truly cares about the quality of the work he delivers and about the success of the project as a whole. On top of all that, Vlad adapted to our team very quickly. He always communicated excellently, expressing his ideas clearly and contributing a great deal to the teamwork. I would work with him again without a second thought, and I strongly recommend his work to anyone who has the chance to count on him.",
+    artIcon: "stairs-goal",
+  },
+  {
+    id: "felipe-todeschini",
+    title: { en: "The Unexpected Interaction", pt: "A Interação Inesperada" },
+    name: "Felipe Todeschini",
+    role: same("Lead Game Designer & Team Leader · Rogue Snail"),
+    date: "2026-11-04",
+    relation: "manager",
+    lang: "en",
+    original:
+      "We first met Vladimir as one of the most active and knowledgeable players in the Hell Clock community. Before joining the team, he was already creating build videos, helping players on Reddit and Discord, and maintaining a wiki for the game. His understanding of our game systems, builds, progression, and endgame was what initially caught our attention.\n\nAfter joining us as QA, that knowledge translated very well into the actual development process. Vladimir is especially good at testing complex interactions between Skills, Gear, progression systems, and different builds — which is extremely important in an ARPG where a small change can create unexpected problems somewhere else.\n\nHe also showed us a good understanding of the difference between a bug, a balance issue, and a design problem. Because he came from the community, he was also very competent at bringing relevant player feedback to the team and giving us context on why certain issues mattered.\n\nVladimir worked with us on our two main content expansions, Journey of Nightmares and Journey of Miracles, where he helped us validate large amounts of new content, balance changes and new gameplay mechanics across both updates.\n\nHe would be a great addition to any team working on ARPGs, RPGs, or other system-heavy games that require someone with a strong understanding of complex mechanics and who can somehow find those crazy bugs and unexpected interactions that slipped past the rest of the team.",
+    translation:
+      "Conhecemos o Vladimir como um dos jogadores mais ativos e entendidos da comunidade de Hell Clock. Antes de entrar no time, ele já criava vídeos de builds, ajudava jogadores no Reddit e no Discord e mantinha uma wiki do jogo. O entendimento dele sobre os sistemas, as builds, a progressão e o endgame do jogo foi o que chamou nossa atenção no início.\n\nDepois que entrou como QA, esse conhecimento se traduziu muito bem no processo real de desenvolvimento. O Vladimir é especialmente bom em testar interações complexas entre Skills, Equipamentos, sistemas de progressão e diferentes builds — algo extremamente importante em um ARPG, onde uma pequena mudança pode criar problemas inesperados em outro lugar.\n\nEle também mostrou entender bem a diferença entre um bug, um problema de balanceamento e um problema de design. Por ter vindo da comunidade, também era muito competente em trazer ao time o feedback relevante dos jogadores e em nos dar contexto sobre por que certos problemas importavam.\n\nO Vladimir trabalhou conosco nas nossas duas principais expansões de conteúdo, Journey of Nightmares e Journey of Miracles, onde nos ajudou a validar uma grande quantidade de conteúdo novo, mudanças de balanceamento e novas mecânicas de gameplay nas duas atualizações.\n\nEle seria um ótimo reforço para qualquer time que trabalhe com ARPGs, RPGs ou outros jogos com muitos sistemas, que precisem de alguém com forte entendimento de mecânicas complexas e que, de algum jeito, consegue encontrar aqueles bugs malucos e interações inesperadas que passaram despercebidos pelo resto do time.",
+    artIcon: "spider-web",
+  },
+  {
     id: "lucas-duarte",
     title: { en: "The Foreseer", pt: "O Vidente" },
     name: "Lucas Duarte",

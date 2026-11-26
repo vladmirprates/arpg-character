@@ -1,6 +1,6 @@
 import { NODES, ROOT_ID } from "./data";
 import { buildFromTargets } from "./build";
-import { sumStats, summarize } from "./summary";
+import { sumStats, summarize, specialization } from "./summary";
 
 describe("sumStats", () => {
   test("adds lines that differ only in their number, keeping the sign style", () => {
@@ -35,5 +35,41 @@ describe("summarize", () => {
   test("an empty build has nothing to show", () => {
     const s = summarize(new Set([ROOT_ID]), NODES);
     expect(s).toEqual({ keystones: [], masteries: [], skills: [], minorStats: [] });
+  });
+});
+
+describe("specialization", () => {
+  const byRegion = (region: string) => NODES.filter((n) => n.region === region).map((n) => n.id);
+  const build = (counts: Record<string, number>) =>
+    new Set(Object.entries(counts).flatMap(([region, n]) => byRegion(region).slice(0, n)));
+
+  test("the two most-invested disciplines name the class, in either order", () => {
+    expect(specialization(build({ south: 5, east: 2 }), NODES)?.name.en).toBe("Test Alchemist");
+    expect(specialization(build({ south: 2, east: 5 }), NODES)?.name.en).toBe("Test Alchemist");
+  });
+
+  test("a third, smaller discipline doesn't change it", () => {
+    expect(specialization(build({ north: 6, west: 4, east: 1 }), NODES)?.name.en).toBe("Release Warden");
+  });
+
+  test("every pair has a name in both languages", () => {
+    const regions = ["north", "south", "east", "west"];
+    const names = new Set<string>();
+    for (const a of regions) {
+      for (const b of regions) {
+        if (a === b) continue;
+        const dual = specialization(build({ [a]: 3, [b]: 2 }), NODES)!;
+        expect(dual.name.en).toBeTruthy();
+        expect(dual.name.pt).toBeTruthy();
+        names.add(dual.name.en);
+      }
+    }
+    expect(names.size).toBe(6);
+  });
+
+  test("it takes two: nothing until a build reaches a second discipline", () => {
+    expect(specialization(new Set(), NODES)).toBeNull();
+    expect(specialization(build({ north: 4 }), NODES)).toBeNull();
+    expect(specialization(build({ northeast: 4, core: 2 }), NODES)).toBeNull(); // bridges and soft skills don't count
   });
 });

@@ -334,8 +334,6 @@ const INSPECTABLE = [
   ".resist__label",
   ".equip .slot",
   ".item-grid .slot",
-  ".stash-tabs__tab",
-  ".stash-tabs__count",
   ".feature",
   ".skill",
 ].join(", ");

@@ -50,8 +50,8 @@ export const CERT_CHECKS: readonly CertCheck[] = [
     },
     web: { en: "Survive a reload or a closed tab.", pt: "Sobreviver a um recarregamento ou aba fechada." },
     how: {
-      en: "Settings, the stash, the bug hunt and achievements are kept across reloads.",
-      pt: "Configurações, baú, caçada de bugs e conquistas são mantidos entre recarregamentos.",
+      en: "Settings, the bag and idol board, the bug hunt and achievements are kept across reloads.",
+      pt: "Configurações, mochila e tabuleiro de ídolos, caçada de bugs e conquistas são mantidos entre recarregamentos.",
     },
     evidence: "e2e",
   },

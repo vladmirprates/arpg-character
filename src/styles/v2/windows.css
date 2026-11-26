@@ -1,0 +1,1089 @@
+/* ==========================================================================
+   v2: what's inside the windows. Quest log, QA report, divination cards,
+   achievements, certification, Find the Bugs, the cube and the bench.
+
+   Documents (quests, the report, the checklist) are set like documents:
+   micro labels, brass rules, a coloured edge where a status needs one, and
+   plain words instead of pills. Game objects (cards, orbs, the bench, the
+   game a job shipped, unlocked achievements) keep their material and light.
+   ========================================================================== */
+
+:where(:root) {
+  /* ======================================================================
+     Quest log
+     ====================================================================== */
+  & .questlog__tabs {
+    gap: 0;
+    padding: 12px 0;
+    background: rgb(0 0 0 / 0.32);
+    border-right: 1px solid var(--v2-line-2);
+  }
+
+  & .questlog__tab {
+    gap: 1px;
+    padding: 11px 20px 11px 18px;
+    color: var(--v2-text-2);
+    border: 0;
+    border-left: 2px solid transparent;
+    border-radius: 0;
+    transition: color 0.12s;
+  }
+
+  & .questlog__tab:hover {
+    color: var(--v2-text);
+    background: linear-gradient(90deg, rgb(var(--v2-accent-rgb) / 0.07), transparent);
+  }
+
+  /* The selected act: a warm sweep of light from its brass edge. */
+  & .questlog__tab[aria-selected="true"] {
+    color: var(--v2-text);
+    background: linear-gradient(90deg, rgb(var(--v2-accent-rgb) / 0.16), transparent);
+    border-left-color: var(--v2-accent);
+  }
+
+  & .questlog__tab[aria-selected="true"] .questlog__tab-act {
+    color: var(--v2-accent-hi);
+  }
+
+  /* Focus rings go inside wherever an edge is clipped: the tabs run flush to the scrolling list,
+     and the scroll regions fill windows that hide their overflow. */
+  & .questlog__tab:focus-visible,
+  & .questlog__panel:focus-visible,
+  & .qa:focus-visible,
+  & .achievements:focus-visible,
+  & .cert:focus-visible,
+  & .bench__log ol:focus-visible {
+    box-shadow: inset 0 0 0 2px var(--v2-accent);
+  }
+
+  & .questlog__tab-act {
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  & .questlog__tab-sub {
+    font-size: 0.8125rem;
+    color: var(--v2-text-3);
+  }
+
+  & .questlog__tab-game {
+    font-size: 0.75rem;
+  }
+
+  & .questlog__panel {
+    padding: 26px clamp(16px, 3.5vw, 40px) 32px;
+  }
+
+  & .questlog__header h3 {
+    font-family: var(--font-display);
+    font-size: 1.75rem;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.005em;
+    color: var(--v2-text);
+    text-shadow: 0 1px 0 rgb(0 0 0 / 0.7);
+  }
+
+  & .questlog__side .questlog__header h3 {
+    font-size: 1.375rem;
+  }
+
+  & .questlog__company {
+    margin-top: 6px;
+    font-size: 1rem;
+    color: var(--v2-text);
+  }
+
+  & .questlog__company span {
+    color: var(--v2-text-2);
+  }
+
+  & .questlog__meta {
+    font-size: 0.875rem;
+    color: var(--v2-text-3);
+  }
+
+  /* Section labels: diamond, tracked label, a rule that fades out (as on the sheet's panels). */
+  & .questlog__panel h4 {
+    gap: 10px;
+    margin: 28px 0 12px;
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--bronze-300);
+  }
+
+  & .questlog__panel h4::before {
+    content: "";
+    flex: none;
+    width: 4px;
+    height: 4px;
+    margin-left: 1px;
+    background: rgb(var(--v2-accent-rgb) / 0.85);
+    transform: rotate(45deg);
+  }
+
+  & .questlog__panel h4::after {
+    background: linear-gradient(90deg, var(--v2-line-3), transparent);
+  }
+
+  & .quests-list {
+    gap: 9px;
+  }
+
+  & .quests-list li {
+    gap: 12px;
+    color: var(--v2-text);
+  }
+
+  & .quests-list__check {
+    width: 15px;
+    height: 15px;
+    margin-top: 4px;
+    fill: var(--v2-accent);
+    filter: drop-shadow(0 0 4px rgb(var(--v2-accent-rgb) / 0.35));
+  }
+
+  /* Tools: square tags set in bronze. */
+  & .gem {
+    padding: 3px 9px;
+    font-size: 0.8125rem;
+    color: var(--v2-text-2);
+    background: rgb(0 0 0 / 0.3);
+    border: 1px solid rgb(var(--v2-accent-rgb) / 0.24);
+    border-radius: var(--radius);
+  }
+
+  & .gem::before {
+    content: none;
+  }
+
+  & .questlog__side + .questlog__side {
+    border-top-color: var(--v2-line-2);
+  }
+
+  & .questlog__links a,
+  & .trials a {
+    color: var(--v2-accent);
+  }
+
+  & .trials li {
+    background: linear-gradient(180deg, rgb(255 220 170 / 0.03), rgb(0 0 0 / 0.25));
+    border: 1px solid var(--v2-line-2);
+    border-radius: var(--radius);
+  }
+
+  & .trials__icon {
+    fill: var(--v2-accent);
+    filter: drop-shadow(0 0 5px rgb(var(--v2-accent-rgb) / 0.35));
+  }
+
+  & .trials small {
+    color: var(--v2-text-3);
+  }
+
+  /* The game a job shipped: the headline of the act, lit like a unique item. */
+  & .questlog__game {
+    gap: 16px;
+    margin: 20px 0 4px;
+    padding: 14px 18px;
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--rarity-unique) 16%, transparent),
+      color-mix(in srgb, var(--rarity-unique) 3%, transparent)
+    );
+    border: 1px solid color-mix(in srgb, var(--rarity-unique) 45%, transparent);
+    border-left: 2px solid var(--rarity-unique);
+    border-radius: var(--radius);
+    box-shadow: inset 0 0 18px color-mix(in srgb, var(--rarity-unique) 12%, transparent);
+  }
+
+  & .questlog__game-icon {
+    width: 38px;
+    height: 38px;
+    filter: drop-shadow(0 0 6px color-mix(in srgb, var(--rarity-unique) 50%, transparent));
+  }
+
+  & .questlog__game-kicker {
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--v2-text-2);
+  }
+
+  & .questlog__game-name {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-shadow: 0 0 12px color-mix(in srgb, var(--rarity-unique) 35%, transparent);
+  }
+
+  & .questlog__game-genre {
+    font-size: 0.875rem;
+    color: var(--v2-text-2);
+  }
+
+  @media (max-width: 720px) {
+    & .questlog__tabs {
+      padding: 0 6px;
+      border-right: 0;
+      border-bottom: 1px solid var(--v2-line-2);
+    }
+    & .questlog__tab {
+      padding: 10px 14px;
+      border-left: 0;
+      border-bottom: 2px solid transparent;
+    }
+    & .questlog__tab[aria-selected="true"] {
+      background: linear-gradient(0deg, rgb(var(--v2-accent-rgb) / 0.16), transparent);
+      border-bottom-color: var(--v2-accent);
+    }
+  }
+
+  /* ======================================================================
+     QA report: key figures set like a report, under brass rules.
+     ====================================================================== */
+  & .qa {
+    padding: 22px clamp(16px, 3.5vw, 40px) 32px;
+  }
+
+  & .qa__status {
+    margin-bottom: 26px;
+    padding: 12px 16px;
+    color: var(--v2-text-2);
+    border-radius: var(--radius);
+  }
+
+  /* Pass / fail: v1's lamp, a full coloured border on a dark tinted ground. */
+  & .qa__status.is-pass {
+    background: rgb(116 214 143 / 0.08);
+    border: 1px solid rgb(116 214 143 / 0.45);
+  }
+
+  & .qa__status.is-pass strong {
+    color: #74d68f;
+  }
+
+  & .qa__status.is-fail {
+    background: rgb(229 72 77 / 0.08);
+    border: 1px solid rgb(229 72 77 / 0.5);
+  }
+
+  & .qa__status.is-fail strong {
+    color: #ff7b7b;
+  }
+
+  & .qa__status a,
+  & .qa__source a,
+  & .qa__full {
+    color: var(--v2-accent);
+  }
+
+  & .qa__tiles {
+    gap: 30px 32px;
+  }
+
+  /* Each figure sits under a brass rule that fades into a hairline. */
+  & .qa__tile {
+    padding: 15px 0 0;
+    background:
+      linear-gradient(90deg, rgb(var(--v2-accent-rgb) / 0.6), rgb(var(--v2-accent-rgb) / 0) 55%) left top / 100% 1px
+        no-repeat,
+      linear-gradient(var(--v2-line-2), var(--v2-line-2)) left top / 100% 1px no-repeat;
+    border: 0;
+    border-radius: 0;
+  }
+
+  & .qa__tile h3,
+  & .qa__how h3 {
+    margin: 0 0 10px;
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--bronze-300);
+  }
+
+  & .qa__tile p {
+    color: var(--v2-text-2);
+  }
+
+  & .qa__tile .qa__big {
+    margin-bottom: 6px;
+  }
+
+  & .qa__big {
+    font-family: var(--font-display);
+    font-size: 2.25rem;
+    font-weight: 500;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    font-variant-numeric: lining-nums;
+    color: var(--v2-text) !important;
+    text-shadow: 0 1px 0 rgb(0 0 0 / 0.7);
+  }
+
+  & .meter {
+    color: var(--v2-text-2);
+  }
+
+  & .meter strong {
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+    color: var(--v2-text);
+  }
+
+  & .meter__bar {
+    height: 4px;
+    overflow: visible;
+    background: rgb(0 0 0 / 0.45);
+    border-radius: 0;
+    box-shadow: inset 0 0 0 1px var(--v2-line);
+  }
+
+  & .meter__bar div {
+    background: linear-gradient(90deg, var(--ember-500), var(--v2-accent-hi));
+    box-shadow: 0 0 8px rgb(var(--v2-accent-rgb) / 0.4);
+  }
+
+  /* Lighthouse keeps its traffic-light bands (that's their meaning), softly lit. */
+  & .gauge {
+    --g: var(--v2-ok);
+  }
+
+  & .gauge--ok {
+    --g: var(--v2-warn);
+  }
+
+  & .gauge--bad {
+    --g: var(--v2-bad);
+  }
+
+  & .gauge svg {
+    filter: drop-shadow(0 0 5px color-mix(in srgb, var(--g) 40%, transparent));
+  }
+
+  & .gauge__track {
+    fill: color-mix(in srgb, var(--g) 6%, transparent);
+    stroke: var(--v2-line-2);
+    stroke-width: 4;
+  }
+
+  & .gauge__value {
+    stroke-width: 4;
+    stroke-linecap: butt;
+  }
+
+  & .gauge__score {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-variant-numeric: lining-nums;
+  }
+
+  & .gauge__label {
+    color: var(--v2-text-2);
+  }
+
+  & .qa__skipped summary {
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--bronze-300);
+  }
+
+  & .qa__skipped summary:hover {
+    color: var(--v2-accent-hi);
+  }
+
+  & .qa__skipped li {
+    background: rgb(0 0 0 / 0.3);
+    border: 1px solid var(--v2-line);
+    border-radius: var(--radius);
+  }
+
+  & .qa__source,
+  & .qa__fine,
+  & .qa__skipped p,
+  & .qa__skipped span {
+    color: var(--v2-text-2);
+  }
+
+  & .qa__how ul {
+    color: var(--v2-text);
+  }
+
+  /* ======================================================================
+     Divination cards: game objects, so they keep their material. A bronze
+     frame, a lit title band, and the art glowing on its dark ground.
+     ====================================================================== */
+  & .divination__intro {
+    color: var(--v2-text-2);
+  }
+
+  & .divination__intro a {
+    color: var(--v2-accent);
+  }
+
+  & .divination__pick:hover,
+  & .divination__pick:focus-visible {
+    transform: translateY(-4px);
+  }
+
+  & .divination__pick:hover .divcard,
+  & .divination__pick:focus-visible .divcard {
+    border-color: var(--v2-accent-hi);
+    box-shadow:
+      0 0 0 1px #000,
+      0 0 18px rgb(var(--v2-accent-rgb) / 0.4),
+      0 14px 28px rgb(0 0 0 / 0.55);
+  }
+
+  & .divcard {
+    background: linear-gradient(180deg, #141014, #070608);
+    border: 2px solid #7a6440;
+    border-radius: 5px;
+    box-shadow:
+      0 0 0 1px #000,
+      inset 0 0 0 1px rgb(255 220 160 / 0.08),
+      0 8px 18px rgb(0 0 0 / 0.6);
+  }
+
+  & .divcard__title {
+    padding: 8px 8px 7px;
+    font-family: var(--font-display);
+    font-weight: 500;
+    color: var(--parch-50);
+    text-shadow: 0 1px 0 #000;
+    background: linear-gradient(180deg, #2c2218, #16110c);
+    border-bottom: 1px solid #5b4a2f;
+  }
+
+  & .divcard__art {
+    background:
+      radial-gradient(circle at 50% 55%, rgb(var(--v2-accent-rgb) / 0.26), transparent 65%),
+      linear-gradient(180deg, #1b1520, #0c0a10);
+    border-bottom: 1px solid #5b4a2f;
+  }
+
+  & .divcard__art svg {
+    fill: var(--v2-accent-hi);
+    filter: drop-shadow(0 0 10px rgb(var(--v2-accent-rgb) / 0.55));
+  }
+
+  & .divcard__stack {
+    font-family: var(--v2-mono);
+    font-size: 0.6875rem;
+    color: var(--v2-text);
+  }
+
+  /* The reward is the person: named in the unique colour, as a card's reward would be. */
+  & .divcard__reward strong {
+    font-weight: 700;
+    color: var(--rarity-unique);
+  }
+
+  & .divcard__reward span {
+    color: var(--v2-text-2);
+  }
+
+  & .divcard__flavour {
+    font-family: var(--font-display);
+    color: color-mix(in srgb, var(--v2-accent) 65%, var(--v2-text-2));
+    border-top-color: rgb(122 100 64 / 0.5);
+  }
+
+  /* How we worked together: a coloured word, not a pill. */
+  & .relation {
+    margin-top: 6px;
+    padding: 0;
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: none;
+    border: 0;
+    border-radius: 0;
+  }
+
+  /* (Outranks .divcard__reward span, which would grey it: in v1 the pill's border carried the colour.) */
+  & .divcard__reward .relation {
+    color: var(--rel);
+  }
+
+  & .relation--manager {
+    --rel: var(--v2-accent-hi);
+  }
+
+  & .relation--sameTeam {
+    --rel: var(--v2-ok);
+  }
+
+  & .relation--otherTeam {
+    --rel: var(--v2-info);
+  }
+
+  & .relation--otherCompany {
+    --rel: #bd96ff;
+  }
+
+  & .divination__zoom::backdrop {
+    background: radial-gradient(ellipse at 50% 40%, rgb(30 18 12 / 0.7), rgb(0 0 0 / 0.92));
+  }
+
+  /* The zoomed card keeps the card's centred title, like the cards in the gallery. */
+  & .divcard--full .divcard__title {
+    font-size: 1.5rem;
+    text-align: center;
+  }
+
+  & .divcard--full .relation {
+    margin-top: 10px;
+    padding: 0;
+    font-size: 0.75rem;
+  }
+
+  /* The zoomed card is for reading: the recommendation set as a quotation in the serif. */
+  & .divcard--full .divcard__flavour {
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    color: var(--v2-text);
+    border-top-color: rgb(122 100 64 / 0.5);
+  }
+
+  & .divcard--full .divcard__flavour::before {
+    color: var(--v2-accent);
+    text-shadow: 0 0 12px rgb(var(--v2-accent-rgb) / 0.4);
+  }
+
+  & .divcard__footer {
+    color: var(--v2-text-3);
+    border-top-color: rgb(122 100 64 / 0.5);
+  }
+
+  & .divcard__date {
+    color: var(--v2-text-2);
+  }
+
+  @media (max-width: 640px) {
+    & .divcard__title {
+      font-size: 0.85rem;
+    }
+  }
+
+  /* ======================================================================
+     Achievements: a two-column ledger; what's unlocked is lit in gold.
+     ====================================================================== */
+  & .achievements,
+  & .cert,
+  & .bounty {
+    padding: 22px clamp(16px, 3.5vw, 40px) 32px;
+  }
+
+  & .achievements__summary {
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  & .achievements__summary p {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bronze-300);
+  }
+
+  & .achievements__bar {
+    height: 6px;
+    overflow: visible;
+    background: var(--v2-well);
+    border: 1px solid var(--v2-line-2);
+    border-radius: 0;
+  }
+
+  & .achievements__bar > div {
+    background: linear-gradient(90deg, var(--ember-500), var(--rarity-rare));
+    box-shadow: 0 0 10px color-mix(in srgb, var(--rarity-rare) 40%, transparent);
+  }
+
+  & .achievements__list {
+    gap: 0 40px;
+  }
+
+  & .achievement {
+    column-gap: 14px;
+    row-gap: 2px;
+    padding: 14px 0;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--v2-line);
+    border-radius: 0;
+  }
+
+  & .achievement__icon {
+    width: 36px;
+    height: 36px;
+    fill: var(--v2-text-3);
+    opacity: 0.7;
+  }
+
+  & .achievement__text strong {
+    font-family: var(--font-body);
+    font-weight: 700;
+    letter-spacing: 0;
+    color: var(--v2-text);
+  }
+
+  & .achievement__text span {
+    color: var(--v2-text-2);
+  }
+
+  & .achievement__state {
+    font-size: 0.8125rem;
+    color: var(--v2-text-3);
+  }
+
+  & .achievement.is-done {
+    background: linear-gradient(90deg, color-mix(in srgb, var(--rarity-rare) 7%, transparent), transparent 70%);
+    border-color: color-mix(in srgb, var(--rarity-rare) 22%, transparent);
+  }
+
+  & .achievement.is-done .achievement__icon {
+    fill: var(--rarity-rare);
+    opacity: 1;
+    filter: drop-shadow(0 0 6px color-mix(in srgb, var(--rarity-rare) 45%, transparent));
+  }
+
+  & .achievement.is-done .achievement__text strong {
+    color: var(--rarity-rare);
+  }
+
+  & .achievement.is-done .achievement__state {
+    color: var(--v2-ok);
+  }
+
+  & .achievements__footer {
+    color: var(--v2-text-2);
+  }
+
+  /* ======================================================================
+     Certification
+     ====================================================================== */
+  & .cert__intro {
+    color: var(--v2-text);
+  }
+
+  & .cert__disclaimer {
+    color: var(--v2-text-2);
+  }
+
+  & .cert__summary {
+    font-family: var(--font-body);
+    font-weight: 700;
+    letter-spacing: 0;
+    color: var(--v2-text-2);
+    background: rgb(0 0 0 / 0.35);
+    border: 1px solid var(--v2-line);
+    border-left: 2px solid var(--v2-text-3);
+    border-radius: var(--radius);
+  }
+
+  & .cert__summary.is-pass {
+    color: #74d68f;
+    background: rgb(116 214 143 / 0.08);
+    border: 1px solid rgb(116 214 143 / 0.45);
+  }
+
+  & .cert__area + .cert__area {
+    margin-top: 26px;
+  }
+
+  & .cert__area h3 {
+    margin-bottom: 10px;
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--bronze-300);
+  }
+
+  & .cert__check {
+    background: rgb(0 0 0 / 0.35);
+    border: 1px solid var(--bronze-700);
+    border-left: 3px solid var(--ash-500);
+    border-radius: var(--radius);
+  }
+
+  & .cert__check[data-status="passed"] {
+    border-left-color: #74d68f;
+  }
+
+  & .cert__check[data-status="failed"] {
+    border-left-color: #ff7b7b;
+  }
+
+  & .cert__check-head code {
+    font: 500 0.75rem var(--v2-mono);
+    color: var(--v2-accent);
+  }
+
+  & .cert__status {
+    padding: 0;
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    border: 0;
+    border-radius: 0;
+  }
+
+  & .cert__status--passed {
+    color: var(--v2-ok);
+  }
+
+  & .cert__status--failed {
+    color: var(--v2-bad);
+  }
+
+  & .cert__status--skipped,
+  & .cert__status--unknown {
+    color: var(--v2-text-3);
+  }
+
+  & .cert__req {
+    color: var(--v2-text);
+  }
+
+  & .cert__check dt {
+    color: var(--v2-text-3);
+  }
+
+  & .cert__check dd {
+    color: var(--v2-text-2);
+  }
+
+  /* ======================================================================
+     Find the Bugs: tickets
+     ====================================================================== */
+  & .bounty__intro {
+    color: var(--v2-text);
+  }
+
+  & .bounty__how {
+    color: var(--v2-text-2);
+  }
+
+  & .bounty__steps {
+    color: var(--v2-text);
+  }
+
+  & .bounty__progress {
+    font-family: var(--font-body);
+    font-weight: 700;
+    color: var(--v2-accent-hi);
+  }
+
+  & .bounty__bar {
+    height: 6px;
+    overflow: visible;
+    background: var(--v2-well);
+    border: 1px solid var(--v2-line-2);
+    border-radius: 0;
+  }
+
+  & .bounty__fill {
+    background: linear-gradient(90deg, var(--ember-500), var(--v2-accent-hi));
+    box-shadow: 0 0 10px rgb(var(--v2-accent-rgb) / 0.4);
+  }
+
+  & .bounty__win {
+    color: var(--v2-text);
+    background: linear-gradient(90deg, rgb(var(--v2-accent-rgb) / 0.16), transparent), rgb(0 0 0 / 0.35);
+    border: 1px solid rgb(var(--v2-accent-rgb) / 0.45);
+    border-left: 2px solid var(--v2-accent);
+    box-shadow: inset 0 0 22px rgb(var(--v2-accent-rgb) / 0.08);
+  }
+
+  & .bounty__win strong {
+    font-family: var(--font-display);
+    font-weight: 500;
+    color: var(--v2-accent-hi);
+    text-shadow: 0 0 12px rgb(var(--v2-accent-rgb) / 0.35);
+  }
+
+  & .bounty__win a {
+    color: var(--v2-accent);
+  }
+
+  & .bounty__bug {
+    background: transparent;
+    border: 1px dashed var(--v2-line-3);
+    border-radius: var(--radius);
+  }
+
+  & .bounty__bug.is-found {
+    background: rgb(0 0 0 / 0.35);
+    border: 1px solid var(--v2-line-2);
+    border-left: 2px solid var(--v2-bad);
+  }
+
+  & .bounty__key {
+    font-family: var(--v2-mono);
+    color: var(--v2-info);
+  }
+
+  & .bounty__bug strong {
+    color: var(--v2-text);
+  }
+
+  & .bounty__bug dt {
+    color: var(--v2-text-3);
+  }
+
+  & .bounty__bug dd {
+    color: var(--v2-text);
+  }
+
+  & .bounty__hint {
+    color: var(--v2-accent-hi);
+  }
+
+  /* Severity and status: coloured words, not pills. */
+  & .bounty__sev,
+  & .bounty__fixed {
+    padding: 0;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: 0;
+    border-radius: 0;
+  }
+
+  & .bounty__sev--low {
+    color: var(--v2-ok);
+    border: 0;
+  }
+
+  & .bounty__sev--medium {
+    color: var(--v2-warn);
+    border: 0;
+  }
+
+  & .bounty__sev--high {
+    color: #ff9b6b;
+    border: 0;
+  }
+
+  & .bounty__sev--critical {
+    color: var(--v2-bad);
+    border: 0;
+  }
+
+  & .bounty__fixed {
+    color: var(--v2-info);
+  }
+
+  & .bounty__cow {
+    fill: var(--v2-text-2);
+  }
+
+  /* ======================================================================
+     Cube: v1's framed chest interior stays (bronze rim, inner dark, a
+     breath of light); only the label changes.
+     ====================================================================== */
+  & .cube__result {
+    color: var(--v2-accent-hi);
+  }
+
+  & .cube__heading {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--bronze-300);
+  }
+
+  /* ======================================================================
+     Crafting bench
+     ====================================================================== */
+  & .bench__base {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--bronze-300);
+  }
+
+  & .bench__base select {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    color: var(--v2-text);
+    background: linear-gradient(180deg, #1c1619, #0a0809);
+    border: 1px solid rgb(var(--v2-accent-rgb) / 0.35);
+    border-radius: var(--radius);
+    box-shadow: inset 0 1px 0 rgb(255 220 170 / 0.06);
+  }
+
+  /* The item sits under a work lamp, on a bench worn into faint rings around it. */
+  & .bench__item {
+    background:
+      radial-gradient(ellipse 55% 65% at 50% 50%, rgb(var(--v2-accent-rgb) / 0.08), transparent 70%),
+      repeating-radial-gradient(circle at 30% 40%, rgb(var(--v2-accent-rgb) / 0.05) 0 1px, transparent 1px 28px),
+      var(--v2-well);
+    border: 1px solid var(--bronze-700);
+    border-radius: var(--radius);
+    box-shadow: inset 0 0 50px rgb(0 0 0 / 0.8);
+  }
+
+  & .bench__item.is-target {
+    border-color: var(--v2-accent);
+    box-shadow:
+      inset 0 0 50px rgb(0 0 0 / 0.8),
+      0 0 18px rgb(var(--v2-accent-rgb) / 0.35);
+  }
+
+  & .bench__log {
+    background: rgb(0 0 0 / 0.35);
+    border: 1px solid var(--v2-line-2);
+    border-radius: var(--radius);
+  }
+
+  & .bench__log h3 {
+    align-items: baseline;
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--bronze-300);
+  }
+
+  & .bench__seed {
+    font-family: var(--v2-mono);
+    font-size: 0.75rem;
+    color: var(--v2-text-3);
+  }
+
+  & .bench__log li {
+    border-bottom-color: var(--v2-line);
+  }
+
+  & .bench__log-tag {
+    font-family: var(--v2-mono);
+    font-weight: 600;
+  }
+
+  & .bench__log-empty {
+    color: var(--v2-text-3);
+  }
+
+  /* Currency: a forged stash panel with its tab plate hanging from the top edge, and the orbs
+     resting in three trays. */
+  & .currency-tab {
+    padding: 0 14px 12px;
+    background: var(--v2-panel-bg);
+    border: 1px solid var(--v2-panel-edge);
+    border-radius: var(--radius);
+    box-shadow: var(--v2-panel-shadow);
+  }
+
+  & .currency-tab__tab {
+    margin: 0 auto 12px;
+    padding: 4px 16px 5px;
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--v2-accent-hi);
+    background: linear-gradient(180deg, #3a2a1a, #1a120c);
+    border: 1px solid var(--bronze-500);
+    border-top: 0;
+    border-radius: 0 0 4px 4px;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 0.5);
+  }
+
+  & .currency-tab__grid {
+    gap: 10px;
+  }
+
+  & .currency-tab__row {
+    gap: 8px;
+    padding: 8px;
+    background: rgb(0 0 0 / 0.35);
+    border: 1px solid rgb(var(--v2-accent-rgb) / 0.14);
+    border-radius: var(--radius);
+  }
+
+  & .bench__hint {
+    color: var(--v2-text-3);
+  }
+
+  /* Orbs: each glows faintly in its tier's colour; picking one up makes it burn. */
+  & .orb {
+    background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--c) 16%, #141012), #050405 72%);
+    border: 1px solid color-mix(in srgb, var(--c) 40%, #000);
+    border-radius: var(--radius);
+    box-shadow:
+      inset 0 0 12px color-mix(in srgb, var(--c) 14%, transparent),
+      0 4px 10px rgb(0 0 0 / 0.55);
+    transition:
+      transform 0.12s,
+      border-color 0.15s,
+      box-shadow 0.15s;
+  }
+
+  & .orb:hover,
+  & .orb:focus-visible {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--c) 75%, transparent);
+    box-shadow:
+      inset 0 0 14px color-mix(in srgb, var(--c) 24%, transparent),
+      0 0 14px color-mix(in srgb, var(--c) 35%, transparent);
+  }
+
+  & .orb:focus-visible {
+    box-shadow:
+      inset 0 0 14px color-mix(in srgb, var(--c) 24%, transparent),
+      var(--focus-ring);
+  }
+
+  & .orb:active {
+    transform: scale(0.96);
+  }
+
+  & .orb.is-held {
+    border-color: var(--c);
+    box-shadow:
+      inset 0 0 16px color-mix(in srgb, var(--c) 32%, transparent),
+      0 0 12px color-mix(in srgb, var(--c) 42%, transparent);
+  }
+
+  @media (max-width: 640px) {
+    & .currency-tab {
+      padding: 0 8px 8px;
+      box-shadow:
+        0 0 0 1px rgb(0 0 0 / 0.75),
+        inset 0 1px 0 rgb(255 220 170 / 0.05),
+        0 -14px 24px rgb(0 0 0 / 0.8);
+    }
+    & .currency-tab__tab {
+      margin-bottom: 6px;
+      padding: 2px 14px 3px;
+      font-size: 0.625rem;
+    }
+    & .currency-tab__grid {
+      gap: 6px;
+    }
+    & .currency-tab__row {
+      gap: 4px;
+      padding: 4px;
+    }
+  }
+}

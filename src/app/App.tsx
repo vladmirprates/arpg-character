@@ -4,12 +4,13 @@ import { CraftingBench } from "../features/crafting/CraftingBench";
 import { InventoryPanel } from "../features/inventory/InventoryPanel";
 import { ActionBar } from "../features/skills/ActionBar";
 import { BugHuntProvider } from "../features/bughunt/BugHunt";
-import { StashPanel } from "../features/stash/StashPanel";
-import { StashProvider } from "../features/stash/StashProvider";
+import { IdolPanel } from "../features/items/IdolPanel";
+import { ItemsProvider } from "../features/items/ItemsProvider";
 import { FeaturesPanel } from "../features/hub/FeaturesPanel";
 import { PassiveTree, type TreeTab } from "../features/tree/PassiveTree";
 import { QuestLog } from "../features/quests/QuestLog";
 import { DivinationCards } from "../features/divination/DivinationCards";
+import { TriageCube } from "../features/cube/TriageCube";
 import { BountyProvider } from "../features/bounty/BountyProvider";
 import { BugBounty } from "../features/bounty/BugBounty";
 import { QAReport } from "../features/qa/QAReport";
@@ -42,11 +43,11 @@ export function App({ initialLocale }: { initialLocale?: Locale }) {
           <AchievementsProvider>
             <TooltipProvider>
               <BountyProvider>
-                <StashProvider>
+                <ItemsProvider>
                   <BugHuntProvider>
                     <Shell />
                   </BugHuntProvider>
-                </StashProvider>
+                </ItemsProvider>
               </BountyProvider>
             </TooltipProvider>
           </AchievementsProvider>
@@ -56,7 +57,7 @@ export function App({ initialLocale }: { initialLocale?: Locale }) {
   );
 }
 
-type Overlay = "tree" | "bench" | "quests" | "cards" | "bounty" | "qa" | "achievements" | "cert" | null;
+type Overlay = "tree" | "bench" | "quests" | "cards" | "bounty" | "qa" | "achievements" | "cert" | "cube" | null;
 
 /** Reads `#tree=<code>` / `#craft=<code>` share links. */
 function readHash(): { tree?: string; craft?: Recipe } {
@@ -143,11 +144,11 @@ function Shell() {
       <div className="app">
         <TopBar />
         <main id="sheet" className="sheet" tabIndex={-1}>
-          {/* Character sheet | inventory window | stash tab + features. */}
+          {/* Character sheet | inventory window | idol board + features. */}
           <CharacterPanel />
-          <InventoryPanel onOpenBench={openBench} />
+          <InventoryPanel onOpenBench={openBench} onOpenCube={() => setOverlay("cube")} />
           <div className="sheet__side">
-            <StashPanel onOpenBench={openBench} />
+            <IdolPanel onOpenBench={openBench} />
             <FeaturesPanel
               onOpenTree={() => setOverlay("tree")}
               onOpenBench={() => openBench()}
@@ -186,6 +187,16 @@ function Shell() {
         className="modal--bench"
       >
         <CraftingBench incoming={incoming} />
+      </Modal>
+
+      <Modal
+        open={overlay === "cube"}
+        onClose={close}
+        title={t("nav.cube")}
+        titleId="cube-title"
+        className="modal--quests modal--cube"
+      >
+        <TriageCube onOpenBench={openBench} />
       </Modal>
 
       <Modal

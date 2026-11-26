@@ -6,14 +6,14 @@ import {
   type AttributeId,
   type ResistId,
 } from "../data/character";
-import type { DisplayItem } from "../data/equipment";
+import { ITEM_SETS, type DisplayItem } from "../data/equipment";
 import type { L } from "../i18n/types";
 import type { TreeNode } from "./tree/data";
 
 /**
  * The character sheet's numbers, derived the way an ARPG does it:
  *   attributes  = base + every attribute line on the allocated passive nodes
- *   resistances = sum of the equipped items' resistance mods, capped at 75%
+ *   resistances = sum of the equipped items' and idols' resistance mods, capped at 75%
  */
 
 export type Attributes = Record<AttributeId, number>;
@@ -61,6 +61,11 @@ export function equipmentResistances(items: readonly DisplayItem[]) {
   const sum: Record<ResistId, number> = { spaghetti: 0, fires: 0, deadlines: 0, scope: 0, flaky: 0 };
   for (const item of items) {
     for (const [id, value] of Object.entries(item.resists ?? {}) as [ResistId, number][]) sum[id] += value;
+  }
+  const worn = new Set(items.map((item) => item.id));
+  for (const set of Object.values(ITEM_SETS)) {
+    if (!set.pieces.every((id) => worn.has(id))) continue;
+    for (const [id, value] of Object.entries(set.resists) as [ResistId, number][]) sum[id] += value;
   }
   return RESISTANCES.map((r) => ({
     ...r,

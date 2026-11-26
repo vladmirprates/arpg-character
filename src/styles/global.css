@@ -1,5 +1,4 @@
-/* Fonts: Marcellus SC (name, titles, buttons, tabs), Alegreya Sans (text). */
-@import "@fontsource/marcellus-sc/400.css";
+/* Fonts: Alegreya Sans (text). Alegreya, the serif for names and titles, comes with the theme (v2/index.css). */
 @import "@fontsource/alegreya-sans/400.css";
 @import "@fontsource/alegreya-sans/500.css";
 @import "@fontsource/alegreya-sans/700.css";
@@ -45,6 +44,7 @@
   --rarity-normal: #d2d0cc;
   --rarity-magic: #8f93ff;
   --rarity-rare: #f4e260;
+  --rarity-set: #4fd66f;
   --rarity-unique: #d9823b;
   --rarity-corrupted: #e0343a;
 
@@ -69,8 +69,8 @@
   --region-southwest: #e8b25c;
   --region-northwest: #5ccfe8;
 
-  /* Flared small caps in the spirit of PoE's Fontin: readable at button size, still fantasy. */
-  --font-display: "Marcellus SC", Georgia, serif;
+  /* The serif for names and titles (loaded in v2/index.css). */
+  --font-display: "Alegreya", Georgia, serif;
   /* Controls share the display face; kept as its own token so they can diverge later. */
   --font-ui: var(--font-display);
   --font-body: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;

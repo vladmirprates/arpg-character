@@ -6,7 +6,7 @@ import { ToastProvider } from "../components/Toasts";
 import { TooltipProvider } from "../components/Tooltip";
 import { AchievementsProvider } from "../features/achievements/AchievementsProvider";
 import { BountyProvider } from "../features/bounty/BountyProvider";
-import { StashProvider } from "../features/stash/StashProvider";
+import { ItemsProvider } from "../features/items/ItemsProvider";
 import { I18nProvider } from "../i18n/I18nProvider";
 import type { Locale } from "../i18n/types";
 
@@ -20,7 +20,7 @@ export function renderWithProviders(ui: ReactElement, { locale = "en" as Locale 
           <AchievementsProvider>
             <TooltipProvider>
               <BountyProvider>
-                <StashProvider>{ui}</StashProvider>
+                <ItemsProvider>{ui}</ItemsProvider>
               </BountyProvider>
             </TooltipProvider>
           </AchievementsProvider>

@@ -1,5 +1,5 @@
 import fc from "fast-check";
-import { cook, decodeRecipe, encodeRecipe, type Recipe } from "./recipe";
+import { cook, decodeRecipe, encodeRecipe, MAX_SHARED_ORBS, type Recipe } from "./recipe";
 import { describeItem, itemName, itemToText } from "./describe";
 import { createItem } from "./engine";
 import { BASE_TYPES, ORB_IDS } from "./types";
@@ -32,6 +32,12 @@ describe("recipe share codes", () => {
     "rejects malformed code %j",
     (code) => expect(decodeRecipe(code)).toBeNull(),
   );
+
+  test("accepts a link at the orb cap and rejects one past it (a hand-made link can't freeze the tab)", () => {
+    expect(decodeRecipe(`bug.1.${"0".repeat(MAX_SHARED_ORBS)}`)?.orbs).toHaveLength(MAX_SHARED_ORBS);
+    expect(decodeRecipe(`bug.1.${"0".repeat(MAX_SHARED_ORBS + 1)}`)).toBeNull();
+    expect(decodeRecipe(`bug.1.${"0".repeat(200_000)}`)).toBeNull();
+  });
 });
 
 describe("item naming", () => {

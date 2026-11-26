@@ -1,0 +1,503 @@
+/* ==========================================================================
+   v2: the character sheet. Masthead, attributes, inventory, idols, the
+   features menu and the action bar.
+
+   The game's own objects (the rune sigil, item slots, the bag, the idol
+   board, skills and globes) keep v1's metalwork and light; v2 only sets the
+   interface around them.
+   ========================================================================== */
+
+:where(:root) {
+  /* ======================================================================
+     Masthead: the name centred like a title page, in gold leaf; the brass
+     rule underneath burns out from a centre diamond and shares the sheet's
+     measure.
+     ====================================================================== */
+  & .topbar {
+    position: relative;
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-areas: ". identity settings";
+    align-items: center;
+    gap: 14px 24px;
+    width: min(100% - 2 * var(--v2-gutter), var(--v2-measure));
+    margin: 0 auto 20px;
+    padding: 18px 0 14px;
+    background: var(--v2-rule);
+  }
+
+  & .topbar::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: var(--v2-accent-hi);
+    transform: translateX(-50%) rotate(45deg);
+    box-shadow: 0 0 6px rgb(var(--v2-accent-rgb) / 0.7);
+  }
+
+  & .topbar__identity {
+    justify-items: center;
+    text-align: center;
+  }
+
+  & .topbar__name {
+    font-family: var(--font-display);
+    /* Set in tracked capitals, like a title on a game's cover. Capitals stand taller than mixed
+       case, so the size comes down a step to keep the masthead's height. */
+    font-size: clamp(1.7rem, 2.6vw, 2.25rem);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: linear-gradient(180deg, var(--parch-50), var(--ember-200) 55%, var(--ember-500));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 2px 4px rgb(0 0 0 / 0.85));
+  }
+
+  & .topbar__class {
+    margin: 6px 0 0;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--bronze-300);
+  }
+
+  & .topbar__class::before,
+  & .topbar__class::after {
+    content: none;
+  }
+
+  & .topbar__settings {
+    justify-self: end;
+    gap: 2px;
+  }
+
+  & .segmented {
+    margin-right: 10px;
+    padding: 0;
+    background: rgb(0 0 0 / 0.35);
+    border: 1px solid rgb(var(--v2-accent-rgb) / 0.3);
+  }
+
+  & .segmented button {
+    min-width: 46px;
+    min-height: 34px;
+    padding: 0 10px;
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--v2-text-3);
+    border-radius: 0;
+    transition:
+      color 0.12s,
+      background-color 0.12s;
+  }
+
+  & .segmented button:hover {
+    color: var(--v2-text);
+  }
+
+  & .segmented button[aria-pressed="true"] {
+    color: var(--v2-accent-hi);
+    background: rgb(var(--v2-accent-rgb) / 0.14);
+  }
+
+  @media (max-width: 720px) {
+    & .topbar {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        "identity"
+        "settings";
+      margin-bottom: 14px;
+      padding-top: 18px;
+    }
+    & .topbar__settings {
+      justify-self: center;
+    }
+  }
+
+  @media (max-width: 380px) {
+    & .segmented {
+      margin-right: 4px;
+    }
+    & .segmented button {
+      min-width: 40px;
+      padding: 0 7px;
+    }
+  }
+
+  /* ======================================================================
+     Sheet layout: the three columns end on one baseline; the features menu
+     takes whatever height the inventory leaves it.
+     ====================================================================== */
+  & .sheet {
+    align-items: stretch;
+    padding-top: 0;
+  }
+
+  & .sheet__side {
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  & .features-panel {
+    display: flex;
+    flex-direction: column;
+  }
+
+  & .features {
+    flex: 1;
+    grid-auto-rows: minmax(50px, 1fr);
+  }
+
+  @media (max-width: 720px) {
+    & .sheet .frame {
+      padding-inline: 12px;
+    }
+  }
+
+  /* ======================================================================
+     Attributes
+     ====================================================================== */
+  & .stat {
+    padding: 5px 0;
+    border-bottom-color: var(--v2-line);
+  }
+
+  & .stat dt {
+    color: var(--v2-text-2);
+  }
+
+  & .stat dd {
+    font-weight: 500;
+    color: var(--v2-text);
+  }
+
+  & .xp {
+    margin: 12px 0 10px;
+  }
+
+  & .xp__label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: var(--bronze-300);
+  }
+
+  & .xp__label span + span {
+    letter-spacing: 0.04em;
+    font-variant-numeric: tabular-nums;
+    color: var(--v2-text-2);
+  }
+
+  & .xp__bar {
+    height: 6px;
+    margin-top: 6px;
+    background: #050405;
+    border: 1px solid var(--bronze-700);
+  }
+
+  & .xp__fill {
+    background: linear-gradient(90deg, var(--bronze-500), var(--v2-accent) 70%, var(--v2-accent-hi));
+    box-shadow: 0 0 8px rgb(var(--v2-accent-rgb) / 0.45);
+  }
+
+  & .attr {
+    gap: 10px;
+    padding: 5px 0;
+    border-bottom-color: var(--v2-line);
+  }
+
+  /* Gem-cut diamonds in the attribute's colour, lit from within. */
+  & .attr__gem {
+    width: 7px;
+    height: 7px;
+    box-shadow: 0 0 6px color-mix(in srgb, var(--tone) 70%, transparent);
+  }
+
+  & .attr__label {
+    color: var(--v2-text-2);
+    transition: color 0.12s;
+  }
+
+  & .attr__label abbr {
+    color: var(--v2-text-3);
+  }
+
+  & .attr:hover .attr__label,
+  & .attr:focus-visible .attr__label,
+  & .resist:hover .resist__label,
+  & .resist:focus-visible .resist__label {
+    color: var(--v2-text);
+  }
+
+  /* The numbers carry their attribute's colour, mixed toward bone so the four sit together. */
+  & .attr__value {
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 500;
+    line-height: 1.1;
+    font-variant-numeric: lining-nums tabular-nums;
+    color: var(--tone);
+    text-shadow: 0 0 14px color-mix(in srgb, var(--tone) 35%, transparent);
+  }
+
+  /* Resistances as a table: name, a short glowing meter, the value. The rows share one set of
+     columns (subgrid), so every meter and number lines up; the names get their room first. */
+  & .resist-list {
+    display: grid;
+    grid-template-columns: minmax(min-content, max-content) minmax(24px, 1fr) auto;
+    column-gap: 12px;
+  }
+
+  & .resist {
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+    align-items: center;
+    gap: 0 12px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--v2-line);
+  }
+
+  & .resist__label {
+    grid-row: 1;
+    grid-column: 1;
+    color: var(--v2-text-2);
+    transition: color 0.12s;
+  }
+
+  & .resist__value {
+    grid-row: 1;
+    grid-column: 3;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    white-space: nowrap;
+    color: var(--tone);
+  }
+
+  & .resist__value small {
+    font-size: 0.8125rem;
+    font-weight: 400;
+    color: var(--v2-text-3);
+  }
+
+  & .resist__meter {
+    grid-row: 1;
+    grid-column: 2;
+    height: 3px;
+    background: rgb(0 0 0 / 0.5);
+  }
+
+  & .resist__meter span {
+    background: var(--tone);
+    box-shadow: 0 0 6px color-mix(in srgb, var(--tone) 65%, transparent);
+  }
+
+  & .char-panel .frame__subtitle {
+    margin: 18px 0 6px;
+  }
+
+  & .socials {
+    gap: 8px;
+  }
+
+  /* ======================================================================
+     Inventory: v1's rune sigil turns behind the paper doll, and a lamp-light
+     falls on it. Slots, the bag and the idol board are v1's metalwork.
+     ====================================================================== */
+  & .inv-panel {
+    background:
+      radial-gradient(ellipse 70% 38% at 50% 30%, rgb(var(--v2-accent-rgb) / 0.07), transparent 72%), var(--v2-panel-bg);
+  }
+
+  /* v1's titles carry their rules beside the text, so its rune ring could rise up beside the title.
+     v2's rule runs under the title, so the ring is drawn a touch smaller: its top clears the rule
+     while its bottom stays exactly where v1 puts it, above the bag (-0.75 + 9.6 = -0.25 + 9.1). */
+  & .equip__sigil {
+    width: calc(var(--eq) * 9.1);
+    transform: translate(-50%, calc(var(--eq) * -0.25));
+  }
+
+  /* The idol altar hangs just below its title's rule, not on it. */
+  & .idol-socket {
+    margin-top: 6px;
+  }
+
+  /* ======================================================================
+     Features: a menu, lit like one. Rows on a bronze hairline table; on
+     hover the row warms from the left and the icon kindles.
+     ====================================================================== */
+  & .features-panel .frame__title {
+    margin-bottom: 0;
+  }
+
+  & .features {
+    gap: 0;
+    padding: 0;
+  }
+
+  & .btn.feature {
+    gap: 10px;
+    min-height: 50px;
+    padding: 8px 10px;
+    font-size: min(0.9375rem, 4.6cqi);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0;
+    color: var(--v2-text);
+    background: transparent;
+    border: 0;
+    border-bottom: 1px solid var(--v2-line);
+    border-radius: 0;
+    box-shadow: none;
+    transition:
+      color 0.12s,
+      background-color 0.12s;
+  }
+
+  & .btn.feature:nth-child(odd) {
+    border-right: 1px solid var(--v2-line);
+  }
+
+  & .btn.feature:hover {
+    color: #f6ead4;
+    border-color: var(--v2-line);
+    background: linear-gradient(90deg, rgb(var(--v2-accent-rgb) / 0.16), rgb(var(--v2-accent-rgb) / 0) 85%);
+    box-shadow: inset 2px 0 0 var(--v2-accent);
+  }
+
+  & .btn.feature:active {
+    transform: none;
+  }
+
+  & .btn.feature:focus-visible {
+    box-shadow: inset 0 0 0 2px var(--v2-accent);
+  }
+
+  & .feature__icon {
+    width: 20px;
+    height: 20px;
+    fill: rgb(var(--v2-accent-rgb) / 0.85);
+    filter: none;
+    transition:
+      fill 0.12s,
+      filter 0.15s;
+  }
+
+  & .feature:hover .feature__icon,
+  & .feature:focus-visible .feature__icon {
+    fill: var(--v2-accent-hi);
+    filter: drop-shadow(0 0 6px rgb(var(--v2-accent-rgb) / 0.6));
+    transform: none;
+  }
+
+  & .feature__progress {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--v2-text-3);
+  }
+
+  @container (min-width: 640px) {
+    & .btn.feature {
+      font-size: min(0.9375rem, 2.3cqi);
+    }
+    & .btn.feature:nth-child(odd) {
+      border-right: 0;
+    }
+    & .btn.feature:not(:nth-child(4n)) {
+      border-right: 1px solid var(--v2-line);
+    }
+  }
+
+  /* ======================================================================
+     Action bar: v1's skills and globes on a full-width HUD strip. The strip
+     starts just above the skill plate, so the globes rise out of it; it
+     catches the pointer like the bar itself, so a planted bug never rests
+     where nobody can see it.
+     ====================================================================== */
+  & .action-bar {
+    background: none;
+  }
+
+  & .action-bar::before {
+    content: "";
+    position: absolute;
+    inset: 36px calc(50% - 50vw) 0;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse 30% 120% at 50% 100%, rgb(120 60 20 / 0.22), transparent),
+      linear-gradient(180deg, #17110e, #080607 55%);
+    border-top: 1px solid var(--bronze-600);
+    box-shadow:
+      0 -1px 0 #000,
+      0 -16px 34px rgb(0 0 0 / 0.6),
+      inset 0 1px 0 rgb(255 220 170 / 0.06);
+  }
+
+  @media (max-width: 560px) {
+    & .action-bar::before {
+      top: 0;
+    }
+  }
+
+  /* The hotkey as a small keycap. */
+  & .skill__key {
+    top: 4px;
+    right: 4px;
+    padding: 0 4px;
+    font-family: var(--v2-mono);
+    font-size: 0.625rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--v2-text);
+    background: rgb(12 10 9 / 0.85);
+    border: 1px solid rgb(var(--v2-accent-rgb) / 0.25);
+    border-radius: 2px;
+    text-shadow: none;
+  }
+
+  & .skill__cooldown {
+    font-variant-numeric: tabular-nums;
+  }
+
+  & .globe__value {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ======================================================================
+     Find the Bugs: an unrevealed bug is still a glitch, but one you can
+     actually catch out of the corner of your eye on the dark page.
+     ====================================================================== */
+  & .hunt-bug__icon {
+    fill: #eef3f6;
+    animation-name: v2-bug-flicker;
+    filter: drop-shadow(0 0 3px #000) drop-shadow(0 0 8px rgb(255 42 106 / 0.35));
+  }
+
+  & .hunt-bug__glitch--r,
+  & .hunt-bug__glitch--c {
+    opacity: 0.75;
+  }
+}
+
+@keyframes v2-bug-flicker {
+  0%,
+  100% {
+    opacity: 0.9;
+  }
+  37% {
+    opacity: 0.4;
+  }
+  39% {
+    opacity: 0.95;
+  }
+  71% {
+    opacity: 0.55;
+  }
+}

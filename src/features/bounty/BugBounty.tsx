@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { SOCIALS } from "../../data/character";
 import { useI18n } from "../../i18n/I18nProvider";
+import { TREE_ICONS, iconViewBox } from "../../game/tree/icons.generated";
 import { useBounty } from "./BountyProvider";
+
+/** game-icons.net art for the closed ticket (bundled via scripts/extract-tree-icons.mjs). */
+const CLOSED_TICKET = { icon: "cow" } as const;
 import { PLANTED_BUGS } from "./plantedBugs";
 import "./BugBounty.css";
 
@@ -21,6 +25,23 @@ export function BugBounty() {
     start(); // the board switches to the hunt view: progress and hints
   };
 
+  /** A joke as old as the genre, filed properly. */
+  const closedTicket = (
+    <div className="bounty__bug bounty__closed" data-testid="bounty-closed">
+      <header>
+        <svg className="bounty__cow" viewBox={iconViewBox(CLOSED_TICKET.icon)} aria-hidden="true">
+          {TREE_ICONS[CLOSED_TICKET.icon]?.map((d, i) => (
+            <path key={i} d={d} />
+          ))}
+        </svg>
+        <span className="bounty__key">{t("bounty.closedKey")}</span>
+        <strong>{t("bounty.closedTitle")}</strong>
+        <span className="bounty__fixed">{t("bounty.closedStatus")}</span>
+      </header>
+      <p className="bounty__hint">{t("bounty.closedText")}</p>
+    </div>
+  );
+
   if (!active && !done) {
     return (
       <div className="bounty">
@@ -35,6 +56,7 @@ export function BugBounty() {
         <button type="button" className="btn btn--primary bounty__start" onClick={begin} data-testid="bounty-start">
           {t("bounty.start")}
         </button>
+        {closedTicket}
       </div>
     );
   }
@@ -122,6 +144,8 @@ export function BugBounty() {
           ),
         )}
       </ol>
+
+      {closedTicket}
 
       <div className="bounty__actions">
         {done ? (

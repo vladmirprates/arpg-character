@@ -23,7 +23,7 @@ import { TREE_ICONS, iconViewBox } from "../../game/tree/icons.generated";
 import { useParticles } from "../../fx/useParticles";
 import { CORRUPTION_KEYS, craftError } from "../../i18n/strings";
 import { useI18n } from "../../i18n/I18nProvider";
-import { useStash } from "../stash/StashProvider";
+import { useItems } from "../items/ItemsProvider";
 import { bugReport, reproUrl } from "./report";
 import { useCraftSession } from "./useCraftSession";
 import { track } from "../../game/events";
@@ -51,7 +51,7 @@ const CURRENCY_TAB: OrbId[][] = [
 ];
 
 interface Props {
-  /** Recipe to load when the bench opens (from the stash or a share link). */
+  /** Recipe to load when the bench opens (from the bag or a share link). */
   incoming: { recipe: Recipe; shared: boolean } | null;
 }
 
@@ -69,7 +69,7 @@ export function CraftingBench({ incoming }: Props) {
   const { t, l, locale, lang } = useI18n();
   const notify = useToast();
   const { reducedMotion } = useSettings();
-  const stash = useStash();
+  const { save } = useItems();
   const session = useCraftSession();
   const { item, recipe, log } = session;
   const view = describeItem(item, lang);
@@ -87,7 +87,7 @@ export function CraftingBench({ incoming }: Props) {
     if (!incoming) return;
     session.load(incoming.recipe);
     if (incoming.shared) notify(t("bench.loadedShared"), "success");
-    else notify(t("stash.loaded"));
+    else notify(t("items.loaded"));
     // Keyed on the incoming object alone: each recipe is applied exactly once.
   }, [incoming]);
 
@@ -178,13 +178,13 @@ export function CraftingBench({ incoming }: Props) {
   };
 
   const keep = () => {
-    if (stash.save(recipe) === -1) {
+    if (save(recipe) === -1) {
       playSfx("error");
-      notify(t("stash.full"), "error");
+      notify(t("items.full"), "error");
       return;
     }
     playSfx("save");
-    notify(t("stash.saved"), "success");
+    notify(t("items.saved"), "success");
     session.reset(recipe.base);
     setShine([]);
   };

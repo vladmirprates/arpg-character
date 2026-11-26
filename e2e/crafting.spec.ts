@@ -48,9 +48,9 @@ test("a kept item survives a reload and reopens in the bench", async ({ page }) 
   await bench.getByRole("button", { name: "Close" }).click();
 
   await page.reload();
-  const stashed = page.getByTestId("stash-0");
-  await expect(stashed).toHaveAccessibleName(name);
-  await stashed.dblclick();
+  const kept = page.locator(".item-grid--bag").getByRole("button", { name, exact: true });
+  await expect(kept).toBeVisible();
+  await kept.dblclick();
   const reopened = page.getByRole("dialog", { name: "Crafting Bench" });
   await expect(reopened.getByTestId("crafted-item").locator(".item-card__name")).toHaveText(name);
 });

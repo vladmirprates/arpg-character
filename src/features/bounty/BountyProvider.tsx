@@ -12,7 +12,7 @@ interface Bounty {
   /** Is this bug on the page right now? (Hunt running and not found yet.) */
   isPlanted: (id: string) => boolean;
   /**
-   * What a functional bug has left behind so far (e.g. the stash item it saved wrong, the cell it
+   * What a functional bug has left behind so far (e.g. the bag item it saved wrong, the cell it
    * duplicated into). Those spots are what Inspect Element can report.
    */
   evidence: (id: string) => readonly string[];

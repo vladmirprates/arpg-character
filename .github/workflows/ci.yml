@@ -5,6 +5,10 @@ on:
     branches: [main]
   pull_request:
 
+# Read-only token: no job here needs to write to the repo, so a compromised dependency can't either.
+permissions:
+  contents: read
+
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true

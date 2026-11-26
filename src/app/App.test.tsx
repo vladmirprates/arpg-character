@@ -9,12 +9,13 @@ import { EQUIPMENT } from "../data/equipment";
 import { characterAttributes, equipmentResistances } from "../game/stats";
 import { publishedBuild } from "../game/tree/build";
 import { NODES } from "../game/tree/data";
+import { boardIdols, defaultLayout } from "../features/items/items";
 
 describe("<App />", () => {
   test("renders the three panels and the action bar", () => {
     render(<App initialLocale="en" />);
     expect(screen.getByRole("heading", { level: 1, name: "Vladmir Prates" })).toBeInTheDocument();
-    for (const name of ["Attributes", "Stash", "Inventory"]) {
+    for (const name of ["Attributes", "Idols", "Inventory"]) {
       expect(screen.getByRole("heading", { level: 2, name })).toBeInTheDocument();
     }
     expect(screen.getByRole("navigation", { name: "Skills" })).toBeInTheDocument();
@@ -73,12 +74,13 @@ describe("<App />", () => {
     vi.useRealTimers();
   });
 
-  test("the sheet's attributes come from My Build and its resistances from the equipped gear", () => {
+  test("the sheet's attributes come from My Build and its resistances from the gear and idols", () => {
     render(<App initialLocale="en" />);
     for (const a of characterAttributes(publishedBuild(), NODES)) {
       expect(screen.getByTestId(`attr-${a.id}`)).toHaveTextContent(String(a.total));
     }
-    for (const r of equipmentResistances(Object.values(EQUIPMENT))) {
+    const idols = boardIdols(defaultLayout(null)).map((entry) => entry.idol);
+    for (const r of equipmentResistances([...Object.values(EQUIPMENT), ...idols])) {
       expect(screen.getByTestId(`resist-${r.id}`)).toHaveTextContent(`${r.value}%`);
     }
     expect(screen.getByTestId("resist-spaghetti")).toHaveTextContent("75% (Cap)");
@@ -89,7 +91,7 @@ describe("<App />", () => {
     const fires = screen.getByTestId("resist-fires").closest("li")!;
     expect(fires).toHaveAttribute("tabindex", "0");
     expect(fires).toHaveTextContent(/when production breaks/);
-    expect(fires).toHaveTextContent(/From equipped gear: 68%/);
+    expect(fires).toHaveTextContent(/From gear and idols: 79% \(capped at 75%\)/);
   });
 
   test("Portuguese defines every UI string", () => {

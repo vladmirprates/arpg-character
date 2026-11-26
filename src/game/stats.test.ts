@@ -1,6 +1,6 @@
+import { EQUIPMENT, ITEM_SETS, setLines, type DisplayItem } from "../data/equipment";
 import { ATTRIBUTES, BASE_ATTRIBUTE, CHARACTER, RESIST_CAP } from "../data/character";
 import { levelAt } from "./age";
-import { EQUIPMENT } from "../data/equipment";
 import { characterAttributes, equipmentResistances, parseAttributes, resistLines, treeAttributes } from "./stats";
 import { buildFromTargets } from "./tree/build";
 import { NODES, ROOT_ID } from "./tree/data";
@@ -129,5 +129,22 @@ describe("every node in a region counts the same towards its attribute", () => {
     const build = buildFromTargets([...south, ...east.slice(0, 10)]);
     const t = treeAttributes(build, NODES);
     expect(t.manual).toBeGreaterThan(t.automation);
+  });
+});
+
+describe("item sets", () => {
+  const commit = { ...EQUIPMENT.ring1 };
+  const push = { ...EQUIPMENT.ring2 };
+  const spaghetti = (items: DisplayItem[]) => equipmentResistances(items).find((r) => r.id === "spaghetti")!.total;
+
+  test("wearing every piece grants the set's bonus, once", () => {
+    expect(spaghetti([commit])).toBe(16);
+    expect(spaghetti([commit, push])).toBe(16 + 16 + ITEM_SETS["version-control"]!.resists.spaghetti!);
+  });
+
+  test("the set's rings are green set items and their tooltip names the set", () => {
+    expect(commit.rarity).toBe("set");
+    expect(setLines(commit)[0]!.en).toBe("Version Control (2/2)");
+    expect(setLines(EQUIPMENT.helmet)).toEqual([]);
   });
 });

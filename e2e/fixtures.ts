@@ -1,4 +1,5 @@
 import { test as base, expect, type Page } from "@playwright/test";
+import { RULES_LAYOUT } from "../src/test/itemsFixture";
 
 /** English UI, reduced motion for stable timing, and a fail-on-console-error guard. */
 export const test = base.extend<{ consoleErrors: string[] }>({
@@ -19,6 +20,13 @@ export const test = base.extend<{ consoleErrors: string[] }>({
 });
 
 export { expect };
+
+/** Starts a test from the fixed arrangement (src/test/itemsFixture.ts), keeping any save it makes across reloads. */
+export async function seedRulesLayout(page: Page) {
+  await page.addInitScript((layout) => {
+    if (!localStorage.getItem("arpg:items")) localStorage.setItem("arpg:items", layout);
+  }, JSON.stringify(RULES_LAYOUT));
+}
 
 export async function openBench(page: Page) {
   await page.goto("./");

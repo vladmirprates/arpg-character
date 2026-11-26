@@ -102,6 +102,22 @@ export const ACHIEVEMENTS: readonly Achievement[] = [
     match: (e) => e.type === "cert.opened",
   },
   {
+    id: "hydra",
+    icon: "snake",
+    title: { en: "Slay the Hydra", pt: "Mate a Hidra" },
+    description: { en: "Report 3 different planted bugs", pt: "Reporte 3 bugs plantados diferentes" },
+    // Distinct bug ids: fix one, and two more are waiting.
+    match: (e) => e.type === "bug.found" && e.id,
+    target: 3,
+  },
+  {
+    id: "cube-logic",
+    icon: "cube",
+    title: { en: "Cube Logic", pt: "Lógica do Cubo" },
+    description: { en: "Discover a Triage Cube recipe", pt: "Descubra uma receita do Cubo de Triagem" },
+    match: (e) => e.type === "cube.recipe",
+  },
+  {
     id: "completionist",
     icon: "laurel-crown",
     title: { en: "Completionist", pt: "Completista" },

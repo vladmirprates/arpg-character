@@ -1,8 +1,8 @@
 import { act, fireEvent, screen, within } from "@testing-library/react";
 import { renderWithProviders } from "../../test/render";
 import { encodeRecipe } from "../../game/crafting/recipe";
-import { StashPanel } from "../stash/StashPanel";
-import { STASH_SIZE } from "../stash/StashProvider";
+import { ItemGrid } from "../items/ItemGrid";
+import { BAG_SIZE } from "../items/items";
 import { CraftingBench } from "./CraftingBench";
 
 const item = () => screen.getByTestId("crafted-item");
@@ -95,43 +95,35 @@ describe("<CraftingBench />", () => {
     expect(item()).toHaveAttribute("data-rarity", "rare");
   });
 
-  test("Keep Item saves to the stash, persists it, and resets the bench", async () => {
+  test("Keep Item saves to the bag, persists it, and resets the bench", async () => {
     const { user } = renderWithProviders(
       <>
         <CraftingBench incoming={null} />
-        <StashPanel onOpenBench={() => {}} />
+        <ItemGrid container="bag" label="Backpack" onOpenBench={() => {}} />
       </>,
     );
     await craftWith(user, "transmute");
     await user.click(screen.getByRole("button", { name: "Keep item" }));
 
     expect(item()).toHaveAttribute("data-rarity", "normal");
-    expect(screen.getByRole("status")).toHaveTextContent("Item saved to stash");
-    expect(screen.getByTestId("stash-0")).toBeInTheDocument();
-    const stored = JSON.parse(localStorage.getItem("arpg:items")!) as { stash: (string | null)[] };
-    expect(stored.stash.filter(Boolean)).toHaveLength(1);
+    expect(screen.getByRole("status")).toHaveTextContent("Item saved to the bag");
+    const stored = JSON.parse(localStorage.getItem("arpg:items")!) as { bag: (string | null)[] };
+    const index = stored.bag.findIndex((ref) => ref?.startsWith("c:"));
+    expect(index).toBeGreaterThan(-1);
+    expect(screen.getByTestId(`bag-${index}`)).toBeInTheDocument();
   });
 
-  test("a full stash refuses new items with an error", async () => {
+  test("a full bag refuses new items with an error", async () => {
     const code = encodeRecipe({ base: "bug", seed: 1, orbs: ["transmute"] });
-    localStorage.setItem("arpg:stash", JSON.stringify(Array(STASH_SIZE).fill(code)));
+    localStorage.setItem("arpg:items", JSON.stringify({ bag: Array(BAG_SIZE).fill(`c:${code}`) }));
     const { user } = renderWithProviders(<CraftingBench incoming={null} />);
     await user.click(screen.getByRole("button", { name: "Keep item" }));
-    expect(screen.getByRole("alert")).toHaveTextContent("Stash is full");
-  });
-
-  test("a stash saved with fewer slots still loads, one cell per item", () => {
-    const code = encodeRecipe({ base: "testcase", seed: 3, orbs: ["transmute"] });
-    localStorage.setItem("arpg:stash", JSON.stringify([code, null, code, null, null, null, null, null]));
-    renderWithProviders(<StashPanel onOpenBench={() => {}} />);
-    expect(screen.getAllByTestId(/^stash-/)).toHaveLength(2);
-    expect(screen.getByTestId("stash-2").closest("li")).toHaveStyle({ gridColumn: "3" });
+    expect(screen.getByRole("alert")).toHaveTextContent("The bag is full");
   });
 
   test("tampered stash storage is ignored instead of crashing", () => {
     localStorage.setItem("arpg:stash", '{"not":"an array"');
-    renderWithProviders(<StashPanel onOpenBench={() => {}} />);
-    expect(screen.queryAllByTestId(/^stash-/)).toHaveLength(0);
-    expect(screen.getByText(/Nothing here yet/)).toBeInTheDocument();
+    renderWithProviders(<ItemGrid container="bag" label="Backpack" onOpenBench={() => {}} />);
+    expect(screen.getAllByTestId(/^bag-/).length).toBeGreaterThan(0);
   });
 });

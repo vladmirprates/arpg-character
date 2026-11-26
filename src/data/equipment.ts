@@ -1,7 +1,8 @@
 import type { L } from "../i18n/types";
+import type { Shape } from "../game/idols/grid";
 import type { ResistId } from "./character";
 
-export type ItemRarity = "normal" | "magic" | "rare" | "unique" | "corrupted";
+export type ItemRarity = "normal" | "magic" | "rare" | "set" | "unique" | "corrupted";
 
 /**
  * Display item. Text uses a tiny safe markup (rendered as React nodes, never as HTML):
@@ -24,11 +25,23 @@ export interface DisplayItem {
   flavor?: L;
   /** Stack count shown on currency, PoE-style. */
   stack?: number;
+  /** The most a stack can hold; its tooltip shows count/max. */
+  maxStack?: number;
   /** Level needed to equip it, shown PoE-style as "Requires Level N" (currency has none). */
   requiredLevel?: number;
+  /** The item set it belongs to: wearing every piece grants the set's bonus. */
+  set?: string;
+  /** Cells it takes up in the bag or on the idol board; one when left out. */
+  shape?: Shape;
   /** Resistance mods (percent). The character sheet's resistances are their sum. */
   resists?: Partial<Record<ResistId, number>>;
 }
+
+/** A currency's "Stack Size" tooltip line. */
+export const stackLine = (count: number, max: number): L => ({
+  en: `Stack Size: {${count}/${max}}`,
+  pt: `Tamanho da Pilha: {${count}/${max}}`,
+});
 
 export type EquipSlot =
   | "weapon1"
@@ -137,7 +150,8 @@ export const EQUIPMENT: Record<EquipSlot, DisplayItem> = {
     resists: { spaghetti: 16, flaky: 18 },
     name: { en: "Git Commit", pt: "Git Commit" },
     base: { en: "Iron Ring", pt: "Anel de Ferro" },
-    rarity: "magic",
+    rarity: "set",
+    set: "version-control",
     gameIcon: "ring",
     mods: [
       { en: "Adds {1-4} lines of clean code", pt: "Adiciona {1-4} linhas de código limpo" },
@@ -168,7 +182,8 @@ export const EQUIPMENT: Record<EquipSlot, DisplayItem> = {
     resists: { spaghetti: 16, deadlines: 23 },
     name: { en: "Git Push", pt: "Git Push" },
     base: { en: "Diamond Ring", pt: "Anel de Diamante" },
-    rarity: "magic",
+    rarity: "set",
+    set: "version-control",
     gameIcon: "big-diamond-ring",
     mods: [
       { en: "{20%} increased Quantity of Features", pt: "{20%} de Quantidade de Features aumentada" },
@@ -334,16 +349,41 @@ export const EQUIPMENT: Record<EquipSlot, DisplayItem> = {
   },
 };
 
+/** Item sets: wearing every piece grants the bonus. */
+export const ITEM_SETS: Record<
+  string,
+  { name: L; pieces: string[]; resists: Partial<Record<ResistId, number>>; bonus: L }
+> = {
+  "version-control": {
+    name: { en: "Version Control", pt: "Controle de Versão" },
+    pieces: ["git-commit", "git-push"],
+    resists: { spaghetti: 10 },
+    bonus: {
+      en: "(2) Set: [+10%] to Spaghetti Code Resistance",
+      pt: "(2) Conjunto: [+10%] de Resistência a Código Espaguete",
+    },
+  },
+};
+
+/** An item's set block for tooltips: the set's name and bonus. Both rings are always worn here. */
+export function setLines(item: DisplayItem): L[] {
+  const set = item.set ? ITEM_SETS[item.set] : undefined;
+  if (!set) return [];
+  const size = set.pieces.length;
+  return [{ en: `${set.name.en} (${size}/${size})`, pt: `${set.name.pt} (${size}/${size})` }, set.bonus];
+}
+
 /** Items in the 12 × 5 inventory grid, filled left to right like freshly picked-up currency. */
 export const BACKPACK: DisplayItem[] = [
   {
     id: "doc-scroll",
     name: { en: "Scroll of Documentation", pt: "Pergaminho da Documentação" },
     base: { en: "Currency", pt: "Moeda" },
-    stack: 1,
+    stack: 20,
+    maxStack: 40,
     rarity: "magic",
     gameIcon: "tied-scroll",
-    properties: [{ en: "Stack Size: {1/40}", pt: "Tamanho da Pilha: {1/40}" }],
+    properties: [stackLine(20, 40)],
     mods: [
       { en: "Identifies {Unwritten Rules} of the project.", pt: "Identifica as {Regras Não Escritas} do projeto." },
       {
@@ -358,9 +398,10 @@ export const BACKPACK: DisplayItem[] = [
     name: { en: "Orb of Environment", pt: "Orbe do Ambiente" },
     base: { en: "Currency", pt: "Moeda" },
     stack: 10,
+    maxStack: 10,
     rarity: "rare",
     gameIcon: "crystal-ball",
-    properties: [{ en: "Stack Size: {10/10}", pt: "Tamanho da Pilha: {10/10}" }],
+    properties: [stackLine(10, 10)],
     mods: [
       {
         en: "Reforges a [Staging Environment] with new random data.",
@@ -377,10 +418,11 @@ export const BACKPACK: DisplayItem[] = [
     id: "hotfix-orb",
     name: { en: "Orb of Hotfix", pt: "Orbe do Hotfix" },
     base: { en: "Currency", pt: "Moeda" },
-    stack: 1,
+    stack: 8,
+    maxStack: 10,
     rarity: "corrupted",
     gameIcon: "crystal-shine",
-    properties: [{ en: "Stack Size: {1/10}", pt: "Tamanho da Pilha: {1/10}" }],
+    properties: [stackLine(8, 10)],
     mods: [
       {
         en: "Corrupts a [Pull Request], deploying it instantly.",
@@ -397,10 +439,11 @@ export const BACKPACK: DisplayItem[] = [
     id: "replication-mirror",
     name: { en: "Mirror of Replication", pt: "Espelho da Replicação" },
     base: { en: "Currency", pt: "Moeda" },
-    stack: 1,
+    stack: 5,
+    maxStack: 10,
     rarity: "unique",
     gameIcon: "mirror-mirror",
-    properties: [{ en: "Stack Size: {1/1}", pt: "Tamanho da Pilha: {1/1}" }],
+    properties: [stackLine(5, 10)],
     mods: [
       { en: "Creates a duplicated copy of a [Complex Bug].", pt: "Cria uma cópia duplicada de um [Bug Complexo]." },
       {
@@ -418,9 +461,10 @@ export const BACKPACK: DisplayItem[] = [
     name: { en: "Ticket Whetstone", pt: "Pedra de Afiar Tickets" },
     base: { en: "Currency", pt: "Moeda" },
     stack: 20,
+    maxStack: 20,
     rarity: "magic",
     gameIcon: "stone-block",
-    properties: [{ en: "Stack Size: {20/20}", pt: "Tamanho da Pilha: {20/20}" }],
+    properties: [stackLine(20, 20)],
     mods: [
       { en: "Improves the {Quality} of a Bug Report.", pt: "Melhora a {Qualidade} de um Relatório de Bug." },
       {

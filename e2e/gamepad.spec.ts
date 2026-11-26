@@ -7,7 +7,14 @@ import { expect, test } from "./fixtures";
  */
 declare global {
   interface Window {
-    __pad: { id: string; connected: boolean; buttons: { pressed: boolean; value: number }[]; axes: number[] };
+    __pad: {
+      id: string;
+      connected: boolean;
+      buttons: { pressed: boolean; value: number }[];
+      axes: number[];
+      /** Buttons tapped by press(): each reads as pressed for exactly one poll, then released. */
+      taps: Record<number, number>;
+    };
   }
 }
 
@@ -24,9 +31,19 @@ test.beforeEach(async ({ page }) => {
       connected: true,
       buttons: Array.from({ length: 17 }, () => ({ pressed: false, value: 0 })),
       axes: [0, 0, 0, 0],
+      taps: {},
     };
     Object.defineProperty(navigator, "getGamepads", {
-      value: () => [window.__pad.connected ? { ...window.__pad, index: 0, mapping: "standard" } : null],
+      value: () => {
+        const pad = window.__pad;
+        if (!pad.connected) return [null];
+        const buttons = pad.buttons.map((b, i) => {
+          const held = b.pressed || (pad.taps[i] ?? 0) > 0;
+          return { pressed: held, value: held ? 1 : 0 };
+        });
+        for (const i of Object.keys(pad.taps)) pad.taps[+i] = Math.max(0, pad.taps[+i]! - 1);
+        return [{ ...pad, buttons, index: 0, mapping: "standard" }];
+      },
     });
   });
   await page.goto("./");
@@ -40,22 +57,15 @@ async function connect(page: Page) {
   });
 }
 
-/** Holds a button for a few frames, then lets go (the app acts on the press, not the release). */
+/**
+ * Taps a button: the pad reports it pressed for exactly one poll of navigator.getGamepads() and
+ * released from the next one on. The app polls once per frame and acts on the press, so it sees
+ * exactly one press, however long frames take. (Holding it for a number of frames instead let a
+ * slow, loaded machine stretch the hold past the D-pad's auto-repeat delay, so focus moved twice.)
+ */
 async function press(page: Page, button: number) {
-  const frames = (n: number) =>
-    page.evaluate(
-      (count) =>
-        new Promise<void>((resolve) => {
-          let left = count;
-          const tick = () => (--left <= 0 ? resolve() : requestAnimationFrame(tick));
-          requestAnimationFrame(tick);
-        }),
-      n,
-    );
-  await page.evaluate((b) => (window.__pad.buttons[b]!.pressed = true), button);
-  await frames(3);
-  await page.evaluate((b) => (window.__pad.buttons[b]!.pressed = false), button);
-  await frames(3);
+  await page.evaluate((b) => (window.__pad.taps[b] = 1), button);
+  await page.waitForFunction((b) => window.__pad.taps[b] === 0, button);
 }
 
 test("[CERT-INP-03] connecting a controller shows its name and button prompts", async ({ page }) => {

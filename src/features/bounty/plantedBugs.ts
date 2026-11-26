@@ -61,14 +61,14 @@ export const PLANTED_BUGS: PlantedBug[] = [
     area: { en: "Inventory → bag → Ticket Whetstone", pt: "Inventário → mochila → Pedra de Afiar Tickets" },
     steps: [
       {
-        en: "Find the Ticket Whetstone in the bag (stack of 20)",
-        pt: "Ache a Pedra de Afiar Tickets na mochila (pilha de 20)",
+        en: "Find the Ticket Whetstone in the bag and note its stack count",
+        pt: "Ache a Pedra de Afiar Tickets na mochila e observe o tamanho da pilha",
       },
       { en: "Hover it and read “Stack Size”", pt: "Passe o mouse e leia “Tamanho da Pilha”" },
     ],
     actual: {
-      en: "The slot shows a stack of 20, but the tooltip says “Stack Size: 12/20”",
-      pt: "A célula mostra uma pilha de 20, mas o tooltip diz “Tamanho da Pilha: 12/20”",
+      en: "The slot's count doesn't match the tooltip, which says “Stack Size: 12/20”",
+      pt: "A contagem da célula não bate com o tooltip, que diz “Tamanho da Pilha: 12/20”",
     },
     expected: { en: "Both show the same amount", pt: "Os dois mostram a mesma quantidade" },
     hint: {
@@ -106,24 +106,24 @@ export const PLANTED_BUGS: PlantedBug[] = [
   },
   {
     id: "stale-save",
-    title: { en: "Keeping an item stashes the previous version", pt: "Guardar um item salva a versão anterior" },
+    title: { en: "Keeping an item saves the previous version", pt: "Guardar um item salva a versão anterior" },
     severity: "high",
-    area: { en: "Crafting Bench → Keep item → Stash", pt: "Bancada de Criação → Guardar item → Baú" },
+    area: { en: "Crafting Bench → Keep item → Bag", pt: "Bancada de Criação → Guardar item → Mochila" },
     steps: [
       { en: "Open the Crafting Bench and apply a few orbs", pt: "Abra a Bancada de Criação e aplique alguns orbes" },
       { en: "Press “Keep item”", pt: "Clique em “Guardar item”" },
       {
-        en: "Hover the new stash item and compare it with what you crafted",
-        pt: "Passe o mouse no novo item do baú e compare com o que você criou",
+        en: "Hover the new bag item and compare it with what you crafted",
+        pt: "Passe o mouse no novo item da mochila e compare com o que você criou",
       },
     ],
     actual: {
-      en: "The stashed item is missing the last orb you applied",
+      en: "The saved item is missing the last orb you applied",
       pt: "O item guardado não tem o efeito do último orbe aplicado",
     },
     expected: {
-      en: "The stash holds exactly the item that was on the bench",
-      pt: "O baú guarda exatamente o item que estava na bancada",
+      en: "The bag holds exactly the item that was on the bench",
+      pt: "A mochila guarda exatamente o item que estava na bancada",
     },
     hint: {
       en: "Craft something and keep it. Is what you saved really what you made?",
@@ -133,26 +133,26 @@ export const PLANTED_BUGS: PlantedBug[] = [
   {
     id: "dupe",
     title: {
-      en: "Ctrl+click duplicates items instead of moving them",
-      pt: "Ctrl+clique duplica itens em vez de movê-los",
+      en: "Ctrl+click duplicates idols instead of moving them",
+      pt: "Ctrl+clique duplica ídolos em vez de movê-los",
     },
     severity: "critical",
-    area: { en: "Bag ↔ Stash", pt: "Mochila ↔ Baú" },
+    area: { en: "Bag ↔ Idol board", pt: "Mochila ↔ Tabuleiro de ídolos" },
     steps: [
       {
-        en: "Ctrl+click an item in the bag to send it to the stash",
-        pt: "Ctrl+clique num item da mochila para enviá-lo ao baú",
+        en: "Ctrl+click an idol on the board to send it to the bag",
+        pt: "Ctrl+clique num ídolo do tabuleiro para enviá-lo à mochila",
       },
-      { en: "Look at both containers", pt: "Olhe os dois recipientes" },
+      { en: "Look at the bag, the board and your resistances", pt: "Olhe a mochila, o tabuleiro e suas resistências" },
     ],
     actual: {
-      en: "The item is in the stash and still in the bag: it now exists twice",
-      pt: "O item está no baú e continua na mochila: agora existe em dobro",
+      en: "The idol is in the bag and still on the board: it now exists twice",
+      pt: "O ídolo está na mochila e continua no tabuleiro: agora existe em dobro",
     },
-    expected: { en: "The item moves; only one copy exists", pt: "O item se move; só existe uma cópia" },
+    expected: { en: "The idol moves; only one copy exists", pt: "O ídolo se move; só existe uma cópia" },
     hint: {
-      en: "Move items between the bag and the stash with the quick shortcut, then count them.",
-      pt: "Mova itens entre a mochila e o baú com o atalho rápido, e depois conte.",
+      en: "Move an idol off the board with the quick shortcut, then count your idols.",
+      pt: "Tire um ídolo do tabuleiro com o atalho rápido e depois conte seus ídolos.",
     },
   },
 ];
