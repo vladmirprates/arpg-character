@@ -7,7 +7,7 @@
    interface around them.
    ========================================================================== */
 
-:where(:root[data-ui="v2"]) {
+:where(:root) {
   /* ======================================================================
      Masthead: the name centred like a title page, in gold leaf; the brass
      rule underneath burns out from a centre diamond and shares the sheet's

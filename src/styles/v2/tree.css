@@ -6,7 +6,7 @@
    bronze edges, brass for what is selected.
    ========================================================================== */
 
-:where(:root[data-ui="v2"]) {
+:where(:root) {
   /* A forged strip along the top of the tree. */
   & .tree__toolbar {
     gap: 10px 20px;

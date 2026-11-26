@@ -2,7 +2,7 @@
    v2: windows over the sheet. Modals, tooltips, item cards, toasts.
    ========================================================================== */
 
-:where(:root[data-ui="v2"]) {
+:where(:root) {
   /* ======================================================================
      Windows: forged like the panels (bronze edge, v1's outer ring, the same
      ornamented corners), with a lit title plate on top.

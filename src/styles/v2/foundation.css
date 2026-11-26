@@ -8,7 +8,7 @@
    embers, forged panels, and light on everything that is magic.
    ========================================================================== */
 
-:root[data-ui="v2"] {
+html:root {
   /* ---- Surfaces: v1's true blacks (ink with a breath of violet), not lifted greys ---- */
   --v2-bg: #070608;
   --v2-surface: #121014;
@@ -78,15 +78,16 @@
 }
 
 @media (max-width: 720px) {
-  :root[data-ui="v2"] {
+  html:root {
     --v2-gutter: 10px;
   }
 }
 
 /* Component rules sit inside :where(), which adds no specificity: each one weighs exactly what the
-   v1 rule it replaces weighs, and wins only by coming later. So v1's more specific rules (and its
-   responsive overrides) keep working unless v2 restates them on purpose. */
-:where(:root[data-ui="v2"]) {
+   base rule it replaces weighs, and wins only by coming later. So the base's more specific rules
+   (and its responsive overrides) keep working unless the theme restates them on purpose.
+   The tokens above use html:root, one step heavier than the base's :root, so they always win. */
+:where(:root) {
   /* ======================================================================
      Base
      ====================================================================== */

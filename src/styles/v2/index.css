@@ -1,9 +1,10 @@
 /* ==========================================================================
-   UI v2: a style layer over v1, active while <html data-ui="v2"> (the default;
-   ?ui=v1 shows v1). v1's stylesheets are untouched. See ./uiVersion.ts.
+   The interface's look: a style layer over the base stylesheets (global.css
+   and each component's own CSS), which keep layout and behaviour. Loaded
+   last, after the base, so its rules win where they restate one.
 
-   Alegreya (the serif) joins Alegreya Sans, which v1 already loads: one
-   family, two voices.
+   Alegreya (the serif) joins Alegreya Sans, which the base already loads:
+   one family, two voices.
    ========================================================================== */
 @import "@fontsource/alegreya/400.css";
 @import "@fontsource/alegreya/500.css";
