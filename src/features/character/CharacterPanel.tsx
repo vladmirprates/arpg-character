@@ -1,18 +1,22 @@
+import { useMemo } from "react";
 import { CHARACTER, RESIST_CAP, SOCIALS } from "../../data/character";
 import { EQUIPMENT } from "../../data/equipment";
 import { characterAttributes, equipmentResistances } from "../../game/stats";
 import { publishedBuild } from "../../game/tree/build";
+import { specialization } from "../../game/tree/summary";
 import { NODES } from "../../game/tree/data";
 
 /** Computed once: the published build and the equipped gear don't change while the page is open. */
-const SHEET = {
-  attributes: characterAttributes(publishedBuild(), NODES),
-  resistances: equipmentResistances(Object.values(EQUIPMENT)),
-};
+const ATTRIBUTES = characterAttributes(publishedBuild(), NODES);
+/** What My Build specializes in. The class itself is fixed; this sits under it. */
+const SPEC = specialization(publishedBuild(), NODES);
+const GEAR = Object.values(EQUIPMENT);
+type Resistance = ReturnType<typeof equipmentResistances>[number];
 import { Frame, SubHeading } from "../../components/Frame";
 import { levelAt } from "../../game/age";
 import { useTooltip } from "../../components/Tooltip";
 import { useI18n } from "../../i18n/I18nProvider";
+import { useItems } from "../items/ItemsProvider";
 import "./CharacterPanel.css";
 
 const ICONS = {
@@ -26,8 +30,9 @@ const ICONS = {
 
 export function CharacterPanel() {
   const { t, l } = useI18n();
-  // Find the Bugs: these spots show their bug only while it's planted.
-  const { attributes, resistances } = SHEET;
+  // Resistances follow the idols on the board, so rearranging them shows up here straight away.
+  const { equippedIdols } = useItems();
+  const resistances = useMemo(() => equipmentResistances([...GEAR, ...equippedIdols]), [equippedIdols]);
   const { level, experience } = levelAt(CHARACTER.birthday, new Date());
   // Floored, so the day before my birthday reads 99%, never a rounded-up 100%.
   const xp = Math.floor(experience * 100);
@@ -39,6 +44,12 @@ export function CharacterPanel() {
           <dt>{t("char.class")}</dt>
           <dd>{l(CHARACTER.className)}</dd>
         </div>
+        {SPEC && (
+          <div className="stat">
+            <dt>{t("char.spec")}</dt>
+            <dd data-testid="char-spec">{l(SPEC.name)}</dd>
+          </div>
+        )}
         <div className="stat">
           <dt>{t("char.level")}</dt>
           <dd>
@@ -65,7 +76,7 @@ export function CharacterPanel() {
       </div>
 
       <ul className="attr-list">
-        {attributes.map((a) => (
+        {ATTRIBUTES.map((a) => (
           <AttributeRow key={a.id} attribute={a} />
         ))}
       </ul>
@@ -97,7 +108,7 @@ export function CharacterPanel() {
 }
 
 /** One attribute; hover or focus shows where it comes from (base + passive tree). */
-function AttributeRow({ attribute: a }: { attribute: (typeof SHEET.attributes)[number] }) {
+function AttributeRow({ attribute: a }: { attribute: (typeof ATTRIBUTES)[number] }) {
   const { t, l } = useI18n();
   const from = t("char.attrFrom", { base: a.base, tree: a.tree });
   const tip = useTooltip<HTMLLIElement>(
@@ -124,7 +135,7 @@ function AttributeRow({ attribute: a }: { attribute: (typeof SHEET.attributes)[n
 }
 
 /** One resistance; hover or focus explains what it means and where the value comes from. */
-function ResistRow({ resist: r }: { resist: (typeof SHEET.resistances)[number] }) {
+function ResistRow({ resist: r }: { resist: Resistance }) {
   const { t, l } = useI18n();
   const label = l(r.label);
   const from =

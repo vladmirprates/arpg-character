@@ -3,7 +3,7 @@ import { expect, test } from "./fixtures";
 test("character sheet renders every panel", async ({ page }) => {
   await page.goto("./");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Vladmir Prates");
-  for (const name of ["Attributes", "Stash", "Inventory"]) {
+  for (const name of ["Attributes", "Idols", "Inventory"]) {
     await expect(page.getByRole("heading", { level: 2, name })).toBeVisible();
   }
   await expect(page.getByTestId("equip-helmet")).toBeVisible();
@@ -174,4 +174,34 @@ test("the quest log opens with its selected act tab in view", async ({ page }) =
       return box.x >= strip.x - 1 && box.x + box.width <= strip.x + strip.width + 1;
     })
     .toBe(true);
+});
+
+test("the class stays QA Engineer, with the tree's specialization below it", async ({ page }) => {
+  await page.goto("./");
+  const panel = page.locator(".char-panel");
+  await expect(panel.locator(".stat").nth(0)).toContainText("QA Engineer");
+  await expect(panel.locator(".stat").nth(1)).toContainText("Specialization");
+  await expect(panel.getByTestId("char-spec")).toHaveText("Bug Oracle");
+});
+
+test("a first visit starts from the chosen arrangement of idols, altar and bag", async ({ page }) => {
+  await page.goto("./");
+  await expect(page.getByTestId("altar-0")).toHaveAccessibleName(/Crossroads/);
+  for (const [id, name] of [
+    ["idols-1", /Full Playthrough/],
+    ["idols-2", /Exploration/],
+    ["idols-5", /Patch Notes/],
+    ["idols-9", /Regression/],
+    ["idols-10", /Cassandra/],
+    ["idols-17", /Reproduction/],
+    ["idols-18", /Telemetry/],
+    ["idols-21", /Sisyphus/],
+    ["bag-23", /Hourglass/],
+    ["bag-34", /Hotfix/],
+    ["bag-36", /Triage Cube/],
+    ["bag-45", /Localization/],
+    ["bag-56", /Release Day/],
+  ] as const) {
+    await expect(page.getByTestId(id)).toHaveAccessibleName(name);
+  }
 });

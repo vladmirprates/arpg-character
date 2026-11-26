@@ -66,3 +66,36 @@ export function sumStats(lines: string[]): string[] {
         : key,
     );
 }
+
+type Mastery = "north" | "south" | "east" | "west";
+const MASTERIES: readonly Mastery[] = ["north", "south", "east", "west"];
+
+/** The specialization two disciplines make, keyed by their regions in MASTERIES order. */
+const SPECIALIZATIONS: Record<string, L> = {
+  "north+south": { en: "Playtester", pt: "Playtester" },
+  "north+east": { en: "Bot Wrangler", pt: "Domador de Bots" },
+  "north+west": { en: "Release Warden", pt: "Guardião do Lançamento" },
+  "south+east": { en: "Test Alchemist", pt: "Alquimista de Testes" },
+  "south+west": { en: "Bug Oracle", pt: "Oráculo de Bugs" },
+  "east+west": { en: "Pipeline Architect", pt: "Arquiteto de Pipeline" },
+};
+
+/**
+ * Two masteries make a specialization: the build's two most-invested disciplines name it. It sits
+ * under the class, it doesn't replace it. Ties go to the discipline listed first. Null until the
+ * build reaches two of them.
+ */
+export function specialization(allocated: ReadonlySet<string>, nodes: readonly TreeNode[]) {
+  const count = (region: Mastery) => nodes.filter((n) => n.region === region && allocated.has(n.id)).length;
+  const ranked = MASTERIES.map((region, order) => ({ region, order, total: count(region) }))
+    .filter((m) => m.total > 0)
+    .sort((a, b) => b.total - a.total || a.order - b.order)
+    .slice(0, 2);
+  if (ranked.length < 2) return null;
+  const [first, second] = [...ranked].sort((a, b) => a.order - b.order) as [(typeof ranked)[0], (typeof ranked)[0]];
+  return {
+    name: SPECIALIZATIONS[`${first.region}+${second.region}`]!,
+    a: REGION_NAMES[first.region],
+    b: REGION_NAMES[second.region],
+  };
+}

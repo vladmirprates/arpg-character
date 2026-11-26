@@ -1,0 +1,48 @@
+/* The idol board, centred in its panel. Cell size comes from the panel's own width, like the inventory's. */
+.idol-panel {
+  container-type: inline-size;
+  --cell: clamp(34px, calc((100cqi - 8px) / 5.6), 37px);
+}
+
+/* The altar socket: above the board, never over it. */
+.idol-socket {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  margin: -14px auto 6px;
+  padding: 3px;
+  background: radial-gradient(circle at 50% 40%, #241a12, #070607 72%);
+  border: 2px solid var(--bronze-500);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 1px #070607,
+    inset 0 0 12px rgb(0 0 0 / 0.9);
+  touch-action: none;
+}
+
+.idol-socket .slot {
+  height: 100%;
+  background: transparent;
+  border-color: transparent;
+  border-radius: 50%;
+  box-shadow: none;
+  cursor: grab;
+}
+
+.idol-socket--empty::before {
+  content: "+";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 1.2rem;
+  color: var(--ash-500);
+}
+
+.idol-socket.is-held .slot {
+  opacity: 0.35;
+}
+
+.idol-socket .item-grid__drop {
+  border-radius: 50%;
+}

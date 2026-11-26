@@ -124,7 +124,7 @@
   }
 }
 
-/* ---- Layout: Character | Inventory | Stash ---- */
+/* ---- Layout: Character | Inventory | Idols ---- */
 .sheet__side {
   display: grid;
   gap: clamp(16px, 2vw, 24px);

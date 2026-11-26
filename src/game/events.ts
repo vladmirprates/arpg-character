@@ -14,7 +14,8 @@ export type GameEvent =
   | { type: "pseudo.enabled" }
   | { type: "perf.opened" }
   | { type: "gamepad.connected" }
-  | { type: "cert.opened" };
+  | { type: "cert.opened" }
+  | { type: "cube.recipe"; id: string };
 
 type Listener = (event: GameEvent) => void;
 const listeners = new Set<Listener>();

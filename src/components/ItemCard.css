@@ -24,6 +24,9 @@
 .rarity-rare {
   --rarity: var(--rarity-rare);
 }
+.rarity-set {
+  --rarity: var(--rarity-set);
+}
 .rarity-unique {
   --rarity: var(--rarity-unique);
 }
@@ -207,4 +210,8 @@
       0 0 16px var(--rarity);
     transform: translateX(4px);
   }
+}
+
+.item-card__set {
+  color: var(--rarity-set);
 }

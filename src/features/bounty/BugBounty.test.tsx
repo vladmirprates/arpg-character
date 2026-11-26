@@ -102,3 +102,13 @@ describe("Find the Bugs", () => {
     expect(plantedCount()).toBe(PLANTED_BUGS.length - 1);
   });
 });
+
+describe("the closed ticket", () => {
+  test("is on the board before and during a hunt", async () => {
+    const { user } = renderWithProviders(<BugBounty />);
+    expect(screen.getByTestId("bounty-closed")).toHaveTextContent("There is no cow level");
+    expect(screen.getByTestId("bounty-closed").querySelector("svg.bounty__cow path")).not.toBeNull(); // the cow
+    await user.click(screen.getByTestId("bounty-start"));
+    expect(screen.getByTestId("bounty-closed")).toHaveTextContent("cannot reproduce");
+  });
+});

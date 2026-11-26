@@ -760,3 +760,21 @@
 .tree__toolbar .btn[aria-pressed="false"] {
   color: var(--ash-400);
 }
+
+.summary__spec {
+  display: grid;
+  margin: 0 0 10px;
+  text-align: center;
+}
+
+.summary__spec span,
+.summary__spec small {
+  font-size: 0.8rem;
+  color: var(--ash-500);
+}
+
+.summary__spec strong {
+  font-family: var(--font-ui);
+  font-size: 1.15rem;
+  color: var(--ember-200);
+}

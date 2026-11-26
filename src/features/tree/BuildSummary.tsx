@@ -2,7 +2,7 @@ import { memo, useMemo } from "react";
 import type { TreeNode } from "../../game/tree/data";
 import { NODES } from "../../game/tree/data";
 import { TREE_ICONS, iconViewBox } from "../../game/tree/icons.generated";
-import { REGION_NAMES, sumStats, summarize } from "../../game/tree/summary";
+import { REGION_NAMES, specialization, sumStats, summarize } from "../../game/tree/summary";
 import { useI18n } from "../../i18n/I18nProvider";
 
 interface Props {
@@ -19,6 +19,7 @@ export const BuildSummary = memo(function BuildSummary({ allocated, onLocate }: 
   const { t, l } = useI18n();
   const summary = useMemo(() => summarize(allocated, NODES), [allocated]);
   const totals = useMemo(() => sumStats(summary.minorStats.map(l)), [summary, l]);
+  const spec = useMemo(() => specialization(allocated, NODES), [allocated]);
   const skillCount = summary.skills.reduce((n, g) => n + g.nodes.length, 0);
   const empty = !skillCount && !summary.keystones.length && !summary.masteries.length;
 
@@ -56,6 +57,14 @@ export const BuildSummary = memo(function BuildSummary({ allocated, onLocate }: 
               keystones: summary.keystones.length,
             })}
           </p>
+
+          {spec && (
+            <p className="summary__spec" data-testid="tree-spec">
+              <span>{t("summary.spec")}</span>
+              <strong>{l(spec.name)}</strong>
+              <small>{t("summary.specFrom", { a: l(spec.a), b: l(spec.b) })}</small>
+            </p>
+          )}
 
           {summary.keystones.length > 0 && (
             <section>

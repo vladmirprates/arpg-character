@@ -77,6 +77,9 @@
 .slot.rarity-rare {
   --rarity: var(--rarity-rare);
 }
+.slot.rarity-set {
+  --rarity: var(--rarity-set);
+}
 .slot.rarity-unique {
   --rarity: var(--rarity-unique);
 }

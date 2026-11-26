@@ -1,6 +1,10 @@
 import type { Locator, Page } from "@playwright/test";
 import { expect, test } from "./fixtures";
 
+/** A board idol in the default arrangement, and where Ctrl+click sends it: right after the currency. */
+const IDOL = "idols-17";
+const COPY = "bag-5";
+
 const planted = (page: Page, id?: string) => page.locator(id ? `[data-planted-bug="${id}"]` : "[data-planted-bug]");
 
 async function startHunt(page: Page) {
@@ -47,31 +51,41 @@ test("the page is clean until a hunt starts; functional bugs only show once trig
   for (const id of ["overdraft", "stale-save", "dupe"]) await expect(planted(page, id)).toHaveCount(0);
 });
 
-test("stale save: keeping a craft stashes the previous version; inspecting it reports the bug", async ({ page }) => {
+/** How many orbs each kept craft in the bag was saved with (from its `c:base.seed.orbs` ref). */
+const keptOrbCounts = (page: Page) =>
+  page.evaluate(() =>
+    (JSON.parse(localStorage.getItem("arpg:items") ?? "{}").bag as (string | null)[])
+      .filter((ref): ref is string => !!ref?.startsWith("c:"))
+      .map((ref) => ref.split(".")[2]!.length),
+  );
+
+test("stale save: keeping a craft saves the previous version; finding the bug repairs it", async ({ page }) => {
   await page.goto("./");
   await startHunt(page);
-  await craftAndKeep(page);
-  const stashed = page.getByTestId("stash-0");
-  await expect(stashed).toHaveAttribute("data-planted-bug", "stale-save");
-  await inspect(page, stashed);
+  await craftAndKeep(page); // two orbs applied…
+  const kept = planted(page, "stale-save");
+  await expect(kept).toHaveCount(1);
+  expect(await keptOrbCounts(page)).toEqual([1]); // …but only one saved
+  await inspect(page, kept);
   await expect(page.getByTestId("open-bounty")).toContainText("1 of 5 found");
   await expect(planted(page, "stale-save")).toHaveCount(0);
+  await expect.poll(() => keptOrbCounts(page)).toEqual([2]); // the kept item is now what was crafted
 });
 
 test("dupe: Ctrl+click copies instead of moving; finding it removes the copy", async ({ page }) => {
   await page.goto("./");
   await startHunt(page);
-  const original = await page.getByTestId("bag-0").getAttribute("aria-label");
-  await page.getByTestId("bag-0").click({ modifiers: ["Control"] });
-  await expect(page.getByTestId("bag-0")).toHaveAttribute("aria-label", original!); // still in the bag…
-  const copy = page.getByTestId("stash-0");
-  await expect(copy).toHaveAttribute("aria-label", original!); // …and in the stash
+  const original = await page.getByTestId(IDOL).getAttribute("aria-label");
+  await page.getByTestId(IDOL).click({ modifiers: ["Control"] });
+  await expect(page.getByTestId(IDOL)).toHaveAttribute("aria-label", original!); // still on the board…
+  const copy = page.getByTestId(COPY);
+  await expect(copy).toHaveAttribute("aria-label", original!); // …and in the bag
   await expect(copy).toHaveAttribute("data-planted-bug", "dupe");
 
   await inspect(page, copy);
   await expect(page.getByTestId("open-bounty")).toContainText("1 of 5 found");
-  await expect(page.getByTestId("stash-0")).toHaveCount(0); // the duplicate is gone
-  await expect(page.getByTestId("bag-0")).toHaveAttribute("aria-label", original!);
+  await expect(page.getByTestId(COPY)).toHaveCount(0); // the duplicate is gone
+  await expect(page.getByTestId(IDOL)).toHaveAttribute("aria-label", original!);
 });
 
 test("overdraft: Coffee goes negative; finding it restores a legal value", async ({ page }) => {
@@ -103,7 +117,7 @@ test("all five found: the hunt ends with a clean page and every report filed", a
   await craftAndKeep(page);
   await inspect(page, planted(page, "stale-save"), false);
   await advance();
-  await page.getByTestId("bag-1").click({ modifiers: ["Control"] });
+  await page.getByTestId(IDOL).click({ modifiers: ["Control"] });
   await inspect(page, planted(page, "dupe"), false);
   await advance();
   await expect(page.getByTestId("open-bounty")).toContainText("4 of 5 found");
@@ -123,13 +137,14 @@ test("all five found: the hunt ends with a clean page and every report filed", a
 test("giving up fixes the page, including any duplicates", async ({ page }) => {
   await page.goto("./");
   await startHunt(page);
-  await page.getByTestId("bag-0").click({ modifiers: ["Control"] });
-  await expect(page.getByTestId("stash-0")).toBeVisible();
+  await page.getByTestId(IDOL).click({ modifiers: ["Control"] });
+  await expect(page.getByTestId(COPY)).toBeVisible();
   await page.getByTestId("open-bounty").click();
   await page.getByRole("button", { name: "Give up and fix the page" }).click();
   await page.keyboard.press("Escape");
   await expect(planted(page)).toHaveCount(0);
-  await expect(page.getByTestId("stash-0")).toHaveCount(0);
+  await expect(page.getByTestId(COPY)).toHaveCount(0);
+  await expect(page.getByTestId(IDOL)).toBeVisible();
 });
 
 test("inspecting an ordinary element finds nothing", async ({ page }) => {
