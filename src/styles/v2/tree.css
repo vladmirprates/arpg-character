@@ -1,0 +1,242 @@
+/* ==========================================================================
+   v2: the passive tree. The tree is the game's sky, so it keeps all of v1's
+   cosmos: the blue-black field, the full nebula, the glowing sigil at its
+   heart, region names and node tooltips with their glowing rails. Around it,
+   the chrome is forged like the rest of v2: type and labels from the system,
+   bronze edges, brass for what is selected.
+   ========================================================================== */
+
+:where(:root[data-ui="v2"]) {
+  /* A forged strip along the top of the tree. */
+  & .tree__toolbar {
+    gap: 10px 20px;
+    padding: 10px 16px 10px 24px;
+    background: linear-gradient(180deg, rgb(24 20 22 / 0.96), rgb(10 8 10 / 0.96));
+    border-bottom: 1px solid var(--v2-panel-edge);
+    box-shadow:
+      0 1px 0 rgb(0 0 0 / 0.8),
+      inset 0 1px 0 rgb(255 220 170 / 0.04);
+  }
+
+  & .tabs {
+    gap: 0;
+    padding: 0;
+    background: rgb(0 0 0 / 0.35);
+    border: 1px solid rgb(var(--v2-accent-rgb) / 0.3);
+    border-radius: var(--radius);
+  }
+
+  & .tab {
+    min-height: 34px;
+    padding: 0 14px;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: var(--v2-text-2);
+    border: 0;
+    border-radius: 0;
+    transition: color 0.12s;
+  }
+
+  & .tab:hover {
+    color: var(--v2-text);
+  }
+
+  /* The selected tab: lit brass, with a burning lower edge. */
+  & .tab[aria-selected="true"] {
+    color: var(--v2-accent-hi);
+    background: linear-gradient(180deg, rgb(var(--v2-accent-rgb) / 0.24), rgb(var(--v2-accent-rgb) / 0.08));
+    border: 0;
+    box-shadow: inset 0 -2px 0 var(--v2-accent);
+  }
+
+  & .tree__points {
+    color: var(--v2-text-2);
+  }
+
+  & .tree__points strong {
+    font-family: var(--font-display);
+    font-size: 1.3125rem;
+    font-weight: 500;
+    font-variant-numeric: lining-nums;
+    color: var(--v2-accent-hi);
+    text-shadow: 0 0 12px rgb(var(--v2-accent-rgb) / 0.35);
+  }
+
+  /* Toggles read as on/off through a filled state, not through brass (brass means "act here"). */
+  & .tree__toolbar .btn[aria-pressed="true"],
+  & .tree__toolbar .tree__summary-toggle[aria-expanded="true"] {
+    color: var(--v2-text);
+    background: rgb(0 0 0 / 0.4);
+    border-color: rgb(var(--v2-accent-rgb) / 0.5);
+    box-shadow: inset 0 0 10px rgb(var(--v2-accent-rgb) / 0.12);
+  }
+
+  & .tree__toolbar .btn[aria-pressed="false"],
+  & .tree__toolbar .tree__summary-toggle[aria-expanded="false"] {
+    color: var(--v2-text-2);
+  }
+
+  /* The on-state rules above set box-shadow, which would also take the keyboard focus ring away. */
+  & .tree__toolbar .btn:focus-visible {
+    box-shadow: var(--focus-ring);
+  }
+
+  /* (The viewport's cosmic field, the full nebula, the region emblems and the blue sigil are v1's,
+     untouched.) */
+  & .region-label {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: 0.32em;
+    opacity: 0.3;
+  }
+
+  & .tree-node__halo {
+    stroke: var(--v2-accent-hi);
+  }
+
+  & .tree__hint {
+    color: var(--v2-text-3);
+    background: linear-gradient(180deg, rgb(14 11 12 / 0.97), rgb(8 7 9 / 0.97));
+    border-top: 1px solid var(--v2-panel-edge);
+  }
+
+  & .tree__credit {
+    color: var(--v2-text-3);
+  }
+
+  & .tree__credit a {
+    color: var(--v2-text-2);
+  }
+
+  /* ---- Node tooltip: v1's frame, rails and centre diamond, with the name in the serif ---- */
+  & .node-tip strong {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  & .node-tip__kind {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--v2-accent);
+  }
+
+  /* ---- Build summary: a forged side panel ---- */
+  /* Opaque: the tree's giant region names would otherwise show through it. */
+  & .summary {
+    padding: 18px 18px 20px;
+    background:
+      radial-gradient(ellipse 90% 30% at 50% 0%, rgb(var(--v2-accent-rgb) / 0.06), transparent 70%),
+      linear-gradient(180deg, #181418, #0a0809);
+    border-left: 1px solid var(--v2-panel-edge);
+  }
+
+  & .summary__title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-align: left;
+    text-transform: none;
+    color: var(--v2-text);
+    text-shadow: 0 1px 0 rgb(0 0 0 / 0.7);
+  }
+
+  & .summary__counts,
+  & .summary__empty {
+    text-align: left;
+    color: var(--v2-text-3);
+  }
+
+  & .summary__spec {
+    margin: 4px 0 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background: var(--v2-rule);
+  }
+
+  & .summary__spec strong {
+    font-family: var(--font-display);
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: var(--v2-accent-hi);
+    text-shadow: 0 0 12px rgb(var(--v2-accent-rgb) / 0.35);
+  }
+
+  & .summary__spec span,
+  & .summary__spec small {
+    color: var(--v2-text-3);
+  }
+
+  & .summary section {
+    margin-top: 18px;
+  }
+
+  & .summary h4 {
+    gap: 10px;
+    margin-bottom: 6px;
+    font-family: var(--font-body);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--bronze-300);
+  }
+
+  & .summary h4::before {
+    content: "";
+    flex: none;
+    width: 4px;
+    height: 4px;
+    margin-left: 1px;
+    background: rgb(var(--v2-accent-rgb) / 0.85);
+    transform: rotate(45deg);
+  }
+
+  & .summary h4::after {
+    background: linear-gradient(90deg, var(--v2-line-3), transparent);
+  }
+
+  & .summary__node {
+    color: var(--v2-text);
+    border-radius: var(--radius);
+  }
+
+  & .summary__node:hover,
+  & .summary__node:focus-visible {
+    background: linear-gradient(90deg, rgb(var(--v2-accent-rgb) / 0.1), transparent);
+    border-color: color-mix(in srgb, var(--c, var(--v2-accent)) 40%, transparent);
+  }
+
+  & .summary__node--keystone,
+  & .summary__node--mastery {
+    font-family: var(--font-body);
+    font-weight: 700;
+    color: var(--v2-accent-hi);
+  }
+
+  @media (max-width: 820px) {
+    & .summary {
+      border-top: 1px solid var(--v2-panel-edge);
+      border-left: 0;
+    }
+  }
+
+  @media (max-width: 640px) {
+    & .tree__toolbar {
+      gap: 6px 10px;
+      padding: 6px 10px;
+    }
+    & .tab {
+      min-height: 34px;
+      padding: 0 10px;
+      font-size: 0.85rem;
+    }
+    & .tree__points strong {
+      font-size: 1.1rem;
+    }
+  }
+}

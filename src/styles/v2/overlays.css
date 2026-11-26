@@ -1,0 +1,170 @@
+/* ==========================================================================
+   v2: windows over the sheet. Modals, tooltips, item cards, toasts.
+   ========================================================================== */
+
+:where(:root[data-ui="v2"]) {
+  /* ======================================================================
+     Windows: forged like the panels (bronze edge, v1's outer ring, the same
+     ornamented corners), with a lit title plate on top.
+     ====================================================================== */
+  & .modal__header {
+    gap: 12px 16px;
+    min-height: 60px;
+    padding: 10px 16px 10px 24px;
+    background: var(--v2-rule), linear-gradient(180deg, rgb(12 9 9 / 0.96), rgb(12 9 9 / 0.8));
+    border-bottom: 0;
+    box-shadow: 0 1px 0 rgb(0 0 0 / 0.8);
+  }
+
+  /* Window titles are centred like the panels' (offset by the close button's width, so they centre
+     on the window). A long title (PT-BR "Árvore de Habilidades Passivas" at 360px) wraps within its own space
+     instead of pushing the close button onto a second header row. */
+  & .modal__title {
+    flex: 1 1 0%;
+    min-width: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.1875rem, 1rem + 1.2vw, 1.375rem);
+    font-weight: 500;
+    line-height: 1.2;
+    padding-left: 52px;
+    letter-spacing: 0.01em;
+    text-align: center;
+    text-transform: none;
+    color: var(--parch-50);
+    text-shadow:
+      0 1px 0 #000,
+      0 0 18px rgb(var(--v2-accent-rgb) / 0.25);
+  }
+
+  & .modal--quests .modal__inner,
+  & .modal--bench .modal__inner {
+    position: relative;
+    background:
+      radial-gradient(ellipse 80% 40% at 50% 0%, rgb(120 70 30 / 0.1), transparent 70%),
+      linear-gradient(180deg, #120e10, #08070a);
+    border: 1px solid rgb(var(--v2-accent-rgb) / 0.3);
+    border-radius: var(--radius);
+    box-shadow:
+      0 0 0 1px #000,
+      0 0 0 4px rgb(12 10 9 / 0.96),
+      0 0 0 5px rgb(var(--v2-accent-rgb) / 0.2),
+      0 32px 90px rgb(0 0 0 / 0.8);
+  }
+
+  /* The panels' corner ornament, drawn on the window's own corners. */
+  & .modal--quests .modal__inner::after,
+  & .modal--bench .modal__inner::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    pointer-events: none;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cg fill='none' stroke='%23b08a52'%3E%3Cpath d='M2 38V14C2 7 7 2 14 2h24' stroke-width='1.5'/%3E%3Cpath d='M7 38V17c0-5.5 4.5-10 10-10h21' stroke-width='.75' opacity='.6'/%3E%3Cpath d='M2 2l7 7' stroke-width='1.25'/%3E%3C/g%3E%3Crect x='9' y='9' width='5' height='5' transform='rotate(45 11.5 11.5)' fill='%23b08a52'/%3E%3C/svg%3E")
+        top left / 30px no-repeat,
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cg transform='matrix(-1 0 0 1 40 0)'%3E%3Cg fill='none' stroke='%23b08a52'%3E%3Cpath d='M2 38V14C2 7 7 2 14 2h24' stroke-width='1.5'/%3E%3Cpath d='M7 38V17c0-5.5 4.5-10 10-10h21' stroke-width='.75' opacity='.6'/%3E%3Cpath d='M2 2l7 7' stroke-width='1.25'/%3E%3C/g%3E%3Crect x='9' y='9' width='5' height='5' transform='rotate(45 11.5 11.5)' fill='%23b08a52'/%3E%3C/g%3E%3C/svg%3E")
+        top right / 30px no-repeat,
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cg transform='matrix(1 0 0 -1 0 40)'%3E%3Cg fill='none' stroke='%23b08a52'%3E%3Cpath d='M2 38V14C2 7 7 2 14 2h24' stroke-width='1.5'/%3E%3Cpath d='M7 38V17c0-5.5 4.5-10 10-10h21' stroke-width='.75' opacity='.6'/%3E%3Cpath d='M2 2l7 7' stroke-width='1.25'/%3E%3C/g%3E%3Crect x='9' y='9' width='5' height='5' transform='rotate(45 11.5 11.5)' fill='%23b08a52'/%3E%3C/g%3E%3C/svg%3E")
+        bottom left / 30px no-repeat,
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cg transform='matrix(-1 0 0 -1 40 40)'%3E%3Cg fill='none' stroke='%23b08a52'%3E%3Cpath d='M2 38V14C2 7 7 2 14 2h24' stroke-width='1.5'/%3E%3Cpath d='M7 38V17c0-5.5 4.5-10 10-10h21' stroke-width='.75' opacity='.6'/%3E%3Cpath d='M2 2l7 7' stroke-width='1.25'/%3E%3C/g%3E%3Crect x='9' y='9' width='5' height='5' transform='rotate(45 11.5 11.5)' fill='%23b08a52'/%3E%3C/g%3E%3C/svg%3E")
+        bottom right / 30px no-repeat;
+    opacity: 0.8;
+  }
+
+  /* ======================================================================
+     Simple tooltips: left-set text on a small forged plate.
+     ====================================================================== */
+  & .tip-simple {
+    padding: 10px 13px;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    text-align: left;
+    color: var(--v2-text-2);
+    background: linear-gradient(180deg, #141113, #09080a);
+    border: 1px solid rgb(var(--v2-accent-rgb) / 0.35);
+    border-radius: var(--radius);
+    box-shadow:
+      0 0 0 1px #000,
+      inset 0 1px 0 rgb(255 228 186 / 0.05),
+      0 14px 34px rgb(0 0 0 / 0.7);
+  }
+
+  & .tip-simple strong {
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--v2-text);
+    border-bottom: 1px solid;
+    border-image: linear-gradient(90deg, rgb(var(--v2-accent-rgb) / 0.6), transparent) 1;
+  }
+
+  & .tip-resist small {
+    color: var(--v2-text-3);
+  }
+
+  /* ======================================================================
+     Item cards: the genre's tooltip, as v1 drew it (rarity edge and glow,
+     glowing rails, diamond separators), with names set in the serif.
+     ====================================================================== */
+  & .item-card__name,
+  & .item-card__base {
+    font-family: var(--font-display);
+    font-weight: 500;
+  }
+
+  & .item-card__name {
+    font-size: 1.25rem;
+    letter-spacing: 0.01em;
+  }
+
+  & .item-card__base {
+    font-size: 0.9375rem;
+  }
+
+  & .item-card__mods {
+    color: var(--v2-text);
+  }
+
+  & .item-card__flavor {
+    font-family: var(--font-display);
+    color: color-mix(in srgb, var(--rarity-unique) 78%, var(--v2-text-2));
+  }
+
+  & .item-card__corrupted {
+    font-family: var(--font-body);
+    font-size: 0.8125rem;
+    letter-spacing: 0.18em;
+  }
+
+  & .affix-group__label {
+    font-size: 0.6875rem;
+    color: var(--v2-text-3);
+  }
+
+  /* ======================================================================
+     Toasts: v1's banners, set in the interface face.
+     ====================================================================== */
+  & .toast {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  /* ======================================================================
+     Controller prompts
+     ====================================================================== */
+  & .gamepad-hints__name {
+    font-family: var(--font-body);
+    font-weight: 700;
+    color: var(--bronze-300);
+  }
+
+  & .gamepad-hints kbd {
+    color: var(--v2-text);
+    background: var(--v2-surface-3);
+    border: 1px solid rgb(var(--v2-accent-rgb) / 0.3);
+    border-radius: 2px;
+  }
+}
