@@ -22,10 +22,17 @@ export function encodeRecipe(recipe: Recipe): string {
   return `${recipe.base}.${recipe.seed.toString(16)}.${orbs}`;
 }
 
+/**
+ * The most orbs a share link may carry. Far beyond any real craft, and small enough that a
+ * hand-made link can't freeze the recipient's tab by replaying (and logging) a million orbs.
+ */
+export const MAX_SHARED_ORBS = 500;
+
 export function decodeRecipe(code: string): Recipe | null {
   const match = /^([a-z]+)\.([0-9a-f]{1,8})\.([0-8]*)$/.exec(code.trim());
   if (!match) return null;
   const [, base, seedHex, orbChars] = match;
+  if (orbChars!.length > MAX_SHARED_ORBS) return null;
   if (!BASE_TYPES.includes(base as BaseType)) return null;
   const orbs = [...orbChars!].map((c) => ORB_IDS[parseInt(c, 36)]!);
   return { base: base as BaseType, seed: parseInt(seedHex!, 16) >>> 0, orbs };

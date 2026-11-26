@@ -19,10 +19,14 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - run: npm run e2e:visual -- --update-snapshots
       - name: Commit baselines
+        # The actor goes through env, never straight into the script (no expression injection).
+        env:
+          ACTOR: ${{ github.actor }}
+          ACTOR_ID: ${{ github.actor_id }}
         run: |
           # Authored as whoever ran the workflow, so the repo's contributors stay its real authors.
-          git config user.name "${{ github.actor }}"
-          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+          git config user.name "$ACTOR"
+          git config user.email "${ACTOR_ID}+${ACTOR}@users.noreply.github.com"
           git add e2e/visual.spec.ts-snapshots
           git diff --cached --quiet || git commit -m "test: update visual regression baselines"
           git push
