@@ -199,47 +199,8 @@ export const ACTS: Act[] = [
   },
 ];
 
+/** Game-related work first, then the mobile and API automation challenges. */
 export const SIDE_QUESTS: SideQuest[] = [
-  {
-    id: "api-challenge",
-    title: { en: "API Automation Technical Challenge", pt: "Desafio Técnico de Automação de API" },
-    links: [{ label: "GitLab", href: "https://gitlab.com/vladmirprates/desafio-automacao-api" }],
-    quests: [
-      {
-        en: "Built a REST API suite with Playwright Test (Node.js / ESM) covering full CRUD scenarios",
-        pt: "Construí uma suíte de API REST com Playwright Test (Node.js / ESM) cobrindo cenários CRUD completos",
-      },
-      {
-        en: "Isolated test data with Faker.js and handled JWT authentication, with zero hardcoded credentials",
-        pt: "Isolei dados de teste com Faker.js e tratei autenticação JWT, sem credenciais fixas no código",
-      },
-      {
-        en: "Shifted left with GitLab CI/CD, plus Postman collections for exploratory testing",
-        pt: "Shift-left com GitLab CI/CD, além de coleções do Postman para testes exploratórios",
-      },
-    ],
-    gems: ["Playwright", "Node.js", "Faker.js", "JWT", "GitLab CI", "Postman"],
-  },
-  {
-    id: "mobile-challenge",
-    title: { en: "Mobile Automation Technical Challenge", pt: "Desafio Técnico de Automação Mobile" },
-    links: [{ label: "GitLab", href: "https://gitlab.com/vladmirprates/desafio-automacao-mobile" }],
-    quests: [
-      {
-        en: "Built a cross-platform-ready suite with WebdriverIO, Appium and Mocha using the Page Object Model",
-        pt: "Construí uma suíte pronta para multiplataforma com WebdriverIO, Appium e Mocha usando Page Object Model",
-      },
-      {
-        en: "Ran E2E scenarios on Android emulators and BrowserStack cloud devices, including gestures",
-        pt: "Executei cenários E2E em emuladores Android e dispositivos na nuvem do BrowserStack, incluindo gestos",
-      },
-      {
-        en: "Ran the suite continuously in GitLab CI/CD with Allure reports",
-        pt: "Executei a suíte continuamente no GitLab CI/CD com relatórios Allure",
-      },
-    ],
-    gems: ["WebdriverIO", "Appium", "Mocha", "BrowserStack", "Allure"],
-  },
   {
     id: "portfolio",
     title: { en: "This Portfolio: QA Character Sheet", pt: "Este Portfólio: Ficha de Personagem de QA" },
@@ -299,6 +260,46 @@ export const SIDE_QUESTS: SideQuest[] = [
       },
     ],
     gems: ["Discord", "Moderation", "Community Management", "Player Support"],
+  },
+  {
+    id: "mobile-challenge",
+    title: { en: "Mobile Automation Technical Challenge", pt: "Desafio Técnico de Automação Mobile" },
+    links: [{ label: "GitLab", href: "https://gitlab.com/vladmirprates/desafio-automacao-mobile" }],
+    quests: [
+      {
+        en: "Built a cross-platform-ready suite with WebdriverIO, Appium and Mocha using the Page Object Model",
+        pt: "Construí uma suíte pronta para multiplataforma com WebdriverIO, Appium e Mocha usando Page Object Model",
+      },
+      {
+        en: "Ran E2E scenarios on Android emulators and BrowserStack cloud devices, including gestures",
+        pt: "Executei cenários E2E em emuladores Android e dispositivos na nuvem do BrowserStack, incluindo gestos",
+      },
+      {
+        en: "Ran the suite continuously in GitLab CI/CD with Allure reports",
+        pt: "Executei a suíte continuamente no GitLab CI/CD com relatórios Allure",
+      },
+    ],
+    gems: ["WebdriverIO", "Appium", "Mocha", "BrowserStack", "Allure"],
+  },
+  {
+    id: "api-challenge",
+    title: { en: "API Automation Technical Challenge", pt: "Desafio Técnico de Automação de API" },
+    links: [{ label: "GitLab", href: "https://gitlab.com/vladmirprates/desafio-automacao-api" }],
+    quests: [
+      {
+        en: "Built a REST API suite with Playwright Test (Node.js / ESM) covering full CRUD scenarios",
+        pt: "Construí uma suíte de API REST com Playwright Test (Node.js / ESM) cobrindo cenários CRUD completos",
+      },
+      {
+        en: "Isolated test data with Faker.js and handled JWT authentication, with zero hardcoded credentials",
+        pt: "Isolei dados de teste com Faker.js e tratei autenticação JWT, sem credenciais fixas no código",
+      },
+      {
+        en: "Shifted left with GitLab CI/CD, plus Postman collections for exploratory testing",
+        pt: "Shift-left com GitLab CI/CD, além de coleções do Postman para testes exploratórios",
+      },
+    ],
+    gems: ["Playwright", "Node.js", "Faker.js", "JWT", "GitLab CI", "Postman"],
   },
 ];
 
